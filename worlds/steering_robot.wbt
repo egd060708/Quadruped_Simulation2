@@ -1,0 +1,1642 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/road/protos/StraightRoadSegment.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/road/protos/CurvedRoadSegment.proto"
+
+WorldInfo {
+  basicTimeStep 8
+}
+Viewpoint {
+  orientation -0.156168138668258 -0.03956161226831053 0.9869378862418972 4.079382952577113
+  position 3.913770425261368 10.053202696006933 4.608526561593924
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 40 40
+}
+Robot {
+  translation -2.69 0 0
+  children [
+    Solid {
+      translation 0 0 0.141
+      children [
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 1
+            anchor 0 0 0.004
+            dampingConstant 0.01
+            staticFriction 0.01
+          }
+          device [
+            PositionSensor {
+              name "GIMBAL_YAW_ENCODER"
+            }
+            RotationalMotor {
+              name "GIMBAL_YAW_MOTOR"
+              maxVelocity 32
+              maxTorque 2
+            }
+          ]
+          endPoint Solid {
+            children [
+              HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                  anchor 0 0.0875 0.197
+                  dampingConstant 0.01
+                  staticFriction 0.01
+                }
+                device [
+                  PositionSensor {
+                    name "GIMBAL_PITCH_ENCODER"
+                  }
+                  RotationalMotor {
+                    name "GIMBAL_PITCH_MOTOR"
+                    maxVelocity 32
+                    maxTorque 2
+                  }
+                ]
+                endPoint Solid {
+                  translation 0 0 0.197
+                  rotation 0 1 0 0
+                  children [
+                    Accelerometer {
+                      name "ACC"
+                    }
+                    Gyro {
+                      name "GYRO"
+                    }
+                    InertialUnit {
+                      name "IMU"
+                    }
+                    DEF gimbal_pitch Group {
+                      children [
+                        Pose {
+                          translation 0.13 0 0.01
+                          children [
+                            Shape {
+                              appearance PBRAppearance {
+                                baseColor 0.0980392 0.0980392 0.0980392
+                                roughness 1
+                                metalness 0.4
+                              }
+                              geometry Box {
+                                size 0.1 0.04 0.04
+                              }
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation -0.02 0 0.04
+                          children [
+                            Shape {
+                              appearance PBRAppearance {
+                                baseColor 0 0.666667 1
+                                roughness 0.5
+                                metalness 0.5
+                              }
+                              geometry Box {
+                                size 0.2 0.175 0.11
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                  boundingObject USE gimbal_pitch
+                  physics Physics {
+                    density 500
+                  }
+                }
+              }
+              DEF gimbal_yaw Group {
+                children [
+                  Pose {
+                    translation 0 -0.09 0.1965
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 1 0.666667 0
+                          roughness 0.5
+                          metalness 0.5
+                        }
+                        geometry Cylinder {
+                          height 0.005
+                          radius 0.03335
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.09 0.1965
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 1 0.666667 0
+                          roughness 0.5
+                          metalness 0.5
+                        }
+                        geometry Cylinder {
+                          height 0.005
+                          radius 0.03335
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.1145 0.1965
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Cylinder {
+                          height 0.044
+                          radius 0.03335
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.09 0.1415
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 1 0.666667 0
+                          roughness 0.5
+                          metalness 0.5
+                        }
+                        geometry Box {
+                          size 0.083 0.005 0.111
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 -0.09 0.1415
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 1 0.666667 0
+                          roughness 0.5
+                          metalness 0.5
+                        }
+                        geometry Box {
+                          size 0.083 0.005 0.111
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0 0.108
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Box {
+                          size 0.083 0.175 0.044
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0 0.065
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 1 0.666667 0
+                          roughness 0.5
+                          metalness 0.5
+                        }
+                        geometry Box {
+                          size 0.11 0.11 0.13
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            boundingObject USE gimbal_yaw
+            physics Physics {
+              density 500
+            }
+          }
+        }
+        DEF gimbal_base Pose {
+          translation 0 0 -0.016
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.0980392 0.0980392 0.0980392
+                roughness 1
+                metalness 0.4
+              }
+              geometry Cylinder {
+                height 0.04
+                radius 0.03
+              }
+            }
+          ]
+        }
+      ]
+      name "gimbal"
+      boundingObject USE gimbal_base
+      physics Physics {
+        density 500
+      }
+    }
+    Solid {
+      translation 0 0 0.08097
+      children [
+        DEF wheelset(3) HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 -1
+            anchor -0.163 -0.163 0.064
+            dampingConstant 0.01
+            staticFriction 0.01
+          }
+          device [
+            PositionSensor {
+              name "RB_STEER_ENCODER"
+            }
+            RotationalMotor {
+              name "RB_STEER_MOTOR"
+              maxVelocity 32
+              maxTorque 2
+            }
+          ]
+          endPoint Solid {
+            translation -0.163 -0.163 0.064
+            rotation 0 0 -1 3.141592653589793
+            children [
+              HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 -1 0
+                  anchor 0 0.01377 -0.091
+                  dampingConstant 0.01
+                  staticFriction 0.01
+                }
+                device [
+                  PositionSensor {
+                    name "RB_WHEEL_ENCODER"
+                  }
+                  RotationalMotor {
+                    name "RB_WHEEL_MOTOR"
+                    controlPID 10 10 0
+                    maxVelocity 90
+                    maxTorque 5
+                  }
+                ]
+                endPoint Solid {
+                  translation 0 0.01377 -0.091
+                  rotation 0 -1 0 0
+                  children [
+                    DEF wheel Pose {
+                      translation 0 -0.013 0
+                      rotation 1 0 0 1.5707996938995747
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 0.0980392 0.0980392 0.0980392
+                            roughness 1
+                            metalness 0.4
+                          }
+                          geometry Cylinder {
+                            height 0.026
+                            radius 0.054
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                  boundingObject USE wheel
+                  physics Physics {
+                    density 500
+                  }
+                }
+              }
+              DEF hold Group {
+                children [
+                  Pose {
+                    translation 0 0.0362 -0.051
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Box {
+                          size 0.056 0.006 0.08
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Cylinder {
+                          height 0.006
+                          radius 0.028
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.04484
+                          radius 0.021
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.016595 -0.015
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Box {
+                          size 0.038 0.03319 0.008
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0 -0.0095
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.019
+                          radius 0.0265
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            name "solid(2)"
+            boundingObject USE hold
+            physics Physics {
+              density 500
+            }
+          }
+        }
+        DEF wheelset(2) HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 -1
+            anchor -0.163 0.163 0.064
+            dampingConstant 0.01
+            staticFriction 0.01
+          }
+          device [
+            PositionSensor {
+              name "LB_STEER_ENCODER"
+            }
+            RotationalMotor {
+              name "LB_STEER_MOTOR"
+              maxVelocity 32
+              maxTorque 2
+            }
+          ]
+          endPoint Solid {
+            translation -0.163 0.163 0.064
+            rotation 0 0 -1 0
+            children [
+              HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 -1 0
+                  anchor 0 0.01377 -0.091
+                  dampingConstant 0.01
+                  staticFriction 0.01
+                }
+                device [
+                  PositionSensor {
+                    name "LB_WHEEL_ENCODER"
+                  }
+                  RotationalMotor {
+                    name "LB_WHEEL_MOTOR"
+                    controlPID 10 10 0
+                    maxVelocity 90
+                    maxTorque 5
+                  }
+                ]
+                endPoint Solid {
+                  translation 0 0.01377 -0.091
+                  rotation 0 -1 0 0
+                  children [
+                    DEF wheel Pose {
+                      translation 0 -0.013 0
+                      rotation 1 0 0 1.5707996938995747
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 0.0980392 0.0980392 0.0980392
+                            roughness 1
+                            metalness 0.4
+                          }
+                          geometry Cylinder {
+                            height 0.026
+                            radius 0.054
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                  boundingObject USE wheel
+                  physics Physics {
+                    density 500
+                  }
+                }
+              }
+              DEF hold Group {
+                children [
+                  Pose {
+                    translation 0 0.0362 -0.051
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Box {
+                          size 0.056 0.006 0.08
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Cylinder {
+                          height 0.006
+                          radius 0.028
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.04484
+                          radius 0.021
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.016595 -0.015
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Box {
+                          size 0.038 0.03319 0.008
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0 -0.0095
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.019
+                          radius 0.0265
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            name "solid(1)"
+            boundingObject USE hold
+            physics Physics {
+              density 500
+            }
+          }
+        }
+        DEF wheelset(1) HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 -1
+            anchor 0.163 -0.163 0.064
+            dampingConstant 0.01
+            staticFriction 0.01
+          }
+          device [
+            PositionSensor {
+              name "RF_STEER_ENCODER"
+            }
+            RotationalMotor {
+              name "RF_STEER_MOTOR"
+              maxVelocity 32
+              maxTorque 2
+            }
+          ]
+          endPoint Solid {
+            translation 0.163 -0.163 0.064
+            rotation 0 0 -1 3.141592653589793
+            children [
+              HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 -1 0
+                  anchor 0 0.01377 -0.091
+                  dampingConstant 0.01
+                  staticFriction 0.01
+                }
+                device [
+                  PositionSensor {
+                    name "RF_WHEEL_ENCODER"
+                  }
+                  RotationalMotor {
+                    name "RF_WHEEL_MOTOR"
+                    controlPID 10 10 0
+                    maxVelocity 90
+                    maxTorque 5
+                  }
+                ]
+                endPoint Solid {
+                  translation 0 0.01377 -0.091
+                  rotation 0 -1 0 0
+                  children [
+                    DEF wheel Pose {
+                      translation 0 -0.013 0
+                      rotation 1 0 0 1.5707996938995747
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 0.0980392 0.0980392 0.0980392
+                            roughness 1
+                            metalness 0.4
+                          }
+                          geometry Cylinder {
+                            height 0.026
+                            radius 0.054
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                  boundingObject USE wheel
+                  physics Physics {
+                    density 500
+                  }
+                }
+              }
+              DEF hold Group {
+                children [
+                  Pose {
+                    translation 0 0.0362 -0.051
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Box {
+                          size 0.056 0.006 0.08
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Cylinder {
+                          height 0.006
+                          radius 0.028
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.04484
+                          radius 0.021
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.016595 -0.015
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Box {
+                          size 0.038 0.03319 0.008
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0 -0.0095
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.019
+                          radius 0.0265
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            boundingObject USE hold
+            physics Physics {
+              density 500
+            }
+          }
+        }
+        DEF wheelset(0) HingeJoint {
+          jointParameters HingeJointParameters {
+            axis 0 0 -1
+            anchor 0.163 0.163 0.064
+            dampingConstant 0.01
+            staticFriction 0.01
+          }
+          device [
+            PositionSensor {
+              name "LF_STEER_ENCODER"
+            }
+            RotationalMotor {
+              name "LF_STEER_MOTOR"
+              maxVelocity 32
+              maxTorque 2
+            }
+          ]
+          endPoint Solid {
+            translation 0.163 0.163 0.064
+            rotation 0 0 -1 0
+            children [
+              HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 -1 0
+                  anchor 0 0.01377 -0.091
+                  dampingConstant 0.01
+                  staticFriction 0.01
+                }
+                device [
+                  PositionSensor {
+                    name "LF_WHEEL_ENCODER"
+                  }
+                  RotationalMotor {
+                    name "LF_WHEEL_MOTOR"
+                    controlPID 10 10 0
+                    maxVelocity 90
+                    maxTorque 5
+                  }
+                ]
+                endPoint Solid {
+                  translation 0 0.01377 -0.091
+                  rotation 0 -1 0 0
+                  children [
+                    DEF wheel Pose {
+                      translation 0 -0.013 0
+                      rotation 1 0 0 1.5707996938995747
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 0.0980392 0.0980392 0.0980392
+                            roughness 1
+                            metalness 0.4
+                          }
+                          geometry Cylinder {
+                            height 0.026
+                            radius 0.054
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                  boundingObject USE wheel
+                  physics Physics {
+                    density 500
+                  }
+                }
+              }
+              DEF hold Group {
+                children [
+                  Pose {
+                    translation 0 0.0362 -0.051
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Box {
+                          size 0.056 0.006 0.08
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.0980392 0.0980392 0.0980392
+                          roughness 1
+                          metalness 0.4
+                        }
+                        geometry Cylinder {
+                          height 0.006
+                          radius 0.028
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.03619 -0.091
+                    rotation 1 0 0 1.5707996938995747
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.04484
+                          radius 0.021
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0.016595 -0.015
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Box {
+                          size 0.038 0.03319 0.008
+                        }
+                      }
+                    ]
+                  }
+                  Pose {
+                    translation 0 0 -0.0095
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          roughness 0.5
+                          metalness 0.3
+                        }
+                        geometry Cylinder {
+                          height 0.019
+                          radius 0.0265
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            name "solid(4)"
+            boundingObject USE hold
+            physics Physics {
+              density 500
+            }
+          }
+        }
+        DEF chassis_frame Group {
+          children [
+            DEF containment(2) Pose {
+              translation 0.28 0.185 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(12) Pose {
+              translation -0.28 0.185 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(7) Pose {
+              translation 0.28 -0.185 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(17) Pose {
+              translation -0.28 -0.185 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(3) Pose {
+              translation 0.185 0.28 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(13) Pose {
+              translation -0.185 0.28 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(8) Pose {
+              translation 0.185 -0.28 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(18) Pose {
+              translation -0.185 -0.28 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Cylinder {
+                    height 0.02
+                    radius 0.01
+                  }
+                }
+              ]
+            }
+            DEF containment(0) Pose {
+              translation 0.28 0.125 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(10) Pose {
+              translation -0.28 0.125 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(5) Pose {
+              translation 0.28 -0.125 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(15) Pose {
+              translation -0.28 -0.125 0.03
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(4) Pose {
+              translation 0.2325 0.2325 0.03
+              rotation 0 0 1 0.7853996938995746
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.135 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(14) Pose {
+              translation -0.2325 0.2325 0.03
+              rotation 0 0 1 -0.7854
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.135 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(9) Pose {
+              translation 0.2325 -0.2325 0.03
+              rotation 0 0 1 -0.7854
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.135 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(19) Pose {
+              translation -0.2325 -0.2325 0.03
+              rotation 0 0 1 0.7854
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.135 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(1) Pose {
+              translation 0.125 0.28 0.03
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(11) Pose {
+              translation -0.125 0.28 0.03
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(6) Pose {
+              translation 0.125 -0.28 0.03
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF containment(16) Pose {
+              translation -0.125 -0.28 0.03
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.02 0.12 0.02
+                  }
+                }
+              ]
+            }
+            DEF light_bar Pose {
+              translation -0.25 0 0.135
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0 0 1
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.02 0.26 0.035
+                  }
+                }
+              ]
+            }
+            DEF suspension(2) Pose {
+              translation 0.163105 0.163105 0.09753
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Cylinder {
+                    height 0.057
+                    radius 0.03335
+                  }
+                }
+              ]
+            }
+            DEF suspension(11) Pose {
+              translation -0.163105 -0.163105 0.09753
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Cylinder {
+                    height 0.057
+                    radius 0.03335
+                  }
+                }
+              ]
+            }
+            DEF suspension(8) Pose {
+              translation -0.163105 0.163105 0.09753
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Cylinder {
+                    height 0.057
+                    radius 0.03335
+                  }
+                }
+              ]
+            }
+            DEF suspension(5) Pose {
+              translation 0.163105 -0.163105 0.09753
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Cylinder {
+                    height 0.057
+                    radius 0.03335
+                  }
+                }
+              ]
+            }
+            DEF suspension(1) Pose {
+              translation 0.106552 0.163105 0.06653
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF suspension(10) Pose {
+              translation -0.106552 -0.163105 0.06653
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF suspension(7) Pose {
+              translation -0.106552 0.163105 0.06653
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF suspension(4) Pose {
+              translation 0.106552 -0.163105 0.06653
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF suspension(0) Pose {
+              translation 0.163105 0.106552 0.06653
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF suspension(9) Pose {
+              translation -0.163105 -0.106552 0.06653
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF suspension(6) Pose {
+              translation -0.163105 0.106552 0.06653
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF suspension(3) Pose {
+              translation 0.163105 -0.106552 0.06653
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 0.5
+                    metalness 0.5
+                  }
+                  geometry Box {
+                    size 0.1 0.213105 0.005
+                  }
+                }
+              ]
+            }
+            DEF armour(0) Pose {
+              translation 0.25 0 0.06875
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Box {
+                    size 0.08 0.13 0.0975
+                  }
+                }
+              ]
+            }
+            DEF armour(1) Pose {
+              translation -0.25 0 0.06875
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Box {
+                    size 0.08 0.13 0.0975
+                  }
+                }
+              ]
+            }
+            DEF armour(2) Pose {
+              translation 0 0.25 0.06875
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Box {
+                    size 0.08 0.13 0.0975
+                  }
+                }
+              ]
+            }
+            DEF armour(3) Pose {
+              translation 0 -0.25 0.06875
+              rotation 0 0 1 1.5707996938995747
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0980392 0.0980392 0.0980392
+                    roughness 1
+                    metalness 0.4
+                  }
+                  geometry Box {
+                    size 0.08 0.13 0.0975
+                  }
+                }
+              ]
+            }
+            DEF aluminium(0) Shape {
+              appearance PBRAppearance {
+                roughness 0.5
+                metalness 0.3
+              }
+              geometry Box {
+                size 0.58 0.13 0.04
+              }
+            }
+            DEF aluminium(2) Pose {
+              translation 0 0.05 0.04
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.2 0.03 0.04
+                  }
+                }
+              ]
+            }
+            DEF aluminium(3) Pose {
+              translation 0 -0.05 0.04
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 0.5
+                    metalness 0.3
+                  }
+                  geometry Box {
+                    size 0.2 0.03 0.04
+                  }
+                }
+              ]
+            }
+            DEF aluminium(1) Shape {
+              appearance PBRAppearance {
+                roughness 0.5
+                metalness 0.3
+              }
+              geometry Box {
+                size 0.13 0.58 0.04
+              }
+            }
+          ]
+        }
+      ]
+      name "chassis"
+      boundingObject USE chassis_frame
+      physics Physics {
+        density 500
+      }
+    }
+  ]
+  name "steering_robot"
+  physics Physics {
+    density 500
+  }
+  controller "steering_controller"
+  selfCollision TRUE
+}
+DEF 飞坡4 StraightRoadSegment {
+  translation -10 -3.206 0.2
+  rotation 0 0 1 1.5707996938995747
+  name "road(6)"
+  width 2
+  roadBorderHeight 0.2
+  startingRoadBorderWidth 0.2
+  endingRoadBorderWidth 0.2
+  length 4
+  roadBoundingObject TRUE
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+DEF 飞坡3 Solid {
+  translation -10 -5 0.2
+  rotation 0 0 1 1.5707996938995747
+  children [
+    StraightRoadSegment {
+      rotation 0 1 0 -0.297
+      width 1
+      roadBorderHeight 0.2
+      startingRoadBorderWidth 0.2
+      endingRoadBorderWidth 0.2
+      length 1.232
+      roadBoundingObject TRUE
+      rightBorderBoundingObject TRUE
+      leftBorderBoundingObject TRUE
+    }
+  ]
+  name "solid(2)"
+}
+DEF 飞坡2 Solid {
+  translation -10 -10 0.2
+  rotation 0.1294279597735375 0.1294279597735375 -0.9831056944488314 1.58784
+  children [
+    DEF slope StraightRoadSegment {
+      width 1
+      roadBorderHeight 0.2
+      startingRoadBorderWidth 0.2
+      endingRoadBorderWidth 0.2
+      length 1
+      roadBoundingObject TRUE
+      rightBorderBoundingObject TRUE
+      leftBorderBoundingObject TRUE
+    }
+  ]
+  name "solid(1)"
+}
+DEF 飞坡1 StraightRoadSegment {
+  translation -10 -10 0.2
+  rotation 0 0 1 1.5708003061004252
+  name "road(5)"
+  width 1
+  roadBorderHeight 0.2
+  startingRoadBorderWidth 0.2
+  endingRoadBorderWidth 0.2
+  length 5
+  roadBoundingObject TRUE
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+DEF huge_slope3 CurvedRoadSegment {
+  translation 7.5 -2.5 0.95
+  name "road(2)"
+  width 3
+  roadBorderHeight 0.5
+  curvatureRadius 2.5
+  totalAngle 3.14159
+  roadBoundingObject TRUE
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+DEF huge_slope2 StraightRoadSegment {
+  translation 5.5 0 0.95
+  name "road(1)"
+  width 3
+  roadBorderHeight 0.5
+  length 2
+  roadBoundingObject TRUE
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+DEF huge_slope4 StraightRoadSegment {
+  translation 5.5 -5 0.95
+  name "road(3)"
+  width 3
+  roadBorderHeight 0.5
+  length 2
+  roadBoundingObject TRUE
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+DEF huge_slope1 StraightRoadSegment {
+  translation 2 0 0
+  rotation 0 1 0 -0.2617996938995747
+  width 3
+  length 3.65
+  roadBoundingObject TRUE
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+DEF huge_slope5 StraightRoadSegment {
+  translation 0.35 -5 0
+  rotation 0 1 0 -0.1818
+  name "road(4)"
+  width 3
+  length 5.25
+  roadBoundingObject TRUE
+  rightBorderBoundingObject TRUE
+  leftBorderBoundingObject TRUE
+}
+DEF step1 Solid {
+  translation -5.53395 6.305 -4.44089e-16
+  children [
+    DEF step1 Shape {
+      appearance PBRAppearance {
+        baseColor 0 0 1
+        roughness 0.5
+        metalness 0.5
+      }
+      geometry Box {
+        size 4 2 0.4
+      }
+    }
+  ]
+  name "solid(3)"
+  boundingObject USE step1
+}

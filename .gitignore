@@ -30,3 +30,19 @@
 *.exe
 *.out
 *.app
+
+# 忽略编译产生的文件
+*.obj
+*.exe
+*.dll
+*.pdb
+*.user
+
+# 忽略临时文件和日志文件
+*.log
+*.tmp
+/.tmp/
+/logs/
+
+/controllers/dog_vs/.vs
+/controllers/dog_vs/dog_vs
