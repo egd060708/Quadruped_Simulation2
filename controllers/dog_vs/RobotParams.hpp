@@ -31,5 +31,5 @@ namespace Quadruped {
 	//const Eigen::Vector<double, 12> ub = Eigen::Vector<double, 12>::Constant(100);
 
 	// 步态运动期望增益
-	const Eigen::Vector3d gaitK(0.01, 0.01, 0.05);
+	const Eigen::Vector3d gaitK(0.001, 0.001, 0.004);
 }

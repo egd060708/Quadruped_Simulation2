@@ -70,9 +70,10 @@ namespace Quadruped
         // 更新当前状态
         void updateBalanceState();
         // 设置终端目标
-        void setBalanceTarget(Vector3d _p, Vector3d _r);
+        void setPositionTarget(Vector3d _p, Vector3d _r);
+        void setVelocityTarget(Vector3d _p_dot, Vector3d _r_dot);
         // 执行mpc控制器
-        void mpc_adjust();
+        void mpc_adjust(Vector<bool, 6> _position_en);
         // 设置腿部接触约束
         void setContactConstrain(Vector4i _contact);
         // 直接设置四足输出
@@ -162,10 +163,16 @@ namespace Quadruped
         currentBalanceState.r_dot = bodyObject->currentBodyState.angVel_xyz;
     }
 
-    void BodyCtrl::setBalanceTarget(Vector3d _p, Vector3d _r)
+    void BodyCtrl::setPositionTarget(Vector3d _p, Vector3d _r)
     {
         targetBalanceState.p = _p;
         targetBalanceState.r = _r;
+    }
+
+    void BodyCtrl::setVelocityTarget(Vector3d _p_dot, Vector3d _r_dot)
+    {
+        targetBalanceState.p_dot = _p_dot;
+        targetBalanceState.r_dot = _r_dot;
     }
 
     void BodyCtrl::setContactConstrain(Vector4i _contact)
@@ -192,19 +199,25 @@ namespace Quadruped
         }
     }
 
-    void BodyCtrl::mpc_adjust()
+    void BodyCtrl::mpc_adjust(Vector<bool, 6> _position_en)
     {
         for (int i = 0; i < 3; i++)
         {
-            linPID[i].target = targetBalanceState.p(i);
-            linPID[i].current = currentBalanceState.p(i);
-            linPID[i].Adjust(0, currentBalanceState.p_dot(i));
-            targetBalanceState.p_dot(i) = linPID[i].out;
-
-            angPID[i].target = targetBalanceState.r(i);
-            angPID[i].current = currentBalanceState.r(i);
-            angPID[i].Adjust(0, currentBalanceState.r_dot(i));
-            targetBalanceState.r_dot(i) = angPID[i].out;
+            if (_position_en(2 * i) == true)
+            {
+                linPID[i].target = targetBalanceState.p(i);
+                linPID[i].current = currentBalanceState.p(i);
+                linPID[i].Adjust(0, currentBalanceState.p_dot(i));
+                targetBalanceState.p_dot(i) = linPID[i].out;
+            }
+            
+            if (_position_en(2 * i + 1) == true)
+            {
+                angPID[i].target = targetBalanceState.r(i);
+                angPID[i].current = currentBalanceState.r(i);
+                angPID[i].Adjust(0, currentBalanceState.r_dot(i));
+                targetBalanceState.r_dot(i) = angPID[i].out;
+            }
         }
 
         B = bodyObject->dynamicRight.inverse() * bodyObject->dynamicLeft;

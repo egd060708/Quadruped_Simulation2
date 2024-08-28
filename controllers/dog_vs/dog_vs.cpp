@@ -210,7 +210,7 @@ int main(int argc, char** argv)
 
         double vx_t = 0;
         double vy_t = 0;
-        double gyaw_t = 0;
+        double vyaw_t = 0;
 
         if (is_sys_init == false)
         {
@@ -266,11 +266,11 @@ int main(int argc, char** argv)
                     break;
                 case 'A':
                     //yaw_t += 0.0005;
-                    gyaw_t = 0.3;
+                    vyaw_t = 0.3;
                     break;
                 case 'D':
                     //yaw_t -= 0.0005;
-                    gyaw_t = -0.3;
+                    vyaw_t = -0.3;
                     break;
                 case 'U':
                     use_mpc = true;
@@ -283,7 +283,7 @@ int main(int argc, char** argv)
             }
             x_t += vx_t * 0.001 * timeStep;
             y_t += vy_t * 0.001 * timeStep;
-            yaw_t += gyaw_t * 0.001 * timeStep;
+            yaw_t += vyaw_t * 0.001 * timeStep;
 
             IOFormat CleanFmt(3, 0, ", ", "\n", "[", "]");
             IOFormat CommaInitFmt(StreamPrecision, DontAlignCols, ", ", ", ", "", "", " << ", ";");
@@ -352,13 +352,16 @@ int main(int argc, char** argv)
             if (t > 0.2)
             {
                 gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
-                gaitCtrl.setGait(Vector2d(vx_t, vy_t), gyaw_t, 0.02);
+                gaitCtrl.setGait(Vector2d(vx_t, vy_t), vyaw_t, 0.02);
                 gaitCtrl.run(feetPos, feetVel);
 
                 qp_ctrl.updateBalanceState();
-                qp_ctrl.setBalanceTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
+                qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
+                qp_ctrl.setVelocityTarget(Eigen::Vector3d(vx_t, vy_t, 0), Eigen::Vector3d(0, 0, vyaw_t));
                 qp_ctrl.setContactConstrain(contactResult);
-                qp_ctrl.mpc_adjust();
+                Eigen::Vector<bool, 6> en;
+                en << true, true, true, true, true, true;
+                qp_ctrl.mpc_adjust(en);
             }
             
 
