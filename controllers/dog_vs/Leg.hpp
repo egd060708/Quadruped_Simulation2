@@ -89,7 +89,7 @@ namespace Quadruped
         // 正运动学更新当前末端位置
         currentLeg.Position(0) = -L2 * sin(currentJoint.Angle(1)) - L3 * sin(currentJoint.Angle(1) + currentJoint.Angle(2));
         currentLeg.Position(1) = L1 * cos(currentJoint.Angle(0)) + L2 * sin(currentJoint.Angle(0)) * cos(currentJoint.Angle(1)) + L3 * sin(currentJoint.Angle(0)) * cos(currentJoint.Angle(1) + currentJoint.Angle(2));
-        currentLeg.Position(2) = -L2 * cos(currentJoint.Angle(0)) * cos(currentJoint.Angle(1)) - L3 * cos(currentJoint.Angle(0)) * cos(currentJoint.Angle(1) + currentJoint.Angle(2));
+        currentLeg.Position(2) = L1 * sin(currentJoint.Angle(0)) - L2 * cos(currentJoint.Angle(0)) * cos(currentJoint.Angle(1)) - L3 * cos(currentJoint.Angle(0)) * cos(currentJoint.Angle(1) + currentJoint.Angle(2));
         // 雅可比矩阵完成从关节速度到末端速度的映射
         currentLeg.Velocity = jacobi * currentJoint.Velocity;
         // 雅可比矩阵完成从当前关节力矩到当前末端虚拟力的映射

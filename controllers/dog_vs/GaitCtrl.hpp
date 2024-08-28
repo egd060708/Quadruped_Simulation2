@@ -128,8 +128,8 @@ namespace Quadruped
 		bodyVelGlobal = bodyController->currentBalanceState.p_dot;
 		bodyWGlobal = bodyController->currentBalanceState.r_dot;
 
-		nextStep(0) = bodyVelGlobal(0) * (1 - phase) * Tswing + bodyVelGlobal(0) * Tstance / 2 + kx * (bodyVelGlobal(0) - vxyTargetGlobal(0));
-		nextStep(1) = bodyVelGlobal(1) * (1 - phase) * Tswing + bodyVelGlobal(1) * Tstance / 2 + ky * (bodyVelGlobal(1) - vxyTargetGlobal(1));
+		nextStep(0) = bodyVelGlobal(0) * (1 - phase) * Tswing + bodyVelGlobal(0) * Tstance / 2 + kx * (vxyTargetGlobal(0) - bodyVelGlobal(0));
+		nextStep(1) = bodyVelGlobal(1) * (1 - phase) * Tswing + bodyVelGlobal(1) * Tstance / 2 + ky * (vxyTargetGlobal(1) - bodyVelGlobal(1));
 		nextStep(2) = 0;
 
 		// 计算旋转状态的落脚点叠加规划

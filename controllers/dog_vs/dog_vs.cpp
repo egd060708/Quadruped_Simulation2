@@ -200,6 +200,7 @@ int main(int argc, char** argv)
     {
         // 使用gps计算加速度
         const double* gps_data = gps->getValues();
+        double t = robot->getTime();
         gps_pos << gps_data[0], gps_data[1], gps_data[2];
         gps_vel = (gps_pos - gps_pos_last) / (0.001 * timeStep);
         gps_acc = (gps_vel - gps_vel_last) / (0.001 * timeStep);
@@ -302,8 +303,11 @@ int main(int argc, char** argv)
             qp_body.bodyAndWorldFramePosition(1);
             qp_body.legAndBodyPosition(1);
             qp_body.legVelocityInWorldFrame();
-            qp_body.estimatorRun(contactResult,phaseResult);
-            qp_body.updateDynamic();
+            if (t > 0.2)
+            {
+                qp_body.estimatorRun(contactResult, phaseResult);
+                qp_body.updateDynamic();
+            }
             std::cout << "estimatorOut:" << std::endl;
             std::cout << qp_body.estimatorOut.block<3, 1>(0, 0).format(CommaInitFmt) << std::endl;
             std::cout << qp_body.currentWorldState.leg_s[0].Position.format(CommaInitFmt) << std::endl;
@@ -345,16 +349,20 @@ int main(int argc, char** argv)
                 }
             }
 
-            gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
-            gaitCtrl.setGait(Vector2d(vx_t, vy_t), gyaw_t, 0.02);
-            gaitCtrl.run(feetPos, feetVel);
+            if (t > 0.2)
+            {
+                gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
+                gaitCtrl.setGait(Vector2d(vx_t, vy_t), gyaw_t, 0.02);
+                gaitCtrl.run(feetPos, feetVel);
 
-            qp_ctrl.updateBalanceState();
-            qp_ctrl.setBalanceTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
-            qp_ctrl.setContactConstrain(contactResult);
-            qp_ctrl.mpc_adjust();
+                qp_ctrl.updateBalanceState();
+                qp_ctrl.setBalanceTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
+                qp_ctrl.setContactConstrain(contactResult);
+                qp_ctrl.mpc_adjust();
+            }
+            
 
-            if (use_mpc == true)
+            if (use_mpc == true && t > 0.2)
             {
                 Eigen::Matrix<double, 3, 4> legF;
                 legF.setZero();
