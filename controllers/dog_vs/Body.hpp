@@ -47,6 +47,7 @@ namespace Quadruped
     {
         LegS leg_b[4];
         Vector3d Ang_xyz = Vector3d::Zero();    // 角度
+        Vector4d Quat = Vector4d::Zero();       //四元数
         Vector3d angVel_xyz = Vector3d::Zero(); // 角速度
         Vector3d linVel_xyz = Vector3d::Zero(); // 线速度
         Vector3d angAcc_xyz = Vector3d::Zero(); // 角加速度
@@ -121,7 +122,8 @@ namespace Quadruped
         // 更新目标位姿
         void updateBodyTargetPos(Vector3d _angle, Vector3d _position);
         // 更新惯导姿态
-        void updateBodyImu(Vector3d _imu);
+        void updateBodyImu(Vector3d _imuRPY);
+        void updateBodyImu(Vector4d _imyQ);
         // 更新陀螺仪角速度
         void updateBodyGyro(Vector3d _gyro);
         // 更新加速度计加速度
@@ -143,6 +145,9 @@ namespace Quadruped
         Eigen::Matrix<double, 3, 4> getFKFeetVel();
         Eigen::Vector3d getFKFeetVel(int i);
 
+        // 一些数学计算函数
+        Eigen::Matrix3d quatToRot(const Vector4d& _quat);
+        Eigen::Vector3d rotMatToRPY(const Matrix3d& R);
     };
 
     Body::Body(Leg* _legObj[4], double _dt)
@@ -269,12 +274,18 @@ namespace Quadruped
         {
             // 当前
             // 三轴欧拉角旋转矩阵
-            Eigen::AngleAxisd rotationx_c(currentBodyState.Ang_xyz(0), Eigen::Vector3d::UnitX());
-            Eigen::AngleAxisd rotationy_c(currentBodyState.Ang_xyz(1), Eigen::Vector3d::UnitY());
-            Eigen::AngleAxisd rotationz_c(currentBodyState.Ang_xyz(2), Eigen::Vector3d::UnitZ());
-            Eigen::Matrix3d rotation_c = (rotationx_c * rotationy_c * rotationz_c).toRotationMatrix();
-            // 构建齐次变换矩阵
+            //Eigen::AngleAxisd rotationx_c(currentBodyState.Ang_xyz(0), Eigen::Vector3d::UnitX());
+            //Eigen::AngleAxisd rotationy_c(currentBodyState.Ang_xyz(1), Eigen::Vector3d::UnitY());
+            //Eigen::AngleAxisd rotationz_c(currentBodyState.Ang_xyz(2), Eigen::Vector3d::UnitZ());
+            //Eigen::Matrix3d rotation_c = (rotationx_c * rotationy_c * rotationz_c).toRotationMatrix();
+            //// 构建齐次变换矩阵
+            //Rsb_c = rotation_c;
+            //Tsb_c.block<3, 3>(0, 0) = rotation_c;
+            //Tsb_c.block<3, 1>(0, 3) = currentWorldState.dist;
+            // 使用四元数得到变换矩阵
+            Eigen::Matrix3d rotation_c = quatToRot(currentBodyState.Quat);
             Rsb_c = rotation_c;
+            currentBodyState.Ang_xyz = rotMatToRPY(rotation_c);
             Tsb_c.block<3, 3>(0, 0) = rotation_c;
             Tsb_c.block<3, 1>(0, 3) = currentWorldState.dist;
             // 更新其他世界坐标系下的变量
@@ -381,9 +392,14 @@ namespace Quadruped
         targetWorldState.dist = _position;
     }
 
-    void Body::updateBodyImu(Vector3d _imu)
+    void Body::updateBodyImu(Vector3d _imuRPY)
     {
-        currentBodyState.Ang_xyz = _imu;
+        currentBodyState.Ang_xyz = _imuRPY;
+    }
+
+    void Body::updateBodyImu(Vector4d _imuQ)
+    {
+        currentBodyState.Quat = _imuQ;
     }
 
     void Body::updateBodyGyro(Vector3d _gyro)
@@ -527,5 +543,29 @@ namespace Quadruped
         Eigen::Vector3d out;
         out = currentWorldState.leg_s[id].Velocity;
         return out;
+    }
+
+    Eigen::Matrix3d Body::quatToRot(const Vector4d& _quat)
+    {
+        double e0 = _quat(0);
+        double e1 = _quat(1);
+        double e2 = _quat(2);
+        double e3 = _quat(3);
+
+        Matrix3d R;
+        R << 1 - 2 * (e2 * e2 + e3 * e3), 2 * (e1 * e2 - e0 * e3),
+            2 * (e1 * e3 + e0 * e2), 2 * (e1 * e2 + e0 * e3),
+            1 - 2 * (e1 * e1 + e3 * e3), 2 * (e2 * e3 - e0 * e1),
+            2 * (e1 * e3 - e0 * e2), 2 * (e2 * e3 + e0 * e1),
+            1 - 2 * (e1 * e1 + e2 * e2);
+        return R;
+    }
+
+    Eigen::Vector3d Body::rotMatToRPY(const Matrix3d& R) {
+        Vector3d rpy;
+        rpy(0) = atan2(R(2, 1), R(2, 2));
+        rpy(1) = asin(-R(2, 0));
+        rpy(2) = atan2(R(1, 0), R(0, 0));
+        return rpy;
     }
 }

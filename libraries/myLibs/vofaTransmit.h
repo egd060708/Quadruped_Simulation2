@@ -7,7 +7,7 @@
 using namespace std;
 
 typedef struct _vofaFrame {
-	float fdata[12];
+	float fdata[21];
 	unsigned char tail[4]{ 0x00, 0x00, 0x80, 0x7f };
 }vofaFrame;
 

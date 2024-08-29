@@ -258,16 +258,16 @@ namespace Quadruped
 	void GaitCtrl::run(Eigen::Matrix<double, 3, 4>& _feetPos, Eigen::Matrix<double, 3, 4>& _feetVel)
 	{
 		if (is_firstRun) {
-			//startP = bodyController->bodyObject->getEstFeetPos();
-			startP = bodyController->bodyObject->getFKFeetPos();
+			startP = bodyController->bodyObject->getEstFeetPos();
+			//startP = bodyController->bodyObject->getFKFeetPos();
 			is_firstRun = false;
 		}
 
 		for (int i(0); i < 4; ++i) {
 			if ((*gaitContact)(i) == 1) {
 				if ((*gaitPhase)(i) < 0.5) {
-					//startP.col(i) = bodyController->bodyObject->getEstFeetPos(i);
-					startP.col(i) = bodyController->bodyObject->getFKFeetPos(i);
+					startP.col(i) = bodyController->bodyObject->getEstFeetPos(i);
+					//startP.col(i) = bodyController->bodyObject->getFKFeetPos(i);
 				}
 				_feetPos.col(i) = startP.col(i);
 				_feetVel.col(i).setZero();

@@ -165,7 +165,7 @@ int main(int argc, char** argv)
     phaseResult.setZero();
     contactResult.setZero();
     GaitCtrl gaitCtrl(&qp_ctrl,legsCtrl,timeStep,&phaseResult,&contactResult);
-    gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+    gaitCtrl.initSwingParams(0.5, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
     gaitCtrl.initExpectK(gaitK);
     Eigen::Matrix<double, 3, 4> feetPos;
     Eigen::Matrix<double, 3, 4> feetVel;
@@ -281,21 +281,27 @@ int main(int argc, char** argv)
                 }
                 key = keyboard->getKey();
             }
-            x_t += vx_t * 0.001 * timeStep;
-            y_t += vy_t * 0.001 * timeStep;
+            Eigen::AngleAxisd rotationz_t(yaw_t, Eigen::Vector3d::UnitZ());
+            Eigen::Vector3d real_vt(vx_t, vy_t, 0);
+            real_vt = rotationz_t.toRotationMatrix() * real_vt;
+            x_t += real_vt(0) * 0.001 * timeStep;
+            y_t += real_vt(1) * 0.001 * timeStep;
             yaw_t += vyaw_t * 0.001 * timeStep;
 
             IOFormat CleanFmt(3, 0, ", ", "\n", "[", "]");
             IOFormat CommaInitFmt(StreamPrecision, DontAlignCols, ", ", ", ", "", "", " << ", ";");
 
-            const double* imu_data = imu->getRollPitchYaw();
+            const double* imuRPY_data = imu->getRollPitchYaw();
+            const double* imuQ_data = imu->getQuaternion();
             const double* gyro_data = gyro->getValues();
             const double* acc_data = acc->getValues();
 
-            Vector3d imud(static_cast<double>(imu_data[0]), static_cast<double>(imu_data[1]), static_cast<double>(imu_data[2]));
+            Vector3d imuRPYd(static_cast<double>(imuRPY_data[0]), static_cast<double>(imuRPY_data[1]), static_cast<double>(imuRPY_data[2]));
+            Vector4d imuQd(static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]));
             Vector3d gyrod(static_cast<double>(gyro_data[0]), static_cast<double>(gyro_data[1]), static_cast<double>(gyro_data[2]));
             Vector3d accd(static_cast<double>(acc_data[0]), static_cast<double>(acc_data[1]), static_cast<double>(acc_data[2]));
-            qp_body.updateBodyImu(imud);
+            //qp_body.updateBodyImu(imuRPYd);
+            qp_body.updateBodyImu(imuQd);
             qp_body.updateBodyGyro(gyrod);
             qp_body.updateBodyAcc(accd);
             //qp_body.updateBodyAcc(gps_acc);
@@ -308,12 +314,18 @@ int main(int argc, char** argv)
                 qp_body.estimatorRun(contactResult, phaseResult);
                 qp_body.updateDynamic();
             }
-            std::cout << "estimatorOut:" << std::endl;
-            std::cout << qp_body.estimatorOut.block<3, 1>(0, 0).format(CommaInitFmt) << std::endl;
+            /*std::cout << "estimatorOut:" << std::endl;*/
+            /*std::cout << qp_body.estimatorOut.block<3, 1>(0, 0).format(CommaInitFmt) << std::endl;
             std::cout << qp_body.currentWorldState.leg_s[0].Position.format(CommaInitFmt) << std::endl;
             std::cout << qp_body.estimator.getState().segment(0, 3).format(CommaInitFmt) << std::endl;
             std::cout << qp_body.currentWorldState.leg_s[LF].Position.format(CommaInitFmt) << std::endl;
-            std::cout << qp_body.estimator.getState().block<3, 1>(6, 0).format(CommaInitFmt) << std::endl;
+            std::cout << qp_body.estimator.getState().block<3, 1>(6, 0).format(CommaInitFmt) << std::endl;*/
+            std::cout << "target:" << std::endl;
+            std::cout << qp_ctrl.targetBalanceState.p.format(CommaInitFmt) << std::endl;
+            std::cout << qp_ctrl.targetBalanceState.r.format(CommaInitFmt) << std::endl;
+            std::cout << "current:" << std::endl;
+            std::cout << qp_ctrl.currentBalanceState.p.format(CommaInitFmt) << std::endl;
+            std::cout << qp_ctrl.currentBalanceState.r.format(CommaInitFmt) << std::endl;
 
             // 不适用平衡控制器和步态
             if (use_mpc == false)
@@ -352,12 +364,12 @@ int main(int argc, char** argv)
             if (t > 0.2)
             {
                 gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
-                gaitCtrl.setGait(Vector2d(vx_t, vy_t), vyaw_t, 0.02);
+                gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.04);
                 gaitCtrl.run(feetPos, feetVel);
 
                 qp_ctrl.updateBalanceState();
                 qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
-                qp_ctrl.setVelocityTarget(Eigen::Vector3d(vx_t, vy_t, 0), Eigen::Vector3d(0, 0, vyaw_t));
+                qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
                 qp_ctrl.setContactConstrain(contactResult);
                 Eigen::Vector<bool, 6> en;
                 en << true, true, true, true, true, true;
@@ -474,40 +486,28 @@ int main(int argc, char** argv)
             std::cout << "yk: " << std::endl;
             std::cout << qp_ctrl.balanceController.Y_K << std::endl;*/
 
-            float data[12];
-            /*data[0] = feetPos(0, LF);
-            data[1] = feetPos(1, LF);
-            data[2] = feetPos(2, LF);
-            data[3] = feetVel(0, LF);
-            data[4] = feetVel(1, LF);
-            data[5] = feetVel(2, LF);
-            data[6] = contactResult(LF);*/
-
-            /*data[0] = float(feetPos(0, LF));
-            data[1] = float(feetPos(1, LF));
-            data[2] = float(feetPos(2, LF));
-            data[3] = float(qp_body.targetBodyState.leg_b[LF].Position(0));
-            data[4] = float(qp_body.targetBodyState.leg_b[LF].Position(1));
-            data[5] = float(qp_body.targetBodyState.leg_b[LF].Position(2));
-            data[6] = phaseResult(LF);
-            data[7] = phaseResult(RF);*/
-
-            /*data[0] = float(legsObj[RB]->targetLeg.Position(2));
-            data[1] = float(legsObj[RB]->currentLeg.Position(2));
-            data[2] = float(legsObj[RB]->targetLeg.Velocity(2));*/
-            data[0] = float(accd(0));
-            data[1] = float(accd(1));
-            data[2] = float(accd(2));
-            //data[2] = float(feetVel(2, LF));
-            data[3] = float(legsObj[RB]->currentLeg.Velocity(2));
-            data[4] = float(legsObj[RB]->targetLeg.Position(0));
-            data[5] = float(legsObj[RB]->currentLeg.Position(0));
-            data[6] = float(legsObj[RB]->targetLeg.Velocity(0));
-            data[7] = float(legsObj[RB]->currentLeg.Velocity(0));
-            data[8] = float(legsObj[RB]->targetLeg.Position(1));
-            data[9] = float(legsObj[RB]->currentLeg.Position(1));
-            data[10] = float(legsObj[RB]->targetLeg.Velocity(1));
-            data[11] = float(legsObj[RB]->currentLeg.Velocity(1));
+            float data[21];
+            data[0] = float(feetPos(0, 0));
+            data[1] = float(feetPos(0, 1));
+            data[2] = float(feetPos(0, 2));
+            data[3] = float(qp_ctrl.bodyObject->getEstFeetPos(0)(0));
+            data[4] = float(qp_ctrl.bodyObject->getEstFeetPos(0)(1));
+            data[5] = float(qp_ctrl.bodyObject->getEstFeetPos(0)(2));
+            data[6] = float(qp_ctrl.mpcOut.col(0)(0));
+            data[7] = float(qp_ctrl.mpcOut.col(0)(1));
+            data[8] = float(qp_ctrl.mpcOut.col(0)(2));
+            data[9] = float(qp_ctrl.targetBalanceState.p(0));
+            data[10] = float(qp_ctrl.targetBalanceState.p(1));
+            data[11] = float(qp_ctrl.targetBalanceState.p(2));
+            data[12] = float(qp_ctrl.currentBalanceState.p(0));
+            data[13] = float(qp_ctrl.currentBalanceState.p(1));
+            data[14] = float(qp_ctrl.currentBalanceState.p(2));
+            data[15] = float(qp_ctrl.targetBalanceState.p_dot(0));
+            data[16] = float(qp_ctrl.targetBalanceState.p_dot(1));
+            data[17] = float(qp_ctrl.targetBalanceState.p_dot(2));
+            data[18] = float(qp_ctrl.currentBalanceState.p_dot(0));
+            data[19] = float(qp_ctrl.currentBalanceState.p_dot(1));
+            data[20] = float(qp_ctrl.currentBalanceState.p_dot(2));
             vofa.dataTransmit(data, 5);
         }
         
