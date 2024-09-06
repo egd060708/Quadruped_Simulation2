@@ -3,6 +3,7 @@
 #include "mpcCal.hpp"
 #include "../../libraries/myLibs/PIDmethod.h"
 #include "LegCtrl.hpp"
+#include "multiCircle.hpp"
 
 using namespace Eigen;
 
@@ -160,7 +161,8 @@ namespace Quadruped
         currentBalanceState.p = bodyObject->currentWorldState.dist;
         currentBalanceState.p_dot = bodyObject->currentWorldState.linVel_xyz;
         currentBalanceState.r = bodyObject->currentBodyState.Ang_xyz;
-        currentBalanceState.r_dot = bodyObject->currentBodyState.angVel_xyz;
+        currentBalanceState.r_dot = bodyObject->currentWorldState.angVel_xyz;
+        //currentBalanceState.r_dot = bodyObject->currentBodyState.angVel_xyz;
     }
 
     void BodyCtrl::setPositionTarget(Vector3d _p, Vector3d _r)
@@ -201,6 +203,7 @@ namespace Quadruped
 
     void BodyCtrl::mpc_adjust(Vector<bool, 6> _position_en)
     {
+        static multiCircle angC[3] = { multiCircle(3.1415926),multiCircle(3.1415926),multiCircle(3.1415926)};
         for (int i = 0; i < 3; i++)
         {
             if (_position_en(2 * i) == true)
@@ -214,9 +217,13 @@ namespace Quadruped
             if (_position_en(2 * i + 1) == true)
             {
                 angPID[i].target = targetBalanceState.r(i);
-                angPID[i].current = currentBalanceState.r(i);
-                angPID[i].Adjust(0, currentBalanceState.r_dot(i));
+                angPID[i].current = angC[i].f(currentBalanceState.r(i));
+                angPID[i].Adjust(0, bodyObject->currentBodyState.angVel_xyz(i));
                 targetBalanceState.r_dot(i) = angPID[i].out;
+                if (i == 2)
+                {
+                    targetBalanceState.r_dot = bodyObject->Rsb_c * targetBalanceState.r_dot;
+                }
             }
         }
 
@@ -232,7 +239,8 @@ namespace Quadruped
         balanceController.mpc_solve();
         for (int i = 0; i < 4; i++)
         {
-            this->mpcOut.col(i) = -bodyObject->Rsb_c.inverse() * balanceController.getOutput().block<3, 1>(3 * i, 0);
+            this->mpcOut.col(i) = -bodyObject->Rsb_c.transpose() * balanceController.getOutput().block<3, 1>(3 * i, 0);
+            //this->mpcOut.col(i) = -balanceController.getOutput().block<3, 1>(3 * i, 0);
         }
     }
 

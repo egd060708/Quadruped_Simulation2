@@ -37,7 +37,7 @@ namespace Quadruped
     {
         LegS leg_s[4];
         Vector3d dist = Vector3d::Zero();       // 机身在世界坐标系下的位移
-        // Vector3d angVel_xyz = Vector3d::Zero(); // 角速度
+        Vector3d angVel_xyz = Vector3d::Zero(); // 角速度
         Vector3d linVel_xyz = Vector3d::Zero(); // 线速度
         // Vector3d angAcc_xyz = Vector3d::Zero(); // 角加速度
         Vector3d linAcc_xyz = Vector3d::Zero(); // 线性加速度
@@ -50,7 +50,7 @@ namespace Quadruped
         Vector4d Quat = Vector4d::Zero();       //四元数
         Vector3d angVel_xyz = Vector3d::Zero(); // 角速度
         Vector3d linVel_xyz = Vector3d::Zero(); // 线速度
-        Vector3d angAcc_xyz = Vector3d::Zero(); // 角加速度
+        //Vector3d angAcc_xyz = Vector3d::Zero(); // 角加速度
         Vector3d linAcc_xyz = Vector3d::Zero(); // 线性加速度
     } bodyFrame;
 
@@ -289,8 +289,8 @@ namespace Quadruped
             Tsb_c.block<3, 3>(0, 0) = rotation_c;
             Tsb_c.block<3, 1>(0, 3) = currentWorldState.dist;
             // 更新其他世界坐标系下的变量
-            // currentWorldState.angVel_xyz = rotation_c * currentBodyState.angVel_xyz;
-            /*currentWorldState.linVel_xyz = rotation_c * currentBodyState.linVel_xyz;*/
+            currentWorldState.angVel_xyz = rotation_c * currentBodyState.angVel_xyz;
+            //currentWorldState.linVel_xyz = rotation_c * currentBodyState.linVel_xyz;
             // currentWorldState.angAcc_xyz = rotation_c * currentBodyState.angAcc_xyz;
             currentWorldState.linAcc_xyz = rotation_c * currentBodyState.linAcc_xyz;
         }
@@ -365,7 +365,7 @@ namespace Quadruped
     {
         for (int i = 0; i < 4; i++)
         {
-            // 将机身旋转角速度向量转换成反对成矩阵
+            // 将机身旋转角速度向量转换成反对称矩阵
             Matrix3d w = v3_to_m3(currentBodyState.angVel_xyz);
             // 更新足端相对于机身坐标系的速度
             currentBodyState.leg_b[i].Velocity = legs[i]->currentLeg.Velocity;
@@ -378,12 +378,15 @@ namespace Quadruped
     {
         for (int i = 0; i < 4; i++)
         {
+            //dynamicLeft.block<3, 3>(0, i * 3) = Rsb_c;
             Vector3d Pgi = Vector3d::Zero();
             Pgi = Rsb_c * (currentBodyState.leg_b[i].Position - Pg);
+            //Pgi = (currentBodyState.leg_b[i].Position - Pg);
             dynamicLeft.block<3, 3>(3, i * 3) = v3_to_m3(Pgi);
         }
         dynamicRight.block<3, 3>(0, 0) = M;
         dynamicRight.block<3, 3>(3, 3) = Rsb_c * Ib * Rsb_c.transpose();
+        //dynamicRight.block<3, 3>(3, 3) = Ib;
     }
 
     void Body::updateBodyTargetPos(Vector3d _angle, Vector3d _position)
@@ -430,7 +433,7 @@ namespace Quadruped
         {
             //此处是指足端相对于机身的速度在世界坐标系中的表达，因此需要减去整机速度
             targetWorldState.leg_s[i].Velocity = _vel.col(i) - estimatorState.block<3,1>(3,0);
-            targetBodyState.leg_b[i].Velocity = Rsb_c.inverse() * _vel.col(i);
+            targetBodyState.leg_b[i].Velocity = Rsb_c.transpose() * _vel.col(i);
             legs[i]->setTargetLegVelocity(targetBodyState.leg_b[i].Velocity);
         }
     }

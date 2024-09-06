@@ -203,6 +203,7 @@
     <ClInclude Include="Leg.hpp" />
     <ClInclude Include="LegCtrl.hpp" />
     <ClInclude Include="mpcCal.hpp" />
+    <ClInclude Include="multiCircle.hpp" />
     <ClInclude Include="RobotParams.hpp" />
     <ClInclude Include="StateMachine.hpp" />
   </ItemGroup>

@@ -153,6 +153,7 @@ int main(int argc, char** argv)
     double roll_t = 0;
     double pitch_t = 0;
     double yaw_t = 0;
+    double test = 0;
 
     LegCtrl* legsCtrl[4] = { &lf_leg_ctrl,&rf_leg_ctrl,&lb_leg_ctrl,&rb_leg_ctrl };
     BodyCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
@@ -165,12 +166,12 @@ int main(int argc, char** argv)
     phaseResult.setZero();
     contactResult.setZero();
     GaitCtrl gaitCtrl(&qp_ctrl,legsCtrl,timeStep,&phaseResult,&contactResult);
-    gaitCtrl.initSwingParams(0.5, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+    gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
     gaitCtrl.initExpectK(gaitK);
     Eigen::Matrix<double, 3, 4> feetPos;
     Eigen::Matrix<double, 3, 4> feetVel;
 
-    VOFA vofa("vjs.exe");
+    //VOFA vofa("vjs.exe");
 
     Eigen::Vector3d last_encoderValue[4];
     for (auto p : last_encoderValue)
@@ -193,6 +194,10 @@ int main(int argc, char** argv)
 
     uint8_t initCount = 0;
     bool is_sys_init = false;
+    Vector3d imuRPYd;
+    Vector4d imuQd;
+    Vector3d gyrod;
+    Vector3d accd;
 
     // Main loop:
     // - perform simulation steps until Webots is stopping the controller
@@ -211,6 +216,7 @@ int main(int argc, char** argv)
         double vx_t = 0;
         double vy_t = 0;
         double vyaw_t = 0;
+        double vtest = 0;
 
         if (is_sys_init == false)
         {
@@ -266,15 +272,16 @@ int main(int argc, char** argv)
                     break;
                 case 'A':
                     //yaw_t += 0.0005;
-                    vyaw_t = 0.3;
+                    vyaw_t = 0.6;
                     break;
                 case 'D':
                     //yaw_t -= 0.0005;
-                    vyaw_t = -0.3;
+                    vyaw_t = -0.6;
                     break;
                 case 'U':
                     use_mpc = true;
                     gaitCtrl.restart();
+                    yaw_t = imuRPYd(2);
                     break;
                 case 'I':
                     break;
@@ -296,10 +303,10 @@ int main(int argc, char** argv)
             const double* gyro_data = gyro->getValues();
             const double* acc_data = acc->getValues();
 
-            Vector3d imuRPYd(static_cast<double>(imuRPY_data[0]), static_cast<double>(imuRPY_data[1]), static_cast<double>(imuRPY_data[2]));
-            Vector4d imuQd(static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]));
-            Vector3d gyrod(static_cast<double>(gyro_data[0]), static_cast<double>(gyro_data[1]), static_cast<double>(gyro_data[2]));
-            Vector3d accd(static_cast<double>(acc_data[0]), static_cast<double>(acc_data[1]), static_cast<double>(acc_data[2]));
+            imuRPYd << static_cast<double>(imuRPY_data[0]), static_cast<double>(imuRPY_data[1]), static_cast<double>(imuRPY_data[2]);
+            imuQd << static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]);
+            gyrod << static_cast<double>(gyro_data[0]), static_cast<double>(gyro_data[1]), static_cast<double>(gyro_data[2]);
+            accd << static_cast<double>(acc_data[0]), static_cast<double>(acc_data[1]), static_cast<double>(acc_data[2]);
             //qp_body.updateBodyImu(imuRPYd);
             qp_body.updateBodyImu(imuQd);
             qp_body.updateBodyGyro(gyrod);
@@ -320,12 +327,23 @@ int main(int argc, char** argv)
             std::cout << qp_body.estimator.getState().segment(0, 3).format(CommaInitFmt) << std::endl;
             std::cout << qp_body.currentWorldState.leg_s[LF].Position.format(CommaInitFmt) << std::endl;
             std::cout << qp_body.estimator.getState().block<3, 1>(6, 0).format(CommaInitFmt) << std::endl;*/
-            std::cout << "target:" << std::endl;
+            /*std::cout << "target:" << std::endl;
             std::cout << qp_ctrl.targetBalanceState.p.format(CommaInitFmt) << std::endl;
             std::cout << qp_ctrl.targetBalanceState.r.format(CommaInitFmt) << std::endl;
-            std::cout << "current:" << std::endl;
+            std::cout << qp_ctrl.targetBalanceState.p_dot.format(CommaInitFmt) << std::endl;
+            std::cout << qp_ctrl.targetBalanceState.r_dot.format(CommaInitFmt) << std::endl;*/
+            /*std::cout << "current:" << std::endl;
             std::cout << qp_ctrl.currentBalanceState.p.format(CommaInitFmt) << std::endl;
             std::cout << qp_ctrl.currentBalanceState.r.format(CommaInitFmt) << std::endl;
+            std::cout << qp_ctrl.currentBalanceState.p_dot.format(CommaInitFmt) << std::endl;
+            std::cout << qp_ctrl.currentBalanceState.r_dot.format(CommaInitFmt) << std::endl;
+            std::cout << qp_body.currentWorldState.leg_s[LF].Position.format(CommaInitFmt) << std::endl;*/
+            /*std::cout << "dynamic:" << std::endl;
+            std::cout << qp_body.dynamicLeft << std::endl;
+            std::cout << qp_body.dynamicRight << std::endl;*/
+            /*std::cout << "state_space" << std::endl;
+            std::cout << qp_ctrl.A << std::endl;
+            std::cout << qp_ctrl.B << std::endl;*/
 
             // 不适用平衡控制器和步态
             if (use_mpc == false)
@@ -364,7 +382,7 @@ int main(int argc, char** argv)
             if (t > 0.2)
             {
                 gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
-                gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.04);
+                gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.02);
                 gaitCtrl.run(feetPos, feetVel);
 
                 qp_ctrl.updateBalanceState();
@@ -486,7 +504,7 @@ int main(int argc, char** argv)
             std::cout << "yk: " << std::endl;
             std::cout << qp_ctrl.balanceController.Y_K << std::endl;*/
 
-            float data[21];
+            /*float data[21];
             data[0] = float(feetPos(0, 0));
             data[1] = float(feetPos(0, 1));
             data[2] = float(feetPos(0, 2));
@@ -508,7 +526,7 @@ int main(int argc, char** argv)
             data[18] = float(qp_ctrl.currentBalanceState.p_dot(0));
             data[19] = float(qp_ctrl.currentBalanceState.p_dot(1));
             data[20] = float(qp_ctrl.currentBalanceState.p_dot(2));
-            vofa.dataTransmit(data, 5);
+            vofa.dataTransmit(data, 5);*/
         }
         
     };

@@ -261,5 +261,8 @@
     <ClInclude Include="GaitCtrl.hpp">
       <Filter>application</Filter>
     </ClInclude>
+    <ClInclude Include="multiCircle.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
