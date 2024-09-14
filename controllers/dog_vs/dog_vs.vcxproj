@@ -206,6 +206,7 @@
     <ClInclude Include="multiCircle.hpp" />
     <ClInclude Include="RobotParams.hpp" />
     <ClInclude Include="StateMachine.hpp" />
+    <ClInclude Include="virtualLegCtrl.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

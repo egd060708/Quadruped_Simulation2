@@ -264,5 +264,8 @@
     <ClInclude Include="multiCircle.hpp">
       <Filter>application</Filter>
     </ClInclude>
+    <ClInclude Include="virtualLegCtrl.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

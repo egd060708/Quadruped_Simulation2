@@ -38,8 +38,8 @@ namespace Quadruped
         Leg(double _l1, double _l2, double _l3, double ratio) : L1(ratio* _l1), L2(_l2), L3(_l3) {}
         void updateJointAng(Vector3d _jAngle);          // 更新各关节观测角度
         void updateJointVel(Vector3d _jVel);            // 更新关节观测角速度
-        void updateJointTau(Vector3d _jTorque);         // 更新关节观测李军
-        void legJacobi_Cal();                           // 根据当前电机角速度计算雅可比矩阵
+        void updateJointTau(Vector3d _jTorque);         // 更新关节观测力矩
+        Matrix3d legJacobi_Cal(JointS &_joint);         // 根据当前电机角速度计算雅可比矩阵
         void legFK_Cal();                               // 包括由当前角度映射末端位姿，由当前角速度映射末端速度，由当前力矩映射当前末端力
         void setTargetLegPositon(Vector3d _lPosition);  // 更新腿部末端位置目标值
         void setTargetLegVelocity(Vector3d _lVelocity); // 更新腿部末端速度目标值
@@ -64,24 +64,26 @@ namespace Quadruped
         currentJoint.Torque = _jTorque;
     }
 
-    void Leg::legJacobi_Cal()
+    Matrix3d Leg::legJacobi_Cal(JointS& _joint)
     {
         // 雅可比矩阵计算
-        double s1 = sin(currentJoint.Angle(0));
-        double c1 = cos(currentJoint.Angle(0));
-        double s2 = sin(currentJoint.Angle(1));
-        double c2 = cos(currentJoint.Angle(1));
-        double s23 = sin(currentJoint.Angle(1) + currentJoint.Angle(2));
-        double c23 = cos(currentJoint.Angle(1) + currentJoint.Angle(2));
-        jacobi(0, 0) = 0;
-        jacobi(0, 1) = -L2 * c2 - L3 * c23;
-        jacobi(0, 2) = -L3 * c23;
-        jacobi(1, 0) = -L1 * s1 + L2 * c1 * c2 + L3 * c1 * c23;
-        jacobi(1, 1) = -L2 * s1 * s2 - L3 * s1 * s23;
-        jacobi(1, 2) = -L3 * s1 * s23;
-        jacobi(2, 0) = L1 * c1 + L2 * s1 * c2 + L3 * s1 * c23;
-        jacobi(2, 1) = L2 * c1 * s2 + L3 * c1 * s23;
-        jacobi(2, 2) = L3 * c1 * s23;
+        Matrix3d J = Matrix3d::Zero();
+        double s1 = sin(_joint.Angle(0));
+        double c1 = cos(_joint.Angle(0));
+        double s2 = sin(_joint.Angle(1));
+        double c2 = cos(_joint.Angle(1));
+        double s23 = sin(_joint.Angle(1) + _joint.Angle(2));
+        double c23 = cos(_joint.Angle(1) + _joint.Angle(2));
+        J(0, 0) = 0;
+        J(0, 1) = -L2 * c2 - L3 * c23;
+        J(0, 2) = -L3 * c23;
+        J(1, 0) = -L1 * s1 + L2 * c1 * c2 + L3 * c1 * c23;
+        J(1, 1) = -L2 * s1 * s2 - L3 * s1 * s23;
+        J(1, 2) = -L3 * s1 * s23;
+        J(2, 0) = L1 * c1 + L2 * s1 * c2 + L3 * s1 * c23;
+        J(2, 1) = L2 * c1 * s2 + L3 * c1 * s23;
+        J(2, 2) = L3 * c1 * s23;
+        return J;
     }
 
     void Leg::legFK_Cal()

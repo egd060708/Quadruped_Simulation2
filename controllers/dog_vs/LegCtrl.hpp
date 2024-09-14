@@ -120,7 +120,7 @@ namespace Quadruped
 
     void LegCtrl::legStateCal()
     {
-        legObject->legJacobi_Cal();
+        legObject->jacobi = legObject->legJacobi_Cal(legObject->currentJoint);
         legObject->legFK_Cal();
         legObject->legIK_Cal();
     }
