@@ -54,9 +54,8 @@ int main(int argc, char** argv)
     motors[Quadruped::LF][2] = robot->getMotor("FL_calf_joint");
     for (int i = 0; i < 3; i++)
     {
-        //motors[Quadruped::LF][i]->setPosition(INFINITY);
-        //motors[Quadruped::LF][i]->setPosition(0);
-        //motors[Quadruped::LF][i]->setVelocity(0);
+        motors[Quadruped::LF][i]->setPosition(INFINITY);
+        motors[Quadruped::LF][i]->setVelocity(0);
     }
     
     motors[Quadruped::RF][0] = robot->getMotor("FR_hip_joint");
@@ -64,9 +63,8 @@ int main(int argc, char** argv)
     motors[Quadruped::RF][2] = robot->getMotor("FR_calf_joint");
     for (int i = 0; i < 3; i++)
     {
-        //motors[Quadruped::RF][i]->setPosition(INFINITY);
-        //motors[Quadruped::RF][i]->setPosition(0);
-        //motors[Quadruped::RF][i]->setVelocity(0);
+        motors[Quadruped::RF][i]->setPosition(INFINITY);
+        motors[Quadruped::RF][i]->setVelocity(0);
     }
 
     motors[Quadruped::LB][0] = robot->getMotor("RL_hip_joint");
@@ -74,9 +72,8 @@ int main(int argc, char** argv)
     motors[Quadruped::LB][2] = robot->getMotor("RL_calf_joint");
     for (int i = 0; i < 3; i++)
     {
-        //motors[Quadruped::LB][i]->setPosition(INFINITY);
-        //motors[Quadruped::LB][i]->setPosition(0);
-        //motors[Quadruped::LB][i]->setVelocity(0);
+        motors[Quadruped::LB][i]->setPosition(INFINITY);
+        motors[Quadruped::LB][i]->setVelocity(0);
     }
 
     motors[Quadruped::RB][0] = robot->getMotor("RR_hip_joint");
@@ -84,9 +81,8 @@ int main(int argc, char** argv)
     motors[Quadruped::RB][2] = robot->getMotor("RR_calf_joint");
     for (int i = 0; i < 3; i++)
     {
-        //motors[Quadruped::RB][i]->setPosition(INFINITY);
-        //motors[Quadruped::RB][i]->setPosition(0);
-        //motors[Quadruped::RB][i]->setVelocity(0);
+        motors[Quadruped::RB][i]->setPosition(INFINITY);
+        motors[Quadruped::RB][i]->setVelocity(0);
     }
 
     // get position sensor
@@ -310,32 +306,32 @@ int main(int argc, char** argv)
             y_t += real_vt(1) * 0.001 * timeStep;
             yaw_t += vyaw_t * 0.001 * timeStep;
 
-            //IOFormat CleanFmt(3, 0, ", ", "\n", "[", "]");
-            //IOFormat CommaInitFmt(StreamPrecision, DontAlignCols, ", ", ", ", "", "", " << ", ";");
+            IOFormat CleanFmt(3, 0, ", ", "\n", "[", "]");
+            IOFormat CommaInitFmt(StreamPrecision, DontAlignCols, ", ", ", ", "", "", " << ", ";");
 
-            //const double* imuRPY_data = imu->getRollPitchYaw();
-            //const double* imuQ_data = imu->getQuaternion();
-            //const double* gyro_data = gyro->getValues();
-            //const double* acc_data = acc->getValues();
+            const double* imuRPY_data = imu->getRollPitchYaw();
+            const double* imuQ_data = imu->getQuaternion();
+            const double* gyro_data = gyro->getValues();
+            const double* acc_data = acc->getValues();
 
-            //imuRPYd << static_cast<double>(imuRPY_data[0]), static_cast<double>(imuRPY_data[1]), static_cast<double>(imuRPY_data[2]);
-            //imuQd << static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]);
-            //gyrod << static_cast<double>(gyro_data[0]), static_cast<double>(gyro_data[1]), static_cast<double>(gyro_data[2]);
-            //accd << static_cast<double>(acc_data[0]), static_cast<double>(acc_data[1]), static_cast<double>(acc_data[2]);
-            ////qp_body.updateBodyImu(imuRPYd);
-            //qp_body.updateBodyImu(imuQd);
-            //qp_body.updateBodyGyro(gyrod);
-            //qp_body.updateBodyAcc(accd);
-            ////qp_body.updateBodyAcc(gps_acc);
-            //qp_body.calTbs(1);
-            //qp_body.bodyAndWorldFramePosition(1);
-            //qp_body.legAndBodyPosition(1);
-            //qp_body.legVelocityInWorldFrame();
-            //if (t > 0.2)
-            //{
-            //    qp_body.estimatorRun(contactResult, phaseResult);
-            //    qp_body.updateDynamic();
-            //}
+            imuRPYd << static_cast<double>(imuRPY_data[0]), static_cast<double>(imuRPY_data[1]), static_cast<double>(imuRPY_data[2]);
+            imuQd << static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]);
+            gyrod << static_cast<double>(gyro_data[0]), static_cast<double>(gyro_data[1]), static_cast<double>(gyro_data[2]);
+            accd << static_cast<double>(acc_data[0]), static_cast<double>(acc_data[1]), static_cast<double>(acc_data[2]);
+            //qp_body.updateBodyImu(imuRPYd);
+            qp_body.updateBodyImu(imuQd);
+            qp_body.updateBodyGyro(gyrod);
+            qp_body.updateBodyAcc(accd);
+            //qp_body.updateBodyAcc(gps_acc);
+            qp_body.calTbs(1);
+            qp_body.bodyAndWorldFramePosition(1);
+            qp_body.legAndBodyPosition(1);
+            qp_body.legVelocityInWorldFrame();
+            if (t > 0.2)
+            {
+                qp_body.estimatorRun(contactResult, phaseResult);
+                qp_body.updateDynamic();
+            }
 
 
             /*std::cout << "estimatorOut:" << std::endl;*/
@@ -377,20 +373,21 @@ int main(int argc, char** argv)
                 qp_body.legAndBodyPosition(-1);
             }
 
-            if (use_mpc == false)
-            {
-                for (int i(0); i < 4; i++)
-                {
-                    vLegsCtrl[i]->virtualLegCtrlPosition();
-                    std::cout << i << " : " << legsObj[i]->targetJoint.Angle << std::endl;
-                    for (int j(0); j < 3; j++)
-                    {
-                        motors[i][j]->setPosition(legsObj[i]->targetJoint.Angle(j));
-                    }
-                }
-            }
+            //// 使用伪反馈VMC控制机体姿态
+            //if (use_mpc == false)
+            //{
+            //    for (int i(0); i < 4; i++)
+            //    {
+            //        vLegsCtrl[i]->virtualLegCtrlPosition();
+            //        std::cout << i << " : " << legsObj[i]->targetJoint.Angle << std::endl;
+            //        for (int j(0); j < 3; j++)
+            //        {
+            //            motors[i][j]->setPosition(legsObj[i]->targetJoint.Angle(j));
+            //        }
+            //    }
+            //}
 
-            /*Eigen::Vector3d encoderValue[4];
+            Eigen::Vector3d encoderValue[4];
             Eigen::Vector3d motorSpeed[4];
             for (int i = 0; i < 4; i++)
             {
@@ -452,7 +449,7 @@ int main(int argc, char** argv)
                 {
                     motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Torque(k), 43));
                 }
-            }*/
+            }
 
             /*std::cout << "mpc_out:" << std::endl;
             std::cout << qp_ctrl.mpcOut.format(CommaInitFmt) << std::endl;

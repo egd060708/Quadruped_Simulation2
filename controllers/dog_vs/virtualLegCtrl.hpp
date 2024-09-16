@@ -15,7 +15,6 @@ namespace Quadruped
 		Vector3d kp_p = Vector3d::Zero();
 		Vector3d kd_p = Vector3d::Zero();
 		Vector3d kp_t = Vector3d::Zero();
-		Vector3d lastP = Vector3d::Zero();
 	public:
 		virtualLegCtrl(Leg* _leg, int _timeStep)
 		{
