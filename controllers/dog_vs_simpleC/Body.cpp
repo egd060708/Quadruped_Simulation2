@@ -51,6 +51,12 @@ void UpdateRsbI_R(double _RI[3][3], double _R[3][3])
 	m3d_transpose2(_RI, _R);
 }
 
+/* 更新机身坐标系在世界坐标系下的位移向量 */
+void UpdatePsb(double _P[3], double _dist[3])
+{
+	memcpy(_P, _dist, 3 * sizeof(double));
+}
+
 /* 机身坐标系腿部末端参数转换到单腿坐标系 */
 void Leg2BodyP(EndS* _bodyLeg, EndS* _Leg, double _leg2Body[3])
 {
@@ -91,25 +97,27 @@ void Body2LegAll(EndS* _l[4], EndS* _bl[4], double _leg2Body[3])
 		for (int j = 0; j < 3; j++)
 		{
 			_l[i]->Position[j] = _bl[i]->Position[j] - temp[i][j];
+			_l[i]->Velocity[j] = _bl[i]->Velocity[j];
 		}
 	}
 }
 
 /* 机身坐标系腿部末端转换到世界坐标系 */
-void Body2WorldP(worldFrame* _w, bodyFrame* _b, double _R[3][3])
+void Body2WorldP(worldFrame* _w, bodyFrame* _b, double _R[3][3], double _P[3])
 {
 	for (int i = 0; i < 4; i++)
 	{
-		transform_calc(_w->leg_s[i].Position, _b->leg_b[i].Position, _R, _w->dist);
+		transform_calc(_w->leg_s[i].Position, _b->leg_b[i].Position, _R, _P);
 	}
 }
 
 /* 世界坐标系腿部末端转换机身坐标系 */
-void World2BodyP(bodyFrame* _b, worldFrame* _w, double _invR[3][3])
+void World2BodyP(bodyFrame* _b, worldFrame* _w, double _invR[3][3], double _P[3])
 {
 	for (int i = 0; i < 4; i++)
 	{
-		invTransform_calc(_b->leg_b[i].Position, _w->leg_s[i].Position, _invR, _w->dist);
+		invTransform_calc(_b->leg_b[i].Position, _w->leg_s[i].Position, _invR, _P);
+		mult_m3d_v3d(_b->leg_b[i].Velocity, _invR, _w->leg_s[i].Velocity);
 	}
 }
 
@@ -119,6 +127,24 @@ void UpdateFootPoint(worldFrame* _wf, double _point[4][3])
 	for (int i = 0; i < 4; i++)
 	{
 		memcpy(_wf->leg_s[i].Position, &_point[i][0], 3 * sizeof(double));
+	}
+}
+
+/* 设置基础立足点（相对于机体中心投影到地面的位置） */
+void UpdateFootPointBase(worldFrame* _wf, double _point[4][3])
+{
+	for (int i = 0; i < 4; i++)
+	{
+		memcpy(_wf->legP_base[i], &_point[i][0], 3 * sizeof(double));
+	}
+}
+
+/* 设置足端速度 */
+void UpdateFootVel(worldFrame* _wf, double _vel[4][3])
+{
+	for (int i = 0; i < 4; i++)
+	{
+		memcpy(_wf->leg_s->Velocity, &_vel[i][0], 3 * sizeof(double));
 	}
 }
 

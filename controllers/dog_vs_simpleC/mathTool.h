@@ -12,5 +12,6 @@ void m3d_transpose1(double _dst[3][3]);
 void m3d_transpose2(double _dst[3][3], double _src[3][3]);
 void transform_calc(double _dst[3], double _src[3], double _R[3][3], double _P[3]);
 void invTransform_calc(double _dst[3], double _src[3], double _invR[3][3], double _P[3]);
+double slopeConstrain(double _tar, double _cur, double _acc, double _dec);
 
 #endif

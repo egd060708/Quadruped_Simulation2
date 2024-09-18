@@ -169,3 +169,20 @@ void invTransform_calc(double _dst[3], double _src[3], double _invR[3][3], doubl
 	mult_m4d_v4d(Res4d, T, P4d);
 	memcpy(_dst, Res4d, 3 * sizeof(double));
 }
+
+/* ÏÞÖÆÐ±ÂÊ */
+double slopeConstrain(double _tar, double _cur, double _acc, double _dec)
+{
+	if ((_tar - _cur) > _acc)
+	{
+		return (_cur + _acc);
+	}
+	else if ((_tar - _cur) < _dec)
+	{
+		return (_cur + _dec);
+	}
+	else
+	{
+		return _tar;
+	}
+}

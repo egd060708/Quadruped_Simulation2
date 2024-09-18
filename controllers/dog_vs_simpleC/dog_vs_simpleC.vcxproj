@@ -156,12 +156,14 @@
     <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\VacuumGripper.cpp" />
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="dog_vs_simpleC.cpp" />
+    <ClCompile Include="GaitCtrl.cpp" />
     <ClCompile Include="Leg.cpp" />
     <ClCompile Include="LegCtrl.cpp" />
     <ClCompile Include="mathTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h" />
+    <ClInclude Include="GaitCtrl.h" />
     <ClInclude Include="Leg.h" />
     <ClInclude Include="LegCtrl.h" />
     <ClInclude Include="main.h" />
