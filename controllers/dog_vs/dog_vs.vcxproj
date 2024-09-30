@@ -110,7 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Libraries\qpOASES-stable-3.2\install\include\qpOASES;D:\Libraries\qpOASES-stable-3.2\install\include;D:\Libraries\eigen-3.4.0\install\include\eigen3;$(WEBOTS_HOME)/include/controller/c;$(WEBOTS_HOME)/include/controller/cpp</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git_Project\github\Quadruped_Simulation2\libraries\robot_module\observer\KelmanFilter\Cpp\include;D:\Git_Project\github\Quadruped_Simulation2\libraries\filter_module\Cpp\include;D:\Git_Project\github\Quadruped_Simulation2\libraries\robot_module\Quadruped\Cpp\include;D:\Git_Project\github\Quadruped_Simulation2\libraries\other_module\Webots\include;D:\Git_Project\github\Quadruped_Simulation2\libraries\robot_module\controller\Pid\Cpp\include;D:\Git_Project\github\Quadruped_Simulation2\libraries\robot_module\controller\Mpc\Cpp\include;D:\Libraries\qpOASES-stable-3.2\install\include\qpOASES;D:\Libraries\qpOASES-stable-3.2\install\include;D:\Libraries\eigen-3.4.0\install\include\eigen3;$(WEBOTS_HOME)/include/controller/c;$(WEBOTS_HOME)/include/controller/cpp</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -172,6 +172,7 @@
     <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\SQProblemSchur.cpp" />
     <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\SubjectTo.cpp" />
     <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Utils.cpp" />
+    <ClCompile Include="..\..\libraries\robot_module\controller\Pid\Cpp\source\PIDmethod.cpp" />
     <ClCompile Include="dog_vs.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,18 +196,17 @@
     <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Types.hpp" />
     <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\UnitTesting.hpp" />
     <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Utils.hpp" />
-    <ClInclude Include="..\..\libraries\myLibs\vofaTransmit.h" />
-    <ClInclude Include="Body.hpp" />
-    <ClInclude Include="BodyCtrl.hpp" />
-    <ClInclude Include="GaitCtrl.hpp" />
-    <ClInclude Include="kalmanFilter.hpp" />
-    <ClInclude Include="Leg.hpp" />
-    <ClInclude Include="LegCtrl.hpp" />
-    <ClInclude Include="mpcCal.hpp" />
-    <ClInclude Include="multiCircle.hpp" />
+    <ClInclude Include="..\..\libraries\other_module\Webots\include\dataDisplay.h" />
+    <ClInclude Include="..\..\libraries\other_module\Webots\include\vofaTransmit.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Body.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrl.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\GaitCtrl.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Leg.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\LegCtrl.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\multiCircle.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\virtualLegCtrl.h" />
     <ClInclude Include="RobotParams.hpp" />
     <ClInclude Include="StateMachine.hpp" />
-    <ClInclude Include="virtualLegCtrl.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

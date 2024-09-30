@@ -158,6 +158,9 @@
     <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\VacuumGripper.cpp">
       <Filter>webotsLib</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\robot_module\controller\Pid\Cpp\source\PIDmethod.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="qpOASES">
@@ -231,40 +234,37 @@
     <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Utils.hpp">
       <Filter>qpOASES</Filter>
     </ClInclude>
-    <ClInclude Include="Body.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="BodyCtrl.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="kalmanFilter.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="Leg.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="LegCtrl.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="mpcCal.hpp">
-      <Filter>application</Filter>
-    </ClInclude>
     <ClInclude Include="RobotParams.hpp">
       <Filter>application</Filter>
     </ClInclude>
     <ClInclude Include="StateMachine.hpp">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\myLibs\vofaTransmit.h">
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Body.h">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="GaitCtrl.hpp">
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrl.h">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="multiCircle.hpp">
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\GaitCtrl.h">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="virtualLegCtrl.hpp">
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Leg.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\LegCtrl.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\multiCircle.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\virtualLegCtrl.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\other_module\Webots\include\dataDisplay.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\other_module\Webots\include\vofaTransmit.h">
       <Filter>application</Filter>
     </ClInclude>
   </ItemGroup>

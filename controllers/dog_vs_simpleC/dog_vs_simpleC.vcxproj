@@ -110,7 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(WEBOTS_HOME)/include/controller/c;$(WEBOTS_HOME)/include/controller/cpp</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git_Project\github\Quadruped_Simulation2\libraries\robot_module\myMath\Cpp\include;D:\Git_Project\github\Quadruped_Simulation2\libraries\robot_module\Quadruped_Simple\Cpp\include;$(WEBOTS_HOME)/include/controller/c;$(WEBOTS_HOME)/include/controller/cpp</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -154,20 +154,13 @@
     <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Supervisor.cpp" />
     <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\TouchSensor.cpp" />
     <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\VacuumGripper.cpp" />
-    <ClCompile Include="Body.cpp" />
+    <ClCompile Include="..\..\libraries\robot_module\myMath\Cpp\source\mathPrint.cpp" />
+    <ClCompile Include="..\..\libraries\robot_module\myMath\Cpp\source\mathTool.cpp" />
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\Body.cpp" />
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\GaitCtrl.cpp" />
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\Leg.cpp" />
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\LegCtrl.cpp" />
     <ClCompile Include="dog_vs_simpleC.cpp" />
-    <ClCompile Include="GaitCtrl.cpp" />
-    <ClCompile Include="Leg.cpp" />
-    <ClCompile Include="LegCtrl.cpp" />
-    <ClCompile Include="mathTool.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Body.h" />
-    <ClInclude Include="GaitCtrl.h" />
-    <ClInclude Include="Leg.h" />
-    <ClInclude Include="LegCtrl.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="mathTool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

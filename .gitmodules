@@ -1,0 +1,9 @@
+[submodule "libraries/file_module"]
+	path = libraries/file_module
+	url = https://github.com/egd060708/file_module.git
+[submodule "libraries/robot_module"]
+	path = libraries/robot_module
+	url = https://github.com/egd060708/robot_module.git
+[submodule "libraries/other_module"]
+	path = libraries/other_module
+	url = https://github.com/egd060708/other_module.git

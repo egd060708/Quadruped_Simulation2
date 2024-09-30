@@ -104,19 +104,22 @@
     <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\VacuumGripper.cpp">
       <Filter>webotsLib</Filter>
     </ClCompile>
-    <ClCompile Include="Leg.cpp">
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\Body.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="LegCtrl.cpp">
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\GaitCtrl.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="mathTool.cpp">
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\Leg.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="Body.cpp">
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\LegCtrl.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="GaitCtrl.cpp">
+    <ClCompile Include="..\..\libraries\robot_module\myMath\Cpp\source\mathPrint.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\robot_module\myMath\Cpp\source\mathTool.cpp">
       <Filter>application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -127,25 +130,5 @@
     <Filter Include="application">
       <UniqueIdentifier>{01b3eebd-74bb-4ec6-9bcf-1e038e776bf1}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Leg.h">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="LegCtrl.h">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="mathTool.h">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="Body.h">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="GaitCtrl.h">
-      <Filter>application</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

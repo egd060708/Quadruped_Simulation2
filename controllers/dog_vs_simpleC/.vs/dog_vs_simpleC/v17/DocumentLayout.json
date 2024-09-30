@@ -3,52 +3,14 @@
   "WorkspaceRootPath": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\dog_vs_simpleC.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:dog_vs_simpleC.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\mathTool.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:mathTool.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Body.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:Body.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Leg.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:Leg.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Body.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:Body.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\LegCtrl.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:LegCtrl.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\GaitCtrl.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:GaitCtrl.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\GaitCtrl.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:GaitCtrl.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\mathTool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:mathTool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\LegCtrl.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:LegCtrl.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Leg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|solutionrelative:Leg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -58,155 +20,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "GaitCtrl.h",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\GaitCtrl.h",
-              "RelativeDocumentMoniker": "GaitCtrl.h",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\GaitCtrl.h",
-              "RelativeToolTip": "GaitCtrl.h",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABEAAAALAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-09-18T02:48:29.76Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "GaitCtrl.cpp",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\GaitCtrl.cpp",
-              "RelativeDocumentMoniker": "GaitCtrl.cpp",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\GaitCtrl.cpp",
-              "RelativeToolTip": "GaitCtrl.cpp",
-              "ViewState": "AQIAAIcAAAAAAAAAAAAAAIcAAAAZAAAA",
+              "DocumentIndex": 0,
+              "Title": "LegCtrl.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp*",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp*",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-09-18T02:48:21.329Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "main.h",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\main.h",
-              "RelativeDocumentMoniker": "main.h",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\main.h",
-              "RelativeToolTip": "main.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-09-16T15:29:33.851Z",
+              "WhenOpened": "2024-09-30T07:21:15.438Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Body.cpp",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Body.cpp",
-              "RelativeDocumentMoniker": "Body.cpp",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Body.cpp",
-              "RelativeToolTip": "Body.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-09-16T05:42:41.51Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Body.h",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Body.h",
-              "RelativeDocumentMoniker": "Body.h",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Body.h",
-              "RelativeToolTip": "Body.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-09-16T05:42:12.407Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "mathTool.h",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\mathTool.h",
-              "RelativeDocumentMoniker": "mathTool.h",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\mathTool.h",
-              "RelativeToolTip": "mathTool.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAA3AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-09-15T14:04:14.8Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "mathTool.cpp",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\mathTool.cpp",
-              "RelativeDocumentMoniker": "mathTool.cpp",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\mathTool.cpp",
-              "RelativeToolTip": "mathTool.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAcAAAA",
+              "Title": "Body.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAADwvwAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-09-15T14:04:06.572Z",
+              "WhenOpened": "2024-09-30T07:19:42.789Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "LegCtrl.h",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\LegCtrl.h",
-              "RelativeDocumentMoniker": "LegCtrl.h",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\LegCtrl.h",
-              "RelativeToolTip": "LegCtrl.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-09-15T13:21:11.59Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "LegCtrl.cpp",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\LegCtrl.cpp",
-              "RelativeDocumentMoniker": "LegCtrl.cpp",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\LegCtrl.cpp",
-              "RelativeToolTip": "LegCtrl.cpp",
-              "ViewState": "AQIAACQAAAAAAAAAAAAAADIAAAAuAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-09-15T13:21:01.482Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Leg.cpp",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Leg.cpp",
-              "RelativeDocumentMoniker": "Leg.cpp",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Leg.cpp",
-              "RelativeToolTip": "Leg.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAE4AAAA5AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-09-15T07:46:54.833Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Leg.h",
-              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Leg.h",
-              "RelativeDocumentMoniker": "Leg.h",
-              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\Leg.h",
-              "RelativeToolTip": "Leg.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAALAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-09-15T07:46:54.809Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "dog_vs_simpleC.cpp",
               "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\dog_vs_simpleC.cpp",
               "RelativeDocumentMoniker": "dog_vs_simpleC.cpp",
               "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\dog_vs_simpleC.cpp",
               "RelativeToolTip": "dog_vs_simpleC.cpp",
-              "ViewState": "AQIAAKMAAAAAAAAAAAAAALEAAAAxAAAA",
+              "ViewState": "AQIAADABAAAAAAAAAAAAADkBAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-09-15T07:46:54.519Z",
               "EditorCaption": ""

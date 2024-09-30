@@ -8,16 +8,16 @@
 #include <webots/Keyboard.hpp>
 #include <webots/GPS.hpp>
 #include <webots/Display.hpp>
-#include "LegCtrl.hpp"
+#include "LegCtrl.h"
 #include "RobotParams.hpp"
-#include "Body.hpp"
-#include "kalmanFilter.hpp"
-#include "BodyCtrl.hpp"
-#include "../../libraries/myLibs/vofaTransmit.h"
-#include "GaitCtrl.hpp"
-#include "../../libraries/myLibs/SecondButterworthLPF.h"
-#include "virtualLegCtrl.hpp"
-#include "../../libraries/myLibs/dataDisplay.h"
+#include "Body.h"
+#include "kelmanFilter.h"
+#include "BodyCtrl.h"
+#include "vofaTransmit.h"
+#include "GaitCtrl.h"
+#include "SecondButterworthLPF.h"
+#include "virtualLegCtrl.h"
+#include "dataDisplay.h"
 
 
 using namespace webots;
@@ -192,12 +192,6 @@ int main(int argc, char** argv)
     for (auto p : last_encoderValue)
     {
         p.setZero();
-    }
-
-    SecondOrderButterworthLPF lpf[4];
-    for (auto p : lpf)
-    {
-        lpf->init(50, 500);
     }
 
     // 由于webots的加速度传感器节点效果很差，因此使用gps进行加速度计算
