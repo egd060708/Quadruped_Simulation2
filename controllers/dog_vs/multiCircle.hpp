@@ -32,4 +32,9 @@ public:
 		last_real = _real;
 		return (_real + (period_up - period_down) * count);
 	}
+	void restart(double _real)
+	{
+		last_real = _real;
+		count = 0;
+	}
 };

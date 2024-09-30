@@ -7,6 +7,7 @@
 #include <webots/Compass.hpp>
 #include <webots/Keyboard.hpp>
 #include <webots/GPS.hpp>
+#include <webots/Display.hpp>
 #include "LegCtrl.hpp"
 #include "RobotParams.hpp"
 #include "Body.hpp"
@@ -16,6 +17,7 @@
 #include "GaitCtrl.hpp"
 #include "../../libraries/myLibs/SecondButterworthLPF.h"
 #include "virtualLegCtrl.hpp"
+#include "../../libraries/myLibs/dataDisplay.h"
 
 
 using namespace webots;
@@ -45,6 +47,7 @@ int main(int argc, char** argv)
     compass->enable(timeStep);
     GPS* gps = robot->getGPS("trunk_imu gps");
     gps->enable(timeStep);
+    Display* disp = robot->getDisplay("trunk_imu display");
 
     // get motor
     Motor* motors[4][3];
@@ -183,6 +186,7 @@ int main(int argc, char** argv)
     Eigen::Matrix<double, 3, 4> feetVel;
 
     //VOFA vofa("vjs.exe");
+    dataDisplay<2> dispD(disp);
 
     Eigen::Vector3d last_encoderValue[4];
     for (auto p : last_encoderValue)
@@ -555,7 +559,8 @@ int main(int argc, char** argv)
             data[20] = float(qp_ctrl.currentBalanceState.p_dot(2));
             vofa.dataTransmit(data, 5);*/
         }
-        
+        float dispBuff[2] = { 0.5,5.5 };
+        dispD.sendCtrl(dispBuff);
     };
 
     // Enter here exit cleanup code.

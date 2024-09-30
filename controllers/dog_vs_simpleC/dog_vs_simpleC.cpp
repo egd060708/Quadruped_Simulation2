@@ -350,7 +350,7 @@ void printM(std::string _n, double** _m, int _row, int _col)
                 }
                 else
                 {
-                    std::cout << " " << *((double*)_m + _col * i + j) << "]";
+                    std::cout << " " << *((double*)_m + _col * i + j) << "]" << std::endl;
                 }
             }
         }
