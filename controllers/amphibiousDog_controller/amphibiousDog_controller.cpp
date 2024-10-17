@@ -12,8 +12,13 @@
 #include "Body.h"
 #include "mathPrint.h"
 #include "GaitCtrl.h"
+#include "water_gait1.h"
 
 #define MOTOR_TORQUE 0
+#define BACK_INV 1 // 是否使用后腿反屈膝
+#define STAND_BIAS 0.023 // 中性落足点的偏移，相对于四个髋关节的位置，正为向外，负为向内
+#define HEIGHT 0.15
+#define IS_WATER_GAIT 1
 
 // All the webots classes are defined in the "webots" namespace
 using namespace webots;
@@ -102,19 +107,24 @@ int main(int argc, char **argv) {
   Leg_Ctrl_Param legsCtrlParam[4];
   Body body;
   double links[2] = { 0.09, 0.1225};
-  InitLeg(&legsObj[LF], links, 1);
-  InitLeg(&legsObj[RF], links, -1);
-  InitLeg(&legsObj[LB], links, 1);
-  InitLeg(&legsObj[RB], links, -1);
+  InitLeg(&legsObj[LF], links, 1, 1);
+  InitLeg(&legsObj[RF], links, -1, 1);
+#if BACK_INV==1
+  InitLeg(&legsObj[LB], links, 1, -1);
+  InitLeg(&legsObj[RB], links, -1, -1);
+#else
+  InitLeg(&legsObj[LB], links, 1, 1);
+  InitLeg(&legsObj[RB], links, -1, 1);
+#endif
   double kp_p[3] = { 10,10,-5 };
   //double kd_p[3] = { 0.5,0.5,-0.25 };
   double kd_p[3] = { 0.,0.,-0. };
   double kp_t[3] = { 1,1,1 };
   double init_p[4][3] = {
-      {0.0, 0, -0.15},
-      {0.0, 0, -0.15},
-      {0.0, 0, -0.15},
-      {0.0, 0, -0.15}
+      {STAND_BIAS, 0, -HEIGHT},
+      {STAND_BIAS, 0, -HEIGHT},
+      {-STAND_BIAS, 0, -HEIGHT},
+      {-STAND_BIAS, 0, -HEIGHT}
   };
   for (int i = 0; i < 4; i++)
   {
@@ -126,21 +136,25 @@ int main(int argc, char **argv) {
   double leg2Body[3] = { 0.12, 0.0826, 0 };
   SetBodyParam(&body, leg2Body);
   double init_Ep[4][3] = {
-      {0.12, 0.0826, 0.},
-      {0.12, -0.0826, 0.},
-      {-0.12, 0.0826, 0.},
-      {-0.12, -0.0826, 0.},
+      {0.12 + STAND_BIAS, 0.0826, 0.},
+      {0.12 + STAND_BIAS, -0.0826, 0.},
+      {-0.12 - STAND_BIAS, 0.0826, 0.},
+      {-0.12 - STAND_BIAS, -0.0826, 0.},
   };
   UpdateFootPoint(&body.targetWorldState, init_Ep);
   UpdateFootPointBase(&body.targetWorldState, init_Ep);
   double angle_t[3] = { 0,0,0 };
-  double p_t[3] = { 0,0,0.15 };
+  double p_t[3] = { 0,0,HEIGHT };
   UpdateBodyPos(&body.targetWorldState, angle_t, p_t);
   GaitS gaitData;
   double bias[4] = { 0.5, 0, 0, 0.5 };
   InitGaitCtrl(&gaitData, &body, 0.6, 0.5, bias);
   double cmd_slope[3] = { 0.01,0.01,0.01 };
   bool is_gait = false;
+
+  // 水下步态参数
+  double water_Ts = 4.;
+  double water_start_t = 0;
 
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
@@ -157,7 +171,7 @@ int main(int argc, char **argv) {
           {
           case keyboard->UP:
               //p_t[0] += 0.0002;
-              gait_cmd[0] = 0.3;
+              gait_cmd[0] = 0.2;
               break;
           case keyboard->DOWN:
               //p_t[0] -= 0.0002;
@@ -202,76 +216,111 @@ int main(int argc, char **argv) {
           case 'U':
               is_gait = true;
               GaitRestart(&gaitData, t);
+              water_start_t = t;
               break;
           case 'I':
               is_gait = false;
+              water_start_t = 0;
               break;
           }
           key = keyboard->getKey();
       }
-      // 更新机身姿态目标
-      UpdateBodyPos(&body.targetWorldState, angle_t, p_t);
-      UpdateRsb(body.Rsb_t, body.targetWorldState.Ang_xyz);
-      UpdateRsbI_R(body.RsbI_t, body.Rsb_t);
-      UpdatePsb(body.Psb_t, body.targetWorldState.dist);
-      // 更新伪反馈
-      EndS* leg4c[4] = { &body.legs[LF]->currentEnd,
-                        &body.legs[RF]->currentEnd,
-                        &body.legs[LB]->currentEnd,
-                        &body.legs[RB]->currentEnd };
-      EndS* bleg4c[4] = { &body.currentBodyState.leg_b[LF],
-                         &body.currentBodyState.leg_b[RF],
-                         &body.currentBodyState.leg_b[LB],
-                         &body.currentBodyState.leg_b[RB] };
-      Leg2BodyAll(bleg4c, leg4c, body.leg2body);
-      Body2WorldP(&body.currentWorldState, &body.currentBodyState, body.Rsb_t, body.Psb_t);
-      // 步态生成
-      SetGaitCmd(&gaitData, gait_cmd, cmd_slope);
-      PhaseGen(&gaitData, t);
-      GaitGen(&gaitData);
-      /*printV("R", gaitData.R, 4);
-      printV("t", gaitData.theta, 4);*/
-      if (is_gait == true)
+      if (IS_WATER_GAIT)
       {
-          UpdateFootPoint(&body.targetWorldState, gaitData.End_Pos);
-          UpdateFootVel(&body.targetWorldState, gaitData.End_Vel);
+          double get_gait[4][2];
+          getGait(get_gait, water_Ts, t, water_start_t);
+          for (int i = 0; i < 4; i++)
+          {
+              for (int j = 0; j < 2; j++)
+              {
+                  double out_angle = 0;
+                  if (i == 1 || i == 3)
+                  {
+                      out_angle = -(get_gait[i][j]);
+                      if (j == 0)
+                      {
+                          out_angle -= 3.1415926 / 2.;
+                      }
+                  }
+                  else
+                  {
+                      out_angle = get_gait[i][j];
+                      if (j == 0)
+                      {
+                          out_angle += 3.1415926 / 2.;
+                      }
+                  }
+                  
+                  motors[i][j]->setPosition(out_angle);
+              }
+          }
       }
       else
       {
-          UpdateFootPoint(&body.targetWorldState, init_Ep);
-          double end_v[4][3] = { 0 };
-          UpdateFootVel(&body.targetWorldState, end_v);
-      }
-      // 输出转换坐标系
-      //printV("WorldP", body.targetWorldState.leg_s[0].Position, 3);
-      World2BodyP(&body.targetBodyState, &body.targetWorldState, body.RsbI_t, body.Psb_t);
-      //printV("BodyP", body.targetBodyState.leg_b[0].Position, 3);
-      EndS* leg4t[4] = { &body.legs[LF]->targetEnd,
-                        &body.legs[RF]->targetEnd,
-                        &body.legs[LB]->targetEnd,
-                        &body.legs[RB]->targetEnd };
-      EndS* bleg4t[4] = { &body.targetBodyState.leg_b[LF],
-                         &body.targetBodyState.leg_b[RF],
-                         &body.targetBodyState.leg_b[LB],
-                         &body.targetBodyState.leg_b[RB] };
-      Body2LegAll(leg4t, bleg4t, body.leg2body);
-      /*printV("LegP", legsObj[0].targetEnd.Position, 3);*/
-      //LegVirtualVMC(&legsObj[0], &legsCtrlParam[0]);
-      // 接入控制器
-      /*std::cout << legsObj[0].targetJoint.Angle[0] << std::endl;
-      std::cout << legsObj[0].targetJoint.Angle[1] << std::endl;*/
-      for (int i = 0; i < 4; i++)
-      {
-          LegVirtualVMC(&legsObj[i], &legsCtrlParam[i]);
-          for (int j = 0; j < 2; j++)
+          // 更新机身姿态目标
+          UpdateBodyPos(&body.targetWorldState, angle_t, p_t);
+          UpdateRsb(body.Rsb_t, body.targetWorldState.Ang_xyz);
+          UpdateRsbI_R(body.RsbI_t, body.Rsb_t);
+          UpdatePsb(body.Psb_t, body.targetWorldState.dist);
+          // 更新伪反馈
+          EndS* leg4c[4] = { &body.legs[LF]->currentEnd,
+                            &body.legs[RF]->currentEnd,
+                            &body.legs[LB]->currentEnd,
+                            &body.legs[RB]->currentEnd };
+          EndS* bleg4c[4] = { &body.currentBodyState.leg_b[LF],
+                             &body.currentBodyState.leg_b[RF],
+                             &body.currentBodyState.leg_b[LB],
+                             &body.currentBodyState.leg_b[RB] };
+          Leg2BodyAll(bleg4c, leg4c, body.leg2body);
+          Body2WorldP(&body.currentWorldState, &body.currentBodyState, body.Rsb_t, body.Psb_t);
+          // 步态生成
+          SetGaitCmd(&gaitData, gait_cmd, cmd_slope);
+          PhaseGen(&gaitData, t);
+          GaitGen(&gaitData);
+          /*printV("R", gaitData.R, 4);
+          printV("t", gaitData.theta, 4);*/
+          if (is_gait == true)
           {
-              if (i == 1 || i == 3)
+              UpdateFootPoint(&body.targetWorldState, gaitData.End_Pos);
+              UpdateFootVel(&body.targetWorldState, gaitData.End_Vel);
+          }
+          else
+          {
+              UpdateFootPoint(&body.targetWorldState, init_Ep);
+              double end_v[4][3] = { 0 };
+              UpdateFootVel(&body.targetWorldState, end_v);
+          }
+          // 输出转换坐标系
+          //printV("WorldP", body.targetWorldState.leg_s[0].Position, 3);
+          World2BodyP(&body.targetBodyState, &body.targetWorldState, body.RsbI_t, body.Psb_t);
+          //printV("BodyP", body.targetBodyState.leg_b[0].Position, 3);
+          EndS* leg4t[4] = { &body.legs[LF]->targetEnd,
+                            &body.legs[RF]->targetEnd,
+                            &body.legs[LB]->targetEnd,
+                            &body.legs[RB]->targetEnd };
+          EndS* bleg4t[4] = { &body.targetBodyState.leg_b[LF],
+                             &body.targetBodyState.leg_b[RF],
+                             &body.targetBodyState.leg_b[LB],
+                             &body.targetBodyState.leg_b[RB] };
+          Body2LegAll(leg4t, bleg4t, body.leg2body);
+          /*printV("LegP", legsObj[0].targetEnd.Position, 3);*/
+          //LegVirtualVMC(&legsObj[0], &legsCtrlParam[0]);
+          // 接入控制器
+          /*std::cout << legsObj[0].targetJoint.Angle[0] << std::endl;
+          std::cout << legsObj[0].targetJoint.Angle[1] << std::endl;*/
+          for (int i = 0; i < 4; i++)
+          {
+              LegVirtualVMC(&legsObj[i], &legsCtrlParam[i]);
+              for (int j = 0; j < 2; j++)
               {
-                  motors[i][j]->setPosition(-legsObj[i].targetJoint.Angle[j]);
-              }
-              else
-              {
-                  motors[i][j]->setPosition(legsObj[i].targetJoint.Angle[j]);
+                  if (i == 1 || i == 3)
+                  {
+                      motors[i][j]->setPosition(-legsObj[i].targetJoint.Angle[j]);
+                  }
+                  else
+                  {
+                      motors[i][j]->setPosition(legsObj[i].targetJoint.Angle[j]);
+                  }
               }
           }
       }

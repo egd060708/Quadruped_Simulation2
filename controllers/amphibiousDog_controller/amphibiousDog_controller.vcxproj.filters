@@ -122,6 +122,9 @@
     <ClCompile Include="..\..\libraries\robot_module\myMath\Cpp\source\mathTool.cpp">
       <Filter>application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\robot_module\Quadruped_Simple\Cpp\source\water_gait1.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="webotsLib">
