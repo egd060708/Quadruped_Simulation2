@@ -1,0 +1,165 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\amphibiousDog_controller\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\amphibiousDog_controller\\amphibiousDog_controller.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|solutionrelative:amphibiousDog_controller.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Leg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\GIT_PROJECT\\GITHUB\\QUADRUPED_SIMULATION2\\LIBRARIES\\ROBOT_MODULE\\QUADRUPED_SIMPLE\\CPP\\INCLUDE\\LEG.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\GIT_PROJECT\\GITHUB\\QUADRUPED_SIMULATION2\\LIBRARIES\\ROBOT_MODULE\\QUADRUPED_SIMPLE\\CPP\\INCLUDE\\BODY.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\GIT_PROJECT\\GITHUB\\QUADRUPED_SIMULATION2\\LIBRARIES\\ROBOT_MODULE\\QUADRUPED_SIMPLE\\CPP\\INCLUDE\\LEGCTRL.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\GIT_PROJECT\\GITHUB\\QUADRUPED_SIMULATION2\\LIBRARIES\\ROBOT_MODULE\\MYMATH\\CPP\\INCLUDE\\MATHTOOL.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|amphibiousDog_controller.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\myMath\\Cpp\\source\\mathTool.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Leg.h",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-10-17T09:09:03.092Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Leg.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Leg.cpp",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Leg.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Leg.cpp",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Leg.cpp",
+              "ViewState": "AQIAAHgAAAAAAAAAAAAnwIQAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-17T09:03:56.093Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Body.h",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Body.h",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Body.h",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Body.h",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Body.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-10-17T08:47:36.232Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Body.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
+              "ViewState": "AQIAAIIAAAAAAAAAAAAnwI4AAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-17T08:47:24.115Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "mathTool.h",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\myMath\\Cpp\\include\\mathTool.h",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\myMath\\Cpp\\include\\mathTool.h",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\myMath\\Cpp\\include\\mathTool.h",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\myMath\\Cpp\\include\\mathTool.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAABGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-10-17T08:28:16.999Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "mathTool.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\myMath\\Cpp\\source\\mathTool.cpp",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\myMath\\Cpp\\source\\mathTool.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\myMath\\Cpp\\source\\mathTool.cpp",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\myMath\\Cpp\\source\\mathTool.cpp",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAAC8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-17T08:26:17.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "LegCtrl.h",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\LegCtrl.h",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\LegCtrl.h",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\LegCtrl.h",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\LegCtrl.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-10-17T08:21:19.471Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LegCtrl.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAnwBYAAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-17T08:20:29.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "amphibiousDog_controller.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\amphibiousDog_controller\\amphibiousDog_controller.cpp",
+              "RelativeDocumentMoniker": "amphibiousDog_controller.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\amphibiousDog_controller\\amphibiousDog_controller.cpp*",
+              "RelativeToolTip": "amphibiousDog_controller.cpp*",
+              "ViewState": "AQIAAIoAAAAAAAAAAAAAAIwAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-17T06:45:01.517Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

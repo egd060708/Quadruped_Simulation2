@@ -8,8 +8,8 @@ WorldInfo {
   basicTimeStep 2
 }
 Viewpoint {
-  orientation 0.0950475626634585 0.06477688303956021 -0.9933629327971802 2.535956054886573
-  position 1.4722750671038294 0.35322941804449925 0.5543921271064765
+  orientation 0.10384921755226764 0.13481954091274356 -0.9854131272729518 1.808063848213398
+  position 5.601940367898111 0.5061725599057081 1.038143747726699
 }
 TexturedBackground {
 }
@@ -138,8 +138,13 @@ Solid {
   }
 }
 Robot {
-  translation 0.1 -0.68 0.17
+  translation 4.7 -2.8 0.17
   children [
+    Accelerometer {
+      name "acc"
+    }
+    Gyro {
+    }
     InertialUnit {
       name "imu"
     }
@@ -148,10 +153,12 @@ Robot {
         position -0.7854
         axis 0 -1 0
         anchor -0.12 -0.1026 -0.01
+        minStop -1.57
       }
       device [
         RotationalMotor {
-          name "lf_hip_motor"
+          name "rb_hip_motor"
+          controlPID 20 1 0.1
         }
       ]
       endPoint Solid {
@@ -163,10 +170,12 @@ Robot {
               position 1.5708
               axis 0 -1 0
               anchor 0 0.02 -0.09
+              maxStop 2
             }
             device [
               RotationalMotor {
-                name "lf_knee_motor"
+                name "rb_knee_motor"
+                controlPID 20 1 0.1
               }
             ]
             endPoint Solid {
@@ -211,7 +220,7 @@ Robot {
               ]
               boundingObject USE calf
               physics Physics {
-                density 500
+                density 100
               }
             }
           }
@@ -334,7 +343,7 @@ Robot {
         name "solid(5)"
         boundingObject USE lap
         physics Physics {
-          density 500
+          density 100
         }
       }
     }
@@ -343,10 +352,12 @@ Robot {
         position -0.7854
         axis 0 -1 0
         anchor 0.12 -0.1026 -0.01
+        maxStop -1.57
       }
       device [
         RotationalMotor {
-          name "lf_hip_motor"
+          name "rf_hip_motor"
+          controlPID 20 1 0.1
         }
       ]
       endPoint Solid {
@@ -358,10 +369,12 @@ Robot {
               position 1.5708
               axis 0 -1 0
               anchor 0 0.02 -0.09
+              maxStop 2
             }
             device [
               RotationalMotor {
-                name "lf_knee_motor"
+                name "rf_knee_motor"
+                controlPID 20 1 0.1
               }
             ]
             endPoint Solid {
@@ -406,7 +419,7 @@ Robot {
               ]
               boundingObject USE calf
               physics Physics {
-                density 500
+                density 100
               }
             }
           }
@@ -529,7 +542,7 @@ Robot {
         name "solid(3)"
         boundingObject USE lap
         physics Physics {
-          density 500
+          density 100
         }
       }
     }
@@ -538,10 +551,12 @@ Robot {
         position 0.7854
         axis 0 1 0
         anchor -0.12 0.0626 -0.01
+        maxStop 1.57
       }
       device [
         RotationalMotor {
-          name "lf_hip_motor"
+          name "lb_hip_motor"
+          controlPID 20 1 0.1
         }
       ]
       endPoint Solid {
@@ -553,10 +568,12 @@ Robot {
               position -1.5708
               axis 0 1 0
               anchor 0 0.02 -0.09
+              minStop -2
             }
             device [
               RotationalMotor {
-                name "lf_knee_motor"
+                name "lb_knee_motor"
+                controlPID 20 1 0.1
               }
             ]
             endPoint Solid {
@@ -601,7 +618,7 @@ Robot {
               ]
               boundingObject USE calf
               physics Physics {
-                density 500
+                density 100
               }
             }
           }
@@ -724,7 +741,7 @@ Robot {
         name "solid(2)"
         boundingObject USE lap
         physics Physics {
-          density 500
+          density 100
         }
       }
     }
@@ -733,10 +750,12 @@ Robot {
         position 0.7854
         axis 0 1 0
         anchor 0.12 0.0626 -0.01
+        maxStop 1.57
       }
       device [
         RotationalMotor {
           name "lf_hip_motor"
+          controlPID 20 1 0.1
         }
       ]
       endPoint Solid {
@@ -748,10 +767,12 @@ Robot {
               position -1.5708
               axis 0 1 0
               anchor 0 0.02 -0.09
+              minStop -2
             }
             device [
               RotationalMotor {
                 name "lf_knee_motor"
+                controlPID 20 1 0.1
               }
             ]
             endPoint Solid {
@@ -796,7 +817,7 @@ Robot {
               ]
               boundingObject USE calf
               physics Physics {
-                density 500
+                density 100
               }
             }
           }
@@ -919,7 +940,7 @@ Robot {
         name "solid(1)"
         boundingObject USE lap
         physics Physics {
-          density 500
+          density 100
         }
       }
     }
@@ -1011,5 +1032,6 @@ Robot {
   physics Physics {
     density 500
   }
+  controller "amphibiousDog_controller"
   selfCollision TRUE
 }

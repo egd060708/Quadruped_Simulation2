@@ -139,10 +139,11 @@ int main(int argc, char **argv) {
   LegS legsObj[4];
   Leg_Ctrl_Param legsCtrlParam[4];
   Body body;
-  InitLeg(&legsObj[LF], 0.0838, 0.2, 0.2, 1);
-  InitLeg(&legsObj[RF], 0.0838, 0.2, 0.2, -1);
-  InitLeg(&legsObj[LB], 0.0838, 0.2, 0.2, 1);
-  InitLeg(&legsObj[RB], 0.0838, 0.2, 0.2, -1);
+  double links[3] = { 0.0838, 0.2, 0.2 };
+  InitLeg(&legsObj[LF], links, 1);
+  InitLeg(&legsObj[RF], links, -1);
+  InitLeg(&legsObj[LB], links, 1);
+  InitLeg(&legsObj[RB], links, -1);
   double kp_p[3] = { 10,10,-5 };
   //double kd_p[3] = { 0.5,0.5,-0.25 };
   double kd_p[3] = { 0.,0.,-0. };
