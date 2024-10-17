@@ -1,0 +1,1015 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+WorldInfo {
+  basicTimeStep 2
+}
+Viewpoint {
+  orientation 0.0950475626634585 0.06477688303956021 -0.9933629327971802 2.535956054886573
+  position 1.4722750671038294 0.35322941804449925 0.5543921271064765
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 20 20
+  floorTileSize 5 5
+}
+Solid {
+  translation 4.67 -7.04 -0.01
+  children [
+    Solid {
+      translation 0 0 0.01
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 5 5 0.02
+          }
+        }
+        Solid {
+          translation 0 0 0.5
+          children [
+            Solid {
+              translation 0 0 0.51
+              children [
+                Solid {
+                  translation 0 0.12 0.07
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                      }
+                      geometry Box {
+                        size 0.1 0.02 0.16
+                      }
+                    }
+                  ]
+                  name "solid(2)"
+                  boundingObject Box {
+                    size 0.1 0.02 0.16
+                  }
+                  physics Physics {
+                  }
+                }
+                Solid {
+                  translation 0 -0.12 0.07
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                      }
+                      geometry Box {
+                        size 0.1 0.02 0.16
+                      }
+                    }
+                  ]
+                  name "solid(1)"
+                  boundingObject Box {
+                    size 0.1 0.02 0.16
+                  }
+                  physics Physics {
+                  }
+                }
+                Solid {
+                  translation 0 0 0.14
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        roughness 1
+                      }
+                      geometry Box {
+                        size 0.1 0.22 0.02
+                      }
+                    }
+                  ]
+                  boundingObject Box {
+                    size 0.1 0.22 0.02
+                  }
+                  physics Physics {
+                  }
+                }
+                Shape {
+                  appearance PBRAppearance {
+                    roughness 1
+                  }
+                  geometry Box {
+                    size 0.1 0.22 0.02
+                  }
+                }
+              ]
+              boundingObject Box {
+                size 0.1 0.22 0.02
+              }
+              physics Physics {
+              }
+            }
+            Shape {
+              appearance PBRAppearance {
+                roughness 0.5
+              }
+              geometry Box {
+                size 0.1 0.1 1
+              }
+            }
+          ]
+          boundingObject Box {
+            size 0.1 0.1 1
+          }
+          physics Physics {
+          }
+        }
+      ]
+      boundingObject Box {
+        size 5 5 0.02
+      }
+      physics Physics {
+      }
+    }
+  ]
+  physics Physics {
+    density -1
+    mass 100
+  }
+}
+Robot {
+  translation 0.1 -0.68 0.17
+  children [
+    InertialUnit {
+      name "imu"
+    }
+    DEF rb_joint HingeJoint {
+      jointParameters HingeJointParameters {
+        position -0.7854
+        axis 0 -1 0
+        anchor -0.12 -0.1026 -0.01
+      }
+      device [
+        RotationalMotor {
+          name "lf_hip_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.12 -0.1026 -0.01
+        rotation 0 1 0 0.7854000000000001
+        children [
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position 1.5708
+              axis 0 -1 0
+              anchor 0 0.02 -0.09
+            }
+            device [
+              RotationalMotor {
+                name "lf_knee_motor"
+              }
+            ]
+            endPoint Solid {
+              translation 0 0.02 -0.09
+              rotation 0 -1 0 1.5708
+              children [
+                DEF calf Group {
+                  children [
+                    Pose {
+                      translation 0 0 -0.04
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Cylinder {
+                            height 0.12
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                    Pose {
+                      translation 0 0 -0.1
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Sphere {
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              boundingObject USE calf
+              physics Physics {
+                density 500
+              }
+            }
+          }
+          DEF lap Group {
+            children [
+              Pose {
+                translation 0 0.04625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.04625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.052
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.06 0.01
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 0
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.04
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.0285
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.04 0.057
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+        name "solid(5)"
+        boundingObject USE lap
+        physics Physics {
+          density 500
+        }
+      }
+    }
+    DEF rf_joint HingeJoint {
+      jointParameters HingeJointParameters {
+        position -0.7854
+        axis 0 -1 0
+        anchor 0.12 -0.1026 -0.01
+      }
+      device [
+        RotationalMotor {
+          name "lf_hip_motor"
+        }
+      ]
+      endPoint Solid {
+        translation 0.12 -0.1026 -0.01
+        rotation 0 1 0 0.7854000000000001
+        children [
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position 1.5708
+              axis 0 -1 0
+              anchor 0 0.02 -0.09
+            }
+            device [
+              RotationalMotor {
+                name "lf_knee_motor"
+              }
+            ]
+            endPoint Solid {
+              translation 0 0.02 -0.09
+              rotation 0 -1 0 1.5708
+              children [
+                DEF calf Group {
+                  children [
+                    Pose {
+                      translation 0 0 -0.04
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Cylinder {
+                            height 0.12
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                    Pose {
+                      translation 0 0 -0.1
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Sphere {
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              boundingObject USE calf
+              physics Physics {
+                density 500
+              }
+            }
+          }
+          DEF lap Group {
+            children [
+              Pose {
+                translation 0 0.04625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.04625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.052
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.06 0.01
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 0
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.04
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.0285
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.04 0.057
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+        name "solid(3)"
+        boundingObject USE lap
+        physics Physics {
+          density 500
+        }
+      }
+    }
+    DEF lb_joint HingeJoint {
+      jointParameters HingeJointParameters {
+        position 0.7854
+        axis 0 1 0
+        anchor -0.12 0.0626 -0.01
+      }
+      device [
+        RotationalMotor {
+          name "lf_hip_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.12 0.0626 -0.01
+        rotation 0 1 0 0.7854000000000001
+        children [
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position -1.5708
+              axis 0 1 0
+              anchor 0 0.02 -0.09
+            }
+            device [
+              RotationalMotor {
+                name "lf_knee_motor"
+              }
+            ]
+            endPoint Solid {
+              translation 0 0.02 -0.09
+              rotation 0 -1 0 1.5708
+              children [
+                DEF calf Group {
+                  children [
+                    Pose {
+                      translation 0 0 -0.04
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Cylinder {
+                            height 0.12
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                    Pose {
+                      translation 0 0 -0.1
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Sphere {
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              boundingObject USE calf
+              physics Physics {
+                density 500
+              }
+            }
+          }
+          DEF lap Group {
+            children [
+              Pose {
+                translation 0 0.04625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.04625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.052
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.06 0.01
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 0
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.04
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.0285
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.04 0.057
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+        name "solid(2)"
+        boundingObject USE lap
+        physics Physics {
+          density 500
+        }
+      }
+    }
+    DEF lf_joint HingeJoint {
+      jointParameters HingeJointParameters {
+        position 0.7854
+        axis 0 1 0
+        anchor 0.12 0.0626 -0.01
+      }
+      device [
+        RotationalMotor {
+          name "lf_hip_motor"
+        }
+      ]
+      endPoint Solid {
+        translation 0.12 0.0626 -0.01
+        rotation 0 1 0 0.7854000000000001
+        children [
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position -1.5708
+              axis 0 1 0
+              anchor 0 0.02 -0.09
+            }
+            device [
+              RotationalMotor {
+                name "lf_knee_motor"
+              }
+            ]
+            endPoint Solid {
+              translation 0 0.02 -0.09
+              rotation 0 -1 0 1.5708
+              children [
+                DEF calf Group {
+                  children [
+                    Pose {
+                      translation 0 0 -0.04
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Cylinder {
+                            height 0.12
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                    Pose {
+                      translation 0 0 -0.1
+                      children [
+                        Shape {
+                          appearance PBRAppearance {
+                            baseColor 1 0.666667 0
+                            roughness 0.8
+                            metalness 0.2
+                          }
+                          geometry Sphere {
+                            radius 0.0225
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              boundingObject USE calf
+              physics Physics {
+                density 500
+              }
+            }
+          }
+          DEF lap Group {
+            children [
+              Pose {
+                translation 0 0.04625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.09
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.0075
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.04625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 -0.00625 -0.0685
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.0075 0.043
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.052
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.06 0.01
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 0
+                rotation 1 0 0 1.5707996938995747
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Cylinder {
+                      height 0.04
+                      radius 0.02
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0 0.02 -0.0285
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.666667 0 0
+                      roughness 0.8
+                      metalness 0.2
+                    }
+                    geometry Box {
+                      size 0.04 0.04 0.057
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE lap
+        physics Physics {
+          density 500
+        }
+      }
+    }
+    DEF Body Group {
+      children [
+        Pose {
+          translation 0.12 0.0563 -0.01
+          rotation 1 0 0 1.5707996938995747
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.333333 0 1
+                roughness 0.8
+                metalness 0.2
+              }
+              geometry Cylinder {
+                height 0.0126
+                radius 0.01
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -0.12 0.0563 -0.01
+          rotation 1 0 0 1.5707996938995747
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.333333 0 1
+                roughness 0.8
+                metalness 0.2
+              }
+              geometry Cylinder {
+                height 0.0126
+                radius 0.01
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -0.12 -0.0563 -0.01
+          rotation 1 0 0 1.5707996938995747
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.333333 0 1
+                roughness 0.8
+                metalness 0.2
+              }
+              geometry Cylinder {
+                height 0.0126
+                radius 0.01
+              }
+            }
+          ]
+        }
+        Pose {
+          translation 0.12 -0.0563 -0.01
+          rotation 1 0 0 1.5707996938995747
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.333333 0 1
+                roughness 0.8
+                metalness 0.2
+              }
+              geometry Cylinder {
+                height 0.0126
+                radius 0.01
+              }
+            }
+          ]
+        }
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.333333 0 1
+            roughness 0.8
+            metalness 0.2
+          }
+          geometry Box {
+            size 0.3 0.1 0.06
+          }
+        }
+      ]
+    }
+  ]
+  name "amphibiousDog"
+  boundingObject USE Body
+  physics Physics {
+    density 500
+  }
+  selfCollision TRUE
+}

@@ -8,4 +8,4 @@ centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: 0 "controllers/Unitree_A1_Ctrl/Unitree_A1_Ctrl.cpp"
 consoles: Console:All:All
-renderingDevicePerspectives: A1:trunk_imu display;1;11.3281;0;0
+renderingDevicePerspectives: A1:trunk_imu display;1;6.71875;0;0
