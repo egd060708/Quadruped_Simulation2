@@ -13,12 +13,13 @@
 #include "mathPrint.h"
 #include "GaitCtrl.h"
 #include "water_gait1.h"
+#include "mathTool.h"
 
 #define MOTOR_TORQUE 0
-#define BACK_INV 1 // 是否使用后腿反屈膝
+#define BACK_INV 0 // 是否使用后腿反屈膝
 #define STAND_BIAS 0.023 // 中性落足点的偏移，相对于四个髋关节的位置，正为向外，负为向内
 #define HEIGHT 0.15
-#define IS_WATER_GAIT 1
+#define IS_WATER_GAIT 0
 
 // All the webots classes are defined in the "webots" namespace
 using namespace webots;
@@ -110,11 +111,11 @@ int main(int argc, char **argv) {
   InitLeg(&legsObj[LF], links, 1, 1);
   InitLeg(&legsObj[RF], links, -1, 1);
 #if BACK_INV==1
-  InitLeg(&legsObj[LB], links, 1, -1);
-  InitLeg(&legsObj[RB], links, -1, -1);
-#else
   InitLeg(&legsObj[LB], links, 1, 1);
   InitLeg(&legsObj[RB], links, -1, 1);
+#else
+  InitLeg(&legsObj[LB], links, 1, -1);
+  InitLeg(&legsObj[RB], links, -1, -1);
 #endif
   double kp_p[3] = { 10,10,-5 };
   //double kd_p[3] = { 0.5,0.5,-0.25 };
@@ -154,7 +155,23 @@ int main(int argc, char **argv) {
 
   // 水下步态参数
   double water_Ts = 4.;
-  double water_start_t = 0;
+#if BACK_INV==0
+  double init_wGait[4][2] = {
+      {-0.785, -1.5708},
+      {-0.785, -1.5708},
+      {-2.3558, 1.5708},
+      {-2.3558, 1.5708}
+  };
+#else
+  double init_wGait[4][2] = {
+      {-0.785, -1.5708},
+      {-0.785, -1.5708},
+      {-0.785, -1.5708},
+      {-0.785, -1.5708}
+  };
+#endif
+  double last_wGait[4][2];
+  memcpy(last_wGait, init_wGait, sizeof(last_wGait));
 
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
@@ -172,10 +189,12 @@ int main(int argc, char **argv) {
           case keyboard->UP:
               //p_t[0] += 0.0002;
               gait_cmd[0] = 0.2;
+              water_Ts -= 0.001;
               break;
           case keyboard->DOWN:
               //p_t[0] -= 0.0002;
               gait_cmd[0] = -0.2;
+              water_Ts += 0.001;
               break;
           case keyboard->RIGHT:
               //p_t[1] -= 0.0002;
@@ -216,19 +235,30 @@ int main(int argc, char **argv) {
           case 'U':
               is_gait = true;
               GaitRestart(&gaitData, t);
-              water_start_t = t;
               break;
           case 'I':
               is_gait = false;
-              water_start_t = 0;
               break;
           }
           key = keyboard->getKey();
       }
       if (IS_WATER_GAIT)
       {
+          double water_slope = 0.02 / water_Ts;
           double get_gait[4][2];
-          getGait(get_gait, water_Ts, t, water_start_t);
+          water_Ts = constrain(water_Ts, 5, 1);
+          /*std::cout << water_Ts << std::endl;*/
+          if (is_gait == true)
+          {
+              getGait(get_gait, water_Ts, t, is_gait);
+          }
+          else
+          {
+              getGait(get_gait, water_Ts, t, is_gait);
+              memcpy(get_gait, init_wGait, sizeof(get_gait));
+          }
+          slopeGait(get_gait, get_gait, last_wGait, water_slope);
+          memcpy(last_wGait, get_gait, sizeof(last_wGait));
           for (int i = 0; i < 4; i++)
           {
               for (int j = 0; j < 2; j++)
