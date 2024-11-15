@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dogWheel_vs.cpp" />
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Altimeter.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Accelerometer.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Brake.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Camera.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Compass.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Connector.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Device.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Display.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\DistanceSensor.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Emitter.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Field.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\GPS.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Gyro.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\InertialUnit.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Joystick.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Keyboard.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\LED.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Lidar.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\LightSensor.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Motion.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Motor.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Mouse.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Node.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Pen.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\PositionSensor.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Radar.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\RangeFinder.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Receiver.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Robot.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Skin.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Speaker.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\Supervisor.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\TouchSensor.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(WEBOTS_HOME)\src\controller\cpp\VacuumGripper.cpp">
+      <Filter>webotsLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Utils.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\SubjectTo.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\SQProblemSchur.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\SQProblem.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\SparseSolver.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\SolutionAnalysis.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\QProblemB.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\QProblem.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\OQPinterface.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Options.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\MessageHandling.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Matrices.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\LAPACKReplacement.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Indexlist.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Flipper.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Constraints.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\Bounds.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\src\BLASReplacement.cpp">
+      <Filter>qpOASES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\robot_module\controller\Pid\Cpp\source\PIDmethod.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Utils.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\UnitTesting.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Types.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\SubjectTo.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\SQProblemSchur.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\SQProblem.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\SparseSolver.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\extras\SolutionAnalysis.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\QProblemB.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\QProblem.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\extras\OQPinterface.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Options.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\MessageHandling.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Matrices.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\LapackBlasReplacement.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Indexlist.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Flipper.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Constraints.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\ConstraintProduct.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Constants.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Bounds.hpp">
+      <Filter>qpOASES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Body.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrl.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\GaitCtrl.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Leg.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\LegCtrl.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\multiCircle.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\virtualLegCtrl.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\other_module\Webots\include\dataDisplay.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\other_module\Webots\include\vofaTransmit.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotParams.hpp">
+      <Filter>application</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="webotsLib">
+      <UniqueIdentifier>{263e0b0e-cd39-4c55-b082-152c488ff905}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application">
+      <UniqueIdentifier>{6ff8edd9-f43f-4be7-9c9d-d634d8d4e808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qpOASES">
+      <UniqueIdentifier>{1c27d182-8fdf-435a-a05f-56abd82f2f89}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

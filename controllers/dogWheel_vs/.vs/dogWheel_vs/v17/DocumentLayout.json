@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dogWheel_vs\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dogWheel_vs.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped\\Cpp\\include\\Leg.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dogWheel_vs.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dogWheel_vs\\dogWheel_vs.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dogWheel_vs.vcxproj|solutionrelative:dogWheel_vs.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Leg.h",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped\\Cpp\\include\\Leg.h",
+              "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped\\Cpp\\include\\Leg.h",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped\\Cpp\\include\\Leg.h",
+              "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped\\Cpp\\include\\Leg.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-15T08:42:21.95Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "dogWheel_vs.cpp",
+              "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dogWheel_vs\\dogWheel_vs.cpp",
+              "RelativeDocumentMoniker": "dogWheel_vs.cpp",
+              "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dogWheel_vs\\dogWheel_vs.cpp",
+              "RelativeToolTip": "dogWheel_vs.cpp",
+              "ViewState": "AQIAADwAAAAAAAAAAAAcwHMAAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-15T06:28:12.29Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

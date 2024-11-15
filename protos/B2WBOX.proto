@@ -1,0 +1,799 @@
+#VRML_SIM R2023b utf8
+# license: Apache License 2.0
+# license url: http://www.apache.org/licenses/LICENSE-2.0
+# This is a proto file for Webots for the B2WBOX
+# Extracted from: D:/Git_Project/github/Quadruped_Simulation2/model/b2w_description.urdf
+
+PROTO B2WBOX [
+  field  SFVec3f     translation     0 0 0
+  field  SFRotation  rotation        0 0 1 0
+  field  SFString    name            "B2WBOX"  # Is `Robot.name`.
+  field  SFString    controller      "void"    # Is `Robot.controller`.
+  field  MFString    controllerArgs  []        # Is `Robot.controllerArgs`.
+  field  SFString    customData      ""        # Is `Robot.customData`.
+  field  SFBool      supervisor      FALSE     # Is `Robot.supervisor`.
+  field  SFBool      synchronization TRUE      # Is `Robot.synchronization`.
+  field  SFBool      selfCollision   FALSE     # Is `Robot.selfCollision`.
+]
+{
+  Robot {
+    translation IS translation
+    rotation IS rotation
+    controller IS controller
+    controllerArgs IS controllerArgs
+    customData IS customData
+    supervisor IS supervisor
+    synchronization IS synchronization
+    selfCollision IS selfCollision
+    children [
+      DEF base_link_visual CadShape {
+        url "../model/B2W_meshes/base_link.dae"
+      }
+      Solid {
+        translation 0.342180 0.000000 0.178510
+        name "lidar_link"
+        boundingObject Cylinder {
+          radius 0.076
+          height 0.16
+        }
+        physics Physics {
+          density -1
+          mass 0.000001
+          centerOfMass [ 0.342180 0.000000 0.178510 ]
+          inertiaMatrix [
+            1.680000e-27 1.680000e-27 1.680000e-27
+            -3.200000e-45 7.680000e-44 -9.260000e-47
+          ]
+        }
+      }
+      Solid {
+        translation 0.421610 0.025000 0.061851
+        rotation -0.678597 0.678600 -0.281083 2.593569
+        name "f_dc_link"
+        physics Physics {
+          density -1
+          mass 0.000001
+          centerOfMass [ 0.000000 0.000000 0.000000 ]
+          inertiaMatrix [
+            1.680000e-27 1.680000e-27 1.680000e-27
+            -9.810000e-45 -2.540000e-44 0.000000e+00
+          ]
+        }
+      }
+      Solid {
+        translation -0.422440 -0.025000 0.038026
+        rotation -0.678597 -0.678600 0.281083 2.593569
+        name "r_dc_link"
+        physics Physics {
+          density -1
+          mass 0.000001
+          centerOfMass [ -0.000000 -0.000000 -0.000000 ]
+          inertiaMatrix [
+            1.680000e-27 1.680000e-27 1.680000e-27
+            -4.310000e-44 2.480000e-45 0.000000e+00
+          ]
+        }
+      }
+      Solid {
+        translation 0.000000 -0.023410 0.049270
+        name "imu_link"
+        physics Physics {
+          density -1
+          mass 0.000001
+          centerOfMass [ -0.000000 0.000000 -0.000000 ]
+          inertiaMatrix [
+            1.680000e-27 1.680000e-27 1.680000e-27
+            1.840000e-44 -7.350000e-44 -3.670000e-44
+          ]
+        }
+      }
+      Solid {
+        name "head_Link"
+        boundingObject Box {
+           size 0.040000 0.120000 0.140000
+        }
+        physics Physics {
+          density -1
+          mass 3.688500
+          centerOfMass [ 0.339890 -0.000168 0.120290 ]
+          inertiaMatrix [
+            2.645500e-02 2.922100e-02 1.091800e-02
+            3.150000e-05 1.660000e-03 -3.270000e-05
+          ]
+        }
+      }
+      Solid {
+        name "tail_link"
+        boundingObject Box {
+           size 0.025000 0.120000 0.140000
+        }
+        physics Physics {
+          density -1
+          mass 0.795000
+          centerOfMass [ -0.374480 0.000488 0.006495 ]
+          inertiaMatrix [
+            2.811800e-03 4.750600e-03 2.915400e-03
+            1.950000e-05 -7.870000e-06 -1.570000e-05
+          ]
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          anchor 0.328500 0.072000 0.000000
+        }
+        device [
+          RotationalMotor {
+            name "FL_hip_joint"
+            maxVelocity 23.0
+            minPosition -0.87
+            maxPosition 0.87
+            maxTorque 200.0
+          }
+          PositionSensor {
+            name "FL_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation 0.328500 0.072000 0.000000
+          children [
+            DEF FL_hip_visual CadShape {
+              url "../model/B2W_meshes/FL_hip.dae"
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 0.000000
+                anchor 0.000000 0.119730 0.000000
+              }
+              device [
+                RotationalMotor {
+                  name "FL_thigh_joint"
+                  maxVelocity 23.0
+                  minPosition -0.94
+                  maxPosition 4.69
+                  maxTorque 200.0
+                }
+                PositionSensor {
+                  name "FL_thigh_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation 0.000000 0.119730 0.000000
+                children [
+                  DEF FL_thigh_visual CadShape {
+                    url "../model/B2W_meshes/FL_thigh.dae"
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      position -1.625000
+                      axis 0.000000 1.000000 0.000000
+                      anchor 0.000000 -0.000088 -0.350000
+                    }
+                    device [
+                      RotationalMotor {
+                        name "FL_calf_joint"
+                        maxVelocity 14.0
+                        minPosition -2.82
+                        maxPosition -0.43
+                        maxTorque 320.0
+                      }
+                      PositionSensor {
+                        name "FL_calf_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 -0.000088 -0.350000
+                      rotation 0.000000 -1.000000 0.000000 1.625000
+                      children [
+                        DEF FL_calf_visual CadShape {
+                          url "../model/B2W_meshes/FL_calf.dae"
+                        }
+                        HingeJoint {
+                          jointParameters HingeJointParameters {
+                            axis 0.000000 1.000000 0.000000
+                            anchor 0.000000 0.000000 -0.350000
+                          }
+                          device [
+                            RotationalMotor {
+                              name "FL_foot_joint"
+                              maxVelocity 50.0
+                              maxTorque 20.0
+                            }
+                            PositionSensor {
+                              name "FL_foot_joint_sensor"
+                            }
+                          ]
+                          endPoint Solid {
+                            translation 0.000000 0.000000 -0.350000
+                            children [
+                              DEF FL_foot_visual CadShape {
+                                url "../model/B2W_meshes/FL_foot.dae"
+                              }
+                            ]
+                            name "FL_foot"
+                            boundingObject DEF FL_foot Mesh {
+                              url "../model/B2W_meshes/FL_foot.dae"
+                            }
+                            physics Physics {
+                              density -1
+                              mass 1.083000
+                              centerOfMass [ -0.000991 0.051053 -0.001130 ]
+                              inertiaMatrix [
+                                4.121000e-03 7.776000e-03 4.108000e-03
+                                6.000000e-06 -4.800000e-05 7.000000e-06
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                      name "FL_calf"
+                      boundingObject DEF FL_calf Mesh {
+                        url "../model/B2W_meshes/FL_calf.dae"
+                      }
+                      physics Physics {
+                        density -1
+                        mass 2.290600
+                        centerOfMass [ 0.005278 0.017301 -0.297780 ]
+                        inertiaMatrix [
+                          2.928300e-02 3.086800e-02 3.260000e-03
+                          2.210000e-04 -1.064000e-03 2.093000e-03
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "FL_thigh"
+                boundingObject Box {
+                   size 0.320000 0.044500 0.054000
+                }
+                physics Physics {
+                  density -1
+                  mass 4.536000
+                  centerOfMass [ -0.006279 -0.032049 -0.057835 ]
+                  inertiaMatrix [
+                    6.229900e-02 6.139900e-02 8.199700e-03
+                    8.778100e-04 -3.647500e-03 8.353700e-03
+                  ]
+                }
+              }
+            }
+          ]
+          name "FL_hip"
+          boundingObject Cylinder {
+            radius 0.07
+            height 0.05
+          }
+          physics Physics {
+            density -1
+            mass 2.673000
+            centerOfMass [ -0.003841 -0.009068 0.000000 ]
+            inertiaMatrix [
+              3.318800e-03 4.874300e-03 3.708700e-03
+              7.160000e-05 -3.770000e-07 4.000000e-09
+            ]
+          }
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          anchor 0.328500 -0.072000 0.000000
+        }
+        device [
+          RotationalMotor {
+            name "FR_hip_joint"
+            maxVelocity 23.0
+            minPosition -0.87
+            maxPosition 0.87
+            maxTorque 200.0
+          }
+          PositionSensor {
+            name "FR_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation 0.328500 -0.072000 0.000000
+          children [
+            DEF FR_hip_visual CadShape {
+              url "../model/B2W_meshes/FR_hip.dae"
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 0.000000
+                anchor 0.000000 -0.119730 0.000000
+              }
+              device [
+                RotationalMotor {
+                  name "FR_thigh_joint"
+                  maxVelocity 23.0
+                  minPosition -0.94
+                  maxPosition 4.69
+                  maxTorque 200.0
+                }
+                PositionSensor {
+                  name "FR_thigh_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation 0.000000 -0.119730 0.000000
+                children [
+                  DEF FR_thigh_visual CadShape {
+                    url "../model/B2W_meshes/FR_thigh.dae"
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      position -1.625000
+                      axis 0.000000 1.000000 0.000000
+                      anchor 0.000000 0.000088 -0.350000
+                    }
+                    device [
+                      RotationalMotor {
+                        name "FR_calf_joint"
+                        maxVelocity 14.0
+                        minPosition -2.82
+                        maxPosition -0.43
+                        maxTorque 320.0
+                      }
+                      PositionSensor {
+                        name "FR_calf_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 0.000088 -0.350000
+                      rotation 0.000000 -1.000000 0.000000 1.625000
+                      children [
+                        DEF FR_calf_visual CadShape {
+                          url "../model/B2W_meshes/FR_calf.dae"
+                        }
+                        HingeJoint {
+                          jointParameters HingeJointParameters {
+                            axis 0.000000 1.000000 0.000000
+                            anchor 0.000000 -0.001000 -0.350000
+                          }
+                          device [
+                            RotationalMotor {
+                              name "FR_foot_joint"
+                              maxVelocity 50.0
+                              maxTorque 20.0
+                            }
+                            PositionSensor {
+                              name "FR_foot_joint_sensor"
+                            }
+                          ]
+                          endPoint Solid {
+                            translation 0.000000 -0.001000 -0.350000
+                            children [
+                              DEF FR_foot_visual CadShape {
+                                url "../model/B2W_meshes/FR_foot.dae"
+                              }
+                            ]
+                            name "FR_foot"
+                            boundingObject DEF FR_foot Mesh {
+                              url "../model/B2W_meshes/FR_foot.dae"
+                            }
+                            physics Physics {
+                              density -1
+                              mass 1.083000
+                              centerOfMass [ -0.000991 -0.051053 -0.001130 ]
+                              inertiaMatrix [
+                                4.121000e-03 7.776000e-03 4.108000e-03
+                                -6.000000e-06 -4.800000e-05 -7.000000e-06
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                      name "FR_calf"
+                      boundingObject DEF FR_calf Mesh {
+                        url "../model/B2W_meshes/FR_calf.dae"
+                      }
+                      physics Physics {
+                        density -1
+                        mass 2.290557
+                        centerOfMass [ 0.005278 -0.017301 -0.297775 ]
+                        inertiaMatrix [
+                          2.928300e-02 3.086800e-02 3.260000e-03
+                          -2.210000e-04 -1.064000e-03 -2.093000e-03
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "FR_thigh"
+                boundingObject Box {
+                   size 0.250000 0.028000 0.040000
+                }
+                physics Physics {
+                  density -1
+                  mass 4.536000
+                  centerOfMass [ -0.006279 0.032049 -0.057835 ]
+                  inertiaMatrix [
+                    6.229908e-02 6.139927e-02 8.199745e-03
+                    -8.778080e-04 -3.647464e-03 -8.353671e-03
+                  ]
+                }
+              }
+            }
+          ]
+          name "FR_hip"
+          boundingObject Cylinder {
+            radius 0.07
+            height 0.05
+          }
+          physics Physics {
+            density -1
+            mass 2.673000
+            centerOfMass [ -0.003841 0.009068 0.000000 ]
+            inertiaMatrix [
+              3.318772e-03 4.874327e-03 3.708731e-03
+              -7.160000e-05 -3.770000e-07 -4.000000e-09
+            ]
+          }
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          anchor -0.328500 0.072000 0.000000
+        }
+        device [
+          RotationalMotor {
+            name "RL_hip_joint"
+            maxVelocity 23.0
+            minPosition -0.87
+            maxPosition 0.87
+            maxTorque 200.0
+          }
+          PositionSensor {
+            name "RL_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation -0.328500 0.072000 0.000000
+          children [
+            DEF RL_hip_visual CadShape {
+              url "../model/B2W_meshes/RL_hip.dae"
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 0.000000
+                anchor 0.000000 0.119730 0.000000
+              }
+              device [
+                RotationalMotor {
+                  name "RL_thigh_joint"
+                  maxVelocity 23.0
+                  minPosition -0.94
+                  maxPosition 4.69
+                  maxTorque 200.0
+                }
+                PositionSensor {
+                  name "RL_thigh_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation 0.000000 0.119730 0.000000
+                children [
+                  DEF RL_thigh_visual CadShape {
+                    url "../model/B2W_meshes/RL_thigh.dae"
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      position -1.625000
+                      axis 0.000000 1.000000 0.000000
+                      anchor 0.000000 -0.000088 -0.350000
+                    }
+                    device [
+                      RotationalMotor {
+                        name "RL_calf_joint"
+                        maxVelocity 14.0
+                        minPosition -2.82
+                        maxPosition -0.43
+                        maxTorque 320.0
+                      }
+                      PositionSensor {
+                        name "RL_calf_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 -0.000088 -0.350000
+                      rotation 0.000000 -1.000000 0.000000 1.625000
+                      children [
+                        DEF RL_calf_visual CadShape {
+                          url "../model/B2W_meshes/RL_calf.dae"
+                        }
+                        HingeJoint {
+                          jointParameters HingeJointParameters {
+                            axis 0.000000 1.000000 0.000000
+                            anchor 0.000000 0.000000 -0.350000
+                          }
+                          device [
+                            RotationalMotor {
+                              name "RL_foot_joint"
+                              maxVelocity 50.0
+                              maxTorque 20.0
+                            }
+                            PositionSensor {
+                              name "RL_foot_joint_sensor"
+                            }
+                          ]
+                          endPoint Solid {
+                            translation 0.000000 0.000000 -0.350000
+                            children [
+                              DEF RL_foot_visual CadShape {
+                                url "../model/B2W_meshes/RL_foot.dae"
+                              }
+                            ]
+                            name "RL_foot"
+                            boundingObject DEF RL_foot Mesh {
+                              url "../model/B2W_meshes/RL_foot.dae"
+                            }
+                            physics Physics {
+                              density -1
+                              mass 1.083000
+                              centerOfMass [ -0.000991 0.051053 -0.001130 ]
+                              inertiaMatrix [
+                                4.121000e-03 7.776000e-03 4.108000e-03
+                                6.000000e-06 -4.800000e-05 7.000000e-06
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                      name "RL_calf"
+                      boundingObject DEF RL_calf Mesh {
+                        url "../model/B2W_meshes/RL_calf.dae"
+                      }
+                      physics Physics {
+                        density -1
+                        mass 2.290600
+                        centerOfMass [ 0.005278 0.017301 -0.297780 ]
+                        inertiaMatrix [
+                          2.928300e-02 3.086800e-02 3.260000e-03
+                          2.210000e-04 -1.064000e-03 2.093000e-03
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "RL_thigh"
+                boundingObject Box {
+                   size 0.250000 0.028000 0.040000
+                }
+                physics Physics {
+                  density -1
+                  mass 4.536000
+                  centerOfMass [ -0.006279 -0.032049 -0.057835 ]
+                  inertiaMatrix [
+                    6.229908e-02 6.139927e-02 8.199745e-03
+                    8.778080e-04 -3.647464e-03 8.353671e-03
+                  ]
+                }
+              }
+            }
+          ]
+          name "RL_hip"
+          boundingObject Cylinder {
+            radius 0.07
+            height 0.05
+          }
+          physics Physics {
+            density -1
+            mass 2.673000
+            centerOfMass [ 0.003841 -0.009068 0.000000 ]
+            inertiaMatrix [
+              3.318800e-03 4.874300e-03 3.708700e-03
+              -7.160000e-05 3.770000e-07 4.000000e-09
+            ]
+          }
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          anchor -0.328500 -0.072000 0.000000
+        }
+        device [
+          RotationalMotor {
+            name "RR_hip_joint"
+            maxVelocity 23.0
+            minPosition -0.87
+            maxPosition 0.87
+            maxTorque 200.0
+          }
+          PositionSensor {
+            name "RR_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation -0.328500 -0.072000 0.000000
+          children [
+            DEF RR_hip_visual CadShape {
+              url "../model/B2W_meshes/RR_hip.dae"
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 0.000000
+                anchor 0.000000 -0.119730 0.000000
+              }
+              device [
+                RotationalMotor {
+                  name "RR_thigh_joint"
+                  maxVelocity 23.0
+                  minPosition -0.94
+                  maxPosition 4.69
+                  maxTorque 200.0
+                }
+                PositionSensor {
+                  name "RR_thigh_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation 0.000000 -0.119730 0.000000
+                children [
+                  DEF RR_thigh_visual CadShape {
+                    url "../model/B2W_meshes/RR_thigh.dae"
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      position -1.625000
+                      axis 0.000000 1.000000 0.000000
+                      anchor 0.000000 0.000088 -0.350000
+                    }
+                    device [
+                      RotationalMotor {
+                        name "RR_calf_joint"
+                        maxVelocity 14.0
+                        minPosition -2.82
+                        maxPosition -0.43
+                        maxTorque 320.0
+                      }
+                      PositionSensor {
+                        name "RR_calf_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 0.000088 -0.350000
+                      rotation 0.000000 -1.000000 0.000000 1.625000
+                      children [
+                        DEF RR_calf_visual CadShape {
+                          url "../model/B2W_meshes/RR_calf.dae"
+                        }
+                        HingeJoint {
+                          jointParameters HingeJointParameters {
+                            axis 0.000000 1.000000 0.000000
+                            anchor 0.000000 -0.001000 -0.350000
+                          }
+                          device [
+                            RotationalMotor {
+                              name "RR_foot_joint"
+                              maxVelocity 50.0
+                              maxTorque 20.0
+                            }
+                            PositionSensor {
+                              name "RR_foot_joint_sensor"
+                            }
+                          ]
+                          endPoint Solid {
+                            translation 0.000000 -0.001000 -0.350000
+                            children [
+                              DEF RR_foot_visual CadShape {
+                                url "../model/B2W_meshes/RR_foot.dae"
+                              }
+                            ]
+                            name "RR_foot"
+                            boundingObject DEF RR_foot Mesh {
+                              url "../model/B2W_meshes/RR_foot.dae"
+                            }
+                            physics Physics {
+                              density -1
+                              mass 1.083000
+                              centerOfMass [ -0.000991 -0.051053 -0.001130 ]
+                              inertiaMatrix [
+                                4.121000e-03 7.776000e-03 4.108000e-03
+                                -6.000000e-06 -4.800000e-05 -7.000000e-06
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                      name "RR_calf"
+                      boundingObject DEF RR_calf Mesh {
+                        url "../model/B2W_meshes/RR_calf.dae"
+                      }
+                      physics Physics {
+                        density -1
+                        mass 2.290600
+                        centerOfMass [ 0.005278 -0.017301 -0.297780 ]
+                        inertiaMatrix [
+                          2.928300e-02 3.086800e-02 3.260000e-03
+                          -2.210000e-04 -1.064000e-03 -2.093000e-03
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "RR_thigh"
+                boundingObject Box {
+                   size 0.250000 0.028000 0.040000
+                }
+                physics Physics {
+                  density -1
+                  mass 4.536000
+                  centerOfMass [ -0.006279 0.032049 -0.057835 ]
+                  inertiaMatrix [
+                    6.229900e-02 6.139900e-02 8.199700e-03
+                    -8.778100e-04 -3.647500e-03 -8.353700e-03
+                  ]
+                }
+              }
+            }
+          ]
+          name "RR_hip"
+          boundingObject Cylinder {
+            radius 0.07
+            height 0.05
+          }
+          physics Physics {
+            density -1
+            mass 2.673000
+            centerOfMass [ 0.003841 0.009068 0.000000 ]
+            inertiaMatrix [
+              3.318800e-03 4.874300e-03 3.708700e-03
+              7.160000e-05 3.770000e-07 -4.000000e-09
+            ]
+          }
+        }
+      }
+      Solid {
+        translation 0.399300 0.000000 -0.015760
+        rotation -0.577350 0.577352 -0.577350 2.094399
+        name "f_oc_link"
+        physics Physics {
+          density -1
+          mass 0.000001
+          centerOfMass [ -0.000000 0.000000 -0.000000 ]
+          inertiaMatrix [
+            1.680000e-27 1.680000e-27 1.680000e-27
+            -3.890000e-44 5.040000e-44 2.810000e-45
+          ]
+        }
+      }
+      Solid {
+        name "logo_link"
+        physics Physics {
+          density -1
+          mass 0.000001
+          centerOfMass [ 0.000000 -0.000000 0.000000 ]
+          inertiaMatrix [
+            1.680000e-27 1.680000e-27 1.680000e-27
+            0.000000e+00 0.000000e+00 0.000000e+00
+          ]
+        }
+      }
+      Solid {
+        translation -0.391430 0.000000 -0.026131
+        rotation -0.577350 -0.577352 0.577350 2.094399
+        name "r_oc_ink"
+        physics Physics {
+          density -1
+          mass 0.000001
+          centerOfMass [ -0.391430 0.000000 -0.011961 ]
+          inertiaMatrix [
+            1.680000e-22 1.680000e-22 1.680000e-22
+            9.030000e-39 0.000000e+00 -1.200000e-38
+          ]
+        }
+      }
+    ]
+    name IS name
+    boundingObject Box {
+       size 0.500000 0.280000 0.150000
+    }
+    physics Physics {
+      density -1
+      mass 35.606000
+      centerOfMass [ 0.000458 0.005261 0.000665 ]
+      inertiaMatrix [
+        2.746600e-01 1.061800e+00 1.182500e+00
+        -6.220000e-04 3.150000e-03 -1.390000e-03
+      ]
+    }
+  }
+}
