@@ -192,7 +192,7 @@ PROTO B2WSimple [
                   }
                   HingeJoint {
                     jointParameters HingeJointParameters {
-                      position -0.812500
+                      position -1.6250000
                       axis 0.000000 1.000000 0.000000
                       anchor 0.000000 -0.000088 -0.350000
                     }

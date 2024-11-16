@@ -124,33 +124,40 @@ int main(int argc, char** argv)
     }
 
     // self controll classes
-    Leg lf_leg_obj(Quadruped::L1, Quadruped::L2, Quadruped::L3, 1);
+    double links[6] = { Quadruped::L1, Quadruped::L2, Quadruped::L3, 0, 0, 0 };
+    Vector<double, 6> iner[4] = { Quadruped::Ihip, Quadruped::Ithigh, Quadruped::Icalf, Quadruped::Ifoot};
+    double mass[4] = { Quadruped::Mhip, Quadruped::Mthigh, Quadruped::Mcalf, Quadruped::Mfoot };
+    Vector3d p_mass[4] = { Quadruped::Phip, Quadruped::Pthigh, Quadruped::Pcalf, Quadruped::Pfoot };
+    Leg lf_leg_obj(links, p_mass, mass, iner, Quadruped::LF);
     LegCtrl lf_leg_ctrl(&lf_leg_obj, timeStep);
-    virtualLegCtrl lf_vleg_ctrl(&lf_leg_obj, timeStep);
+    //virtualLegCtrl lf_vleg_ctrl(&lf_leg_obj, timeStep);
     lf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
-    lf_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
+    //lf_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
 
-    Leg rf_leg_obj(Quadruped::L1, Quadruped::L2, Quadruped::L3, -1);
+    Leg rf_leg_obj(links, p_mass, mass, iner, Quadruped::RF);
     LegCtrl rf_leg_ctrl(&rf_leg_obj, timeStep);
-    virtualLegCtrl rf_vleg_ctrl(&rf_leg_obj, timeStep);
+    //virtualLegCtrl rf_vleg_ctrl(&rf_leg_obj, timeStep);
     rf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
-    rf_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
+    //rf_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
 
-    Leg lb_leg_obj(Quadruped::L1, Quadruped::L2, Quadruped::L3, 1);
+    Leg lb_leg_obj(links, p_mass, mass, iner, Quadruped::LB);
     LegCtrl lb_leg_ctrl(&lb_leg_obj, timeStep);
-    virtualLegCtrl lb_vleg_ctrl(&lb_leg_obj, timeStep);
+    //virtualLegCtrl lb_vleg_ctrl(&lb_leg_obj, timeStep);
     lb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
-    lb_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
+    //lb_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
 
-    Leg rb_leg_obj(Quadruped::L1, Quadruped::L2, Quadruped::L3, -1);
+    Leg rb_leg_obj(links, p_mass, mass, iner, Quadruped::RB);
     LegCtrl rb_leg_ctrl(&rb_leg_obj, timeStep);
-    virtualLegCtrl rb_vleg_ctrl(&rb_leg_obj, timeStep);
+    //virtualLegCtrl rb_vleg_ctrl(&rb_leg_obj, timeStep);
     rb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
-    rb_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
+    //rb_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
 
     Leg* legsObj[4] = { &lf_leg_obj, &rf_leg_obj, &lb_leg_obj, &rb_leg_obj };
     Body qp_body(legsObj, static_cast<double>(timeStep) * 0.001f);
-    qp_body.initParams(leg2bodyFrame, initRbLegXYPosition, M, Ib, Pg);
+    double mb[3] = { Quadruped::Mmid, Quadruped::Mhead, Quadruped::Mtail };
+    Vector<double, 6> ib[3] = { Quadruped::Imid, Quadruped::Ihead, Quadruped::Itail };
+    Vector3d pb[3] = { Quadruped::Pmid, Quadruped::Phead, Quadruped::Ptail };
+    qp_body.initParams(leg2bodyFrame, initRbLegXYPosition, mb, ib, pb);
     Eigen::Matrix<double, 3, 4> footPoint;
     footPoint.col(LF) = Vector3d(0.1805, 0.1308, 0.);
     footPoint.col(RF) = Vector3d(0.1805, -0.1308, 0.);
@@ -168,7 +175,7 @@ int main(int argc, char** argv)
     double test = 0;
 
     LegCtrl* legsCtrl[4] = { &lf_leg_ctrl,&rf_leg_ctrl,&lb_leg_ctrl,&rb_leg_ctrl };
-    virtualLegCtrl* vLegsCtrl[4] = { &lf_vleg_ctrl, &rf_vleg_ctrl, &lb_vleg_ctrl, &rb_vleg_ctrl };
+    //virtualLegCtrl* vLegsCtrl[4] = { &lf_vleg_ctrl, &rf_vleg_ctrl, &lb_vleg_ctrl, &rb_vleg_ctrl };
 
     BodyCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
     qp_ctrl.importWeight(Q, F, R, W);
@@ -330,6 +337,9 @@ int main(int argc, char** argv)
                 qp_body.estimatorRun(contactResult, phaseResult);
                 qp_body.updateDynamic();
             }
+            std::cout << "mass:" << qp_body.M << std::endl;
+            std::cout << "inerM:" << qp_body.I << std::endl;
+            std::cout << "massP:" << qp_body.P << std::endl;
 
 
             /*std::cout << "estimatorOut:" << std::endl;*/
