@@ -6,11 +6,11 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "../protos/B2WSimple.proto"
 
 WorldInfo {
-  basicTimeStep 8
+  basicTimeStep 2
 }
 Viewpoint {
-  orientation 0.13833791284443256 0.8525828767876518 -0.5039494618295947 0.6229604042396382
-  position -2.615694298901298 1.2051392114026958 3.0233415338477494
+  orientation 0.15120908624805854 0.11978045859906991 -0.9812178422622694 1.8201169400938126
+  position 5.558940863358263 3.5913291825027773 1.8248761418951496
 }
 TexturedBackground {
 }
@@ -139,5 +139,6 @@ Solid {
   }
 }
 B2WSimple {
-  translation 0.02 0 1.1
+  translation 4.57 0 0.61
+  controller "dogWheel_vs"
 }

@@ -124,7 +124,7 @@ int main(int argc, char** argv)
     }
 
     // self controll classes
-    double links[6] = { Quadruped::L1, Quadruped::L2, Quadruped::L3, 0, 0, 0 };
+    double links[7] = { Quadruped::L1, Quadruped::L2, 0, Quadruped::L3, 0, 0, 0 };
     Vector<double, 6> iner[4] = { Quadruped::Ihip, Quadruped::Ithigh, Quadruped::Icalf, Quadruped::Ifoot};
     double mass[4] = { Quadruped::Mhip, Quadruped::Mthigh, Quadruped::Mcalf, Quadruped::Mfoot };
     Vector3d p_mass[4] = { Quadruped::Phip, Quadruped::Pthigh, Quadruped::Pcalf, Quadruped::Pfoot };
@@ -337,9 +337,12 @@ int main(int argc, char** argv)
                 qp_body.estimatorRun(contactResult, phaseResult);
                 qp_body.updateDynamic();
             }
-            std::cout << "mass:" << qp_body.M << std::endl;
+            /*std::cout << "mass:" << qp_body.M << std::endl;
             std::cout << "inerM:" << qp_body.I << std::endl;
-            std::cout << "massP:" << qp_body.P << std::endl;
+            std::cout << "massP:" << qp_body.P << std::endl;*/
+            std::cout << "tar:" << lf_leg_obj.targetLeg.Position << std::endl;
+            std::cout << "cur:" << lf_leg_obj.currentLeg.Position << std::endl;
+            std::cout << "f:" << lf_leg_obj.targetLeg.Force << std::endl;
 
 
             /*std::cout << "estimatorOut:" << std::endl;*/
