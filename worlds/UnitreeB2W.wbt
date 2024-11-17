@@ -7,10 +7,17 @@ EXTERNPROTO "../protos/B2WSimple.proto"
 
 WorldInfo {
   basicTimeStep 2
+  contactProperties [
+    ContactProperties {
+      coulombFriction [
+        1000
+      ]
+    }
+  ]
 }
 Viewpoint {
-  orientation 0.15120908624805854 0.11978045859906991 -0.9812178422622694 1.8201169400938126
-  position 5.558940863358263 3.5913291825027773 1.8248761418951496
+  orientation 0.12247947661079954 0.04262869177288578 -0.9915551282943763 2.476948706461873
+  position 10.807398663735915 5.085081112731615 2.374831895378283
 }
 TexturedBackground {
 }
@@ -20,125 +27,7 @@ RectangleArena {
   floorSize 40 40
   floorTileSize 5 5
 }
-Solid {
-  translation 0 0 -0.01
-  children [
-    Solid {
-      translation 0 0 0.01
-      children [
-        Shape {
-          appearance PBRAppearance {
-          }
-          geometry Box {
-            size 5 5 0.02
-          }
-        }
-        Solid {
-          translation 0 0 0.5
-          children [
-            Solid {
-              translation 0 0 0.51
-              children [
-                Solid {
-                  translation 0 0.185 0.1
-                  children [
-                    Shape {
-                      appearance PBRAppearance {
-                        roughness 1
-                      }
-                      geometry Box {
-                        size 0.1 0.02 0.22
-                      }
-                    }
-                  ]
-                  name "solid(2)"
-                  boundingObject Box {
-                    size 0.1 0.02 0.22
-                  }
-                  physics Physics {
-                  }
-                }
-                Solid {
-                  translation 0 -0.185 0.1
-                  children [
-                    Shape {
-                      appearance PBRAppearance {
-                        roughness 1
-                      }
-                      geometry Box {
-                        size 0.1 0.02 0.22
-                      }
-                    }
-                  ]
-                  name "solid(1)"
-                  boundingObject Box {
-                    size 0.1 0.02 0.22
-                  }
-                  physics Physics {
-                  }
-                }
-                Solid {
-                  translation 0 0 0.2
-                  children [
-                    Shape {
-                      appearance PBRAppearance {
-                        roughness 1
-                      }
-                      geometry Box {
-                        size 0.1 0.35 0.02
-                      }
-                    }
-                  ]
-                  boundingObject Box {
-                    size 0.1 0.35 0.02
-                  }
-                  physics Physics {
-                  }
-                }
-                Shape {
-                  appearance PBRAppearance {
-                    roughness 1
-                  }
-                  geometry Box {
-                    size 0.1 0.35 0.02
-                  }
-                }
-              ]
-              boundingObject Box {
-                size 0.1 0.35 0.02
-              }
-              physics Physics {
-              }
-            }
-            Shape {
-              appearance PBRAppearance {
-                roughness 0.5
-              }
-              geometry Box {
-                size 0.1 0.1 1
-              }
-            }
-          ]
-          boundingObject Box {
-            size 0.1 0.1 1
-          }
-          physics Physics {
-          }
-        }
-      ]
-      boundingObject Box {
-        size 5 5 0.02
-      }
-      physics Physics {
-      }
-    }
-  ]
-  physics Physics {
-    density -1
-    mass 100
-  }
-}
 B2WSimple {
-  translation 4.57 0 0.61
+  translation 4.56 0 0.62
   controller "dogWheel_vs"
 }

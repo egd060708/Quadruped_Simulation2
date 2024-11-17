@@ -43,12 +43,12 @@ namespace Quadruped {
 	const double Mfoot = 1.083000;
 	const Eigen::Vector3d Pfoot(-0.000991,0.051053,-0.001130);
 	// mpc平衡控制器权重参数
-	const Eigen::Vector<double, 6> Q(2000000, 300000, 2500000, 10000, 100000, 5000);
+	const Eigen::Vector<double, 6> Q(500000, 300000, 500000, 30000, 50000, 30000);
 	const Eigen::Vector<double, 6> F = Q;
 	const Eigen::Vector<double, 12> R = Eigen::Vector<double, 12>::Constant(1);
-	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(0.8);
-	const Eigen::Vector<double, 9> linPD(30, -0.1, 10, 30, -0.1, 10, 50, -0.1, 10);
-	const Eigen::Vector<double, 9> angPD(10, -0.1, 5, 20, -0.1, 10, 10, -0.1, 5);
+	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(0.1);
+	const Eigen::Vector<double, 9> linPD(20, -0.2, 2, 15, -0.15, 2, 25, -0.25, 2);
+	const Eigen::Vector<double, 9> angPD(10, -0.1, 2, 20, -0.2, 2, 10, -0.1, 2);
 	//const Eigen::Vector<double, 9> linPD(0, -0., 0, 0, -0., 0, 0, -0., 0);
 	//const Eigen::Vector<double, 9> angPD(0, -0., 0, 0, -0., 0, 0, -0., 0);
 

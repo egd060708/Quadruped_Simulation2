@@ -171,11 +171,12 @@ int main(int argc, char **argv) {
   phaseResult.setZero();
   contactResult.setZero();
   GaitCtrl gaitCtrl(&qp_ctrl, legsCtrl, timeStep, &phaseResult, &contactResult);
-  gaitCtrl.initSwingParams(0.4, 1, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+  gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
   gaitCtrl.initExpectK(gaitK);
   Eigen::Matrix<double, 3, 4> feetPos;
   Eigen::Matrix<double, 3, 4> feetVel;
 
+  //VOFA vofa("vjs.exe");
 
   Eigen::Vector3d last_encoderValue[4];
   for (auto p : last_encoderValue)
@@ -192,19 +193,19 @@ int main(int argc, char **argv) {
 
   // 重新配置腿部曲线跟踪参数
   Vector2d lPid_pvParams[6];
-  lPid_pvParams[0] << 2000, 1000;
-  lPid_pvParams[1] << 50, 1000;
-  lPid_pvParams[2] << 3000, 1000;
-  lPid_pvParams[3] << 60, 1000;
-  lPid_pvParams[4] << 4000, 1000;
-  lPid_pvParams[5] << 100, 1000;
+  lPid_pvParams[0] << 4000, 200;
+  lPid_pvParams[1] << 100, 200;
+  lPid_pvParams[2] << 4000, 200;
+  lPid_pvParams[3] << 100, 200;
+  lPid_pvParams[4] << 4000, 500;
+  lPid_pvParams[5] << 100, 500;
   for (auto p : legsCtrl)
   {
       p->loadPid_pvParams(p->lPid_pv, lPid_pvParams);
   }
 
   qp_ctrl.force_c = 1000;
-  qp_ctrl.u = 1.2;
+  qp_ctrl.u = 2;
 
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
@@ -318,9 +319,10 @@ int main(int argc, char **argv) {
               qp_body.estimatorRun(contactResult, phaseResult);
               qp_body.updateDynamic();
           }
-          /*std::cout << "mass:" << qp_body.M << std::endl;
+          std::cout << "mass:" << qp_body.M << std::endl;
           std::cout << "inerM:" << qp_body.I << std::endl;
-          std::cout << "massP:" << qp_body.P << std::endl;*/
+          std::cout << "massP:" << qp_body.P << std::endl;
+          std::cout << "estPos:" << qp_body.getEstFeetPos() << std::endl;
           /*std::cout << "tar:" << lf_leg_obj.targetLeg.Position << std::endl;
           std::cout << "cur:" << lf_leg_obj.currentLeg.Position << std::endl;
           std::cout << "f:" << lf_leg_obj.targetLeg.Force << std::endl;*/
@@ -338,6 +340,14 @@ int main(int argc, char **argv) {
               qp_body.calTbs(-1);
               qp_body.bodyAndWorldFramePosition(-1);
               qp_body.legAndBodyPosition(-1);
+              /*double w = 10;
+              double scale = 0.02;
+              legsCtrl[0]->legObject->targetLeg.Position(0) += scale * sin(w*t);
+              legsCtrl[0]->legObject->targetLeg.Position(1) += scale * sin(w*t);
+              legsCtrl[0]->legObject->targetLeg.Position(2) += scale * sin(w*t);
+              legsCtrl[0]->legObject->targetLeg.Velocity(0) = scale * w * cos(w*t);
+              legsCtrl[0]->legObject->targetLeg.Velocity(1) = scale * w * cos(w*t);
+              legsCtrl[0]->legObject->targetLeg.Velocity(2) = scale * w * cos(w*t);*/
           }
 
           Eigen::Vector3d encoderValue[4];
@@ -362,7 +372,7 @@ int main(int argc, char **argv) {
           if (t > 0.2)
           {
               gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
-              gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.02);
+              gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.04);
               gaitCtrl.run(feetPos, feetVel);
 
               qp_ctrl.updateBalanceState();
@@ -410,6 +420,38 @@ int main(int argc, char **argv) {
                   }
               }
           }
+
+          //float data[DNUM];
+          ///*data[0] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(0));
+          //data[1] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(1));
+          //data[2] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(2));*/
+          //data[0] = float(qp_ctrl.currentBalanceState.p_dot(0));
+          //data[1] = float(qp_ctrl.currentBalanceState.p_dot(1));
+          //data[2] = float(qp_ctrl.currentBalanceState.p_dot(2));
+          //data[3] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(0));
+          //data[4] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(1));
+          //data[5] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(2));
+          //data[6] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(0));
+          //data[7] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(1));
+          //data[8] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(2));
+          //data[9] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(0));
+          //data[10] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(1));
+          //data[11] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(2));
+          //data[12] = float(gaitCtrl.contact(0));
+          //data[13] = float(gaitCtrl.phase(0));
+          ///*data[9] = float(qp_ctrl.targetBalanceState.p(0));
+          //data[10] = float(qp_ctrl.targetBalanceState.p(1));
+          //data[11] = float(qp_ctrl.targetBalanceState.p(2));
+          //data[12] = float(qp_ctrl.currentBalanceState.p(0));
+          //data[13] = float(qp_ctrl.currentBalanceState.p(1));
+          //data[14] = float(qp_ctrl.currentBalanceState.p(2));
+          //data[15] = float(qp_ctrl.targetBalanceState.p_dot(0));
+          //data[16] = float(qp_ctrl.targetBalanceState.p_dot(1));
+          //data[17] = float(qp_ctrl.targetBalanceState.p_dot(2));
+          //data[18] = float(qp_ctrl.currentBalanceState.p_dot(0));
+          //data[19] = float(qp_ctrl.currentBalanceState.p_dot(1));
+          //data[20] = float(qp_ctrl.currentBalanceState.p_dot(2));*/
+          //vofa.dataTransmit(data, 5);
       }
   };
 
