@@ -206,6 +206,7 @@
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Leg.h" />
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\LegCtrl.h" />
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\multiCircle.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\RobotEst.h" />
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\virtualLegCtrl.h" />
     <ClInclude Include="RobotParams.hpp" />
   </ItemGroup>

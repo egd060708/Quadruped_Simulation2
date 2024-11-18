@@ -259,6 +259,9 @@
     <ClInclude Include="RobotParams.hpp">
       <Filter>application</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\RobotEst.h">
+      <Filter>application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="webotsLib">

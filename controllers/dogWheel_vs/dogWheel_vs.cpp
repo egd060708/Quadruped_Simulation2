@@ -18,6 +18,7 @@
 #include "SecondButterworthLPF.h"
 #include "virtualLegCtrl.h"
 #include "dataDisplay.h"
+#include "RobotEst.h"
 
 using namespace webots;
 using namespace Quadruped;
@@ -137,8 +138,9 @@ int main(int argc, char **argv) {
   LegCtrl rb_leg_ctrl(&rb_leg_obj, timeStep);
   rb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE, -0.234832 - YSPAN, -0.5937));
 
+  QpEst qpest(static_cast<double>(timeStep) * 0.001f);
   Leg* legsObj[4] = { &lf_leg_obj, &rf_leg_obj, &lb_leg_obj, &rb_leg_obj };
-  Body qp_body(legsObj, static_cast<double>(timeStep) * 0.001f);
+  Body qp_body(&qpest,legsObj, static_cast<double>(timeStep) * 0.001f);
   double mb[3] = { Quadruped::Mmid, Quadruped::Mhead, Quadruped::Mtail };
   Vector<double, 6> ib[3] = { Quadruped::Imid, Quadruped::Ihead, Quadruped::Itail };
   Vector3d pb[3] = { Quadruped::Pmid, Quadruped::Phead, Quadruped::Ptail };
@@ -316,13 +318,23 @@ int main(int argc, char **argv) {
           qp_body.legVelocityInWorldFrame();
           if (t > 0.2)
           {
-              qp_body.estimatorRun(contactResult, phaseResult);
+              Eigen::Matrix<double, 3, 1> estInput = qp_body.currentWorldState.linAcc_xyz + qp_body.g;
+              Eigen::Matrix<double, 28, 1> estObserve;
+              for (int i(0); i < 4; i++)
+              {
+                  estObserve.block<3, 1>(i * 3, 0) = qp_body.Rsb_c * qp_body.currentBodyState.leg_b[i].Position;
+                  estObserve.block<3, 1>(12 + i * 3, 0) = qp_body.currentWorldState.leg_s[i].Velocity;
+                  estObserve(24 + i, 0) = 0;
+              }
+              qp_body.est->estimatorRun(estInput, estObserve, contactResult, phaseResult);
+              qp_body.currentWorldState.dist = qp_body.est->estimatorState.block<3, 1>(0, 0);
+              qp_body.currentWorldState.linVel_xyz = qp_body.est->estimatorState.block<3, 1>(3, 0);
               qp_body.updateDynamic();
           }
-          std::cout << "mass:" << qp_body.M << std::endl;
+          /*std::cout << "mass:" << qp_body.M << std::endl;
           std::cout << "inerM:" << qp_body.I << std::endl;
           std::cout << "massP:" << qp_body.P << std::endl;
-          std::cout << "estPos:" << qp_body.getEstFeetPos() << std::endl;
+          std::cout << "estPos:" << qp_body.getEstFeetPos() << std::endl;*/
           /*std::cout << "tar:" << lf_leg_obj.targetLeg.Position << std::endl;
           std::cout << "cur:" << lf_leg_obj.currentLeg.Position << std::endl;
           std::cout << "f:" << lf_leg_obj.targetLeg.Force << std::endl;*/
