@@ -13,10 +13,10 @@
       "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Leg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\GIT_PROJECT\\GITHUB\\QUADRUPED_SIMULATION2\\LIBRARIES\\ROBOT_MODULE\\QUADRUPED_SIMPLE\\CPP\\INCLUDE\\LEG.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B2AA53B0-6416-4406-8FF5-6D43BBA8B305}|dog_vs_simpleC.vcxproj|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +30,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Leg.h",
               "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h",
               "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h",
@@ -38,8 +38,7 @@
               "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\include\\Leg.h",
               "ViewState": "AQIAAAsAAAAAAAAAAAAAABAAAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-10-17T06:47:31.244Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-17T06:47:31.244Z"
             },
             {
               "$type": "Document",
@@ -51,8 +50,7 @@
               "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Leg.cpp",
               "ViewState": "AQIAABUAAAAAAAAAAAAAAIUAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-10-17T06:39:22.998Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-17T06:39:22.998Z"
             },
             {
               "$type": "Document",
@@ -64,12 +62,11 @@
               "RelativeToolTip": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\LegCtrl.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-09-30T07:21:15.438Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-30T07:21:15.438Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "Body.cpp",
               "DocumentMoniker": "D:\\Git_Project\\github\\Quadruped_Simulation2\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
               "RelativeDocumentMoniker": "..\\..\\libraries\\robot_module\\Quadruped_Simple\\Cpp\\source\\Body.cpp",
@@ -87,7 +84,7 @@
               "RelativeDocumentMoniker": "dog_vs_simpleC.cpp",
               "ToolTip": "D:\\Git_Project\\github\\Quadruped_Simulation2\\controllers\\dog_vs_simpleC\\dog_vs_simpleC.cpp",
               "RelativeToolTip": "dog_vs_simpleC.cpp",
-              "ViewState": "AQIAABsAAAAAAAAAAAAgwLoAAAAPAAAA",
+              "ViewState": "AQIAAK4AAAAAAAAAAAAgwLoAAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-09-15T07:46:54.519Z",
               "EditorCaption": ""

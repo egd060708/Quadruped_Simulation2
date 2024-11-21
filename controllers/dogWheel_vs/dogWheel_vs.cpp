@@ -12,13 +12,14 @@
 #include "RobotParams.hpp"
 #include "Body.h"
 #include "kelmanFilter.h"
-#include "BodyCtrl.h"
+//#include "BodyCtrl.h"
 #include "vofaTransmit.h"
 #include "GaitCtrl.h"
 #include "SecondButterworthLPF.h"
 #include "virtualLegCtrl.h"
 #include "dataDisplay.h"
 #include "RobotEst.h"
+#include "BodyCtrlNew.h"
 
 using namespace webots;
 using namespace Quadruped;
@@ -163,7 +164,8 @@ int main(int argc, char **argv) {
 
   LegCtrl* legsCtrl[4] = { &lf_leg_ctrl,&rf_leg_ctrl,&lb_leg_ctrl,&rb_leg_ctrl };
 
-  BodyCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
+  //BodyCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
+  QpCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
   qp_ctrl.importWeight(Q, F, R, W);
   qp_ctrl.importPDparam(linPD, angPD);
   bool use_mpc = false;
@@ -329,7 +331,8 @@ int main(int argc, char **argv) {
               qp_body.est->estimatorRun(estInput, estObserve, contactResult, phaseResult);
               qp_body.currentWorldState.dist = qp_body.est->estimatorState.block<3, 1>(0, 0);
               qp_body.currentWorldState.linVel_xyz = qp_body.est->estimatorState.block<3, 1>(3, 0);
-              qp_body.updateDynamic();
+              qp_body.updateEqBody();
+              qp_ctrl.updateDynamic();
           }
           /*std::cout << "mass:" << qp_body.M << std::endl;
           std::cout << "inerM:" << qp_body.I << std::endl;

@@ -243,9 +243,6 @@
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Body.h">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrl.h">
-      <Filter>application</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\GaitCtrl.h">
       <Filter>application</Filter>
     </ClInclude>
@@ -268,6 +265,9 @@
       <Filter>application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\RobotEst.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrlNew.h">
       <Filter>application</Filter>
     </ClInclude>
   </ItemGroup>

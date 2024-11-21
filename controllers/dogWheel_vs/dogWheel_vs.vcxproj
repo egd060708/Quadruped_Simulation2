@@ -201,7 +201,7 @@
     <ClInclude Include="..\..\libraries\other_module\Webots\include\dataDisplay.h" />
     <ClInclude Include="..\..\libraries\other_module\Webots\include\vofaTransmit.h" />
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Body.h" />
-    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrl.h" />
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrlNew.h" />
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\GaitCtrl.h" />
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\Leg.h" />
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\LegCtrl.h" />
