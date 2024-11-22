@@ -45,11 +45,12 @@ int main(int argc, char **argv) {
   acc->enable(timeStep);
 
   // get motor
-  Motor* motors[4][3];
+  Motor* motors[4][4];
 
   motors[Quadruped::LF][0] = robot->getMotor("FL_hip_joint");
   motors[Quadruped::LF][1] = robot->getMotor("FL_thigh_joint");
   motors[Quadruped::LF][2] = robot->getMotor("FL_calf_joint");
+  motors[Quadruped::LF][3] = robot->getMotor("FL_foot_joint");
   for (int i = 0; i < 3; i++)
   {
       motors[Quadruped::LF][i]->setPosition(INFINITY);
@@ -59,6 +60,7 @@ int main(int argc, char **argv) {
   motors[Quadruped::RF][0] = robot->getMotor("FR_hip_joint");
   motors[Quadruped::RF][1] = robot->getMotor("FR_thigh_joint");
   motors[Quadruped::RF][2] = robot->getMotor("FR_calf_joint");
+  motors[Quadruped::RF][3] = robot->getMotor("FR_foot_joint");
   for (int i = 0; i < 3; i++)
   {
       motors[Quadruped::RF][i]->setPosition(INFINITY);
@@ -68,6 +70,7 @@ int main(int argc, char **argv) {
   motors[Quadruped::LB][0] = robot->getMotor("RL_hip_joint");
   motors[Quadruped::LB][1] = robot->getMotor("RL_thigh_joint");
   motors[Quadruped::LB][2] = robot->getMotor("RL_calf_joint");
+  motors[Quadruped::LB][3] = robot->getMotor("RL_foot_joint");
   for (int i = 0; i < 3; i++)
   {
       motors[Quadruped::LB][i]->setPosition(INFINITY);
@@ -77,6 +80,7 @@ int main(int argc, char **argv) {
   motors[Quadruped::RB][0] = robot->getMotor("RR_hip_joint");
   motors[Quadruped::RB][1] = robot->getMotor("RR_thigh_joint");
   motors[Quadruped::RB][2] = robot->getMotor("RR_calf_joint");
+  motors[Quadruped::RB][3] = robot->getMotor("RR_foot_joint");
   for (int i = 0; i < 3; i++)
   {
       motors[Quadruped::RB][i]->setPosition(INFINITY);
@@ -84,12 +88,13 @@ int main(int argc, char **argv) {
   }
 
   // get position sensor
-  PositionSensor* encoder[4][3];
+  PositionSensor* encoder[4][4];
 
   encoder[Quadruped::LF][0] = robot->getPositionSensor("FL_hip_joint_sensor");
   encoder[Quadruped::LF][1] = robot->getPositionSensor("FL_thigh_joint_sensor");
   encoder[Quadruped::LF][2] = robot->getPositionSensor("FL_calf_joint_sensor");
-  for (int i = 0; i < 3; i++)
+  encoder[Quadruped::LF][3] = robot->getPositionSensor("FL_foot_joint_sensor");
+  for (int i = 0; i < 4; i++)
   {
       encoder[Quadruped::LF][i]->enable(timeStep);
   }
@@ -97,7 +102,8 @@ int main(int argc, char **argv) {
   encoder[Quadruped::RF][0] = robot->getPositionSensor("FR_hip_joint_sensor");
   encoder[Quadruped::RF][1] = robot->getPositionSensor("FR_thigh_joint_sensor");
   encoder[Quadruped::RF][2] = robot->getPositionSensor("FR_calf_joint_sensor");
-  for (int i = 0; i < 3; i++)
+  encoder[Quadruped::RF][3] = robot->getPositionSensor("FR_foot_joint_sensor");
+  for (int i = 0; i < 4; i++)
   {
       encoder[Quadruped::RF][i]->enable(timeStep);
   }
@@ -105,7 +111,8 @@ int main(int argc, char **argv) {
   encoder[Quadruped::LB][0] = robot->getPositionSensor("RL_hip_joint_sensor");
   encoder[Quadruped::LB][1] = robot->getPositionSensor("RL_thigh_joint_sensor");
   encoder[Quadruped::LB][2] = robot->getPositionSensor("RL_calf_joint_sensor");
-  for (int i = 0; i < 3; i++)
+  encoder[Quadruped::LB][3] = robot->getPositionSensor("RL_foot_joint_sensor");
+  for (int i = 0; i < 4; i++)
   {
       encoder[Quadruped::LB][i]->enable(timeStep);
   }
@@ -113,7 +120,8 @@ int main(int argc, char **argv) {
   encoder[Quadruped::RB][0] = robot->getPositionSensor("RR_hip_joint_sensor");
   encoder[Quadruped::RB][1] = robot->getPositionSensor("RR_thigh_joint_sensor");
   encoder[Quadruped::RB][2] = robot->getPositionSensor("RR_calf_joint_sensor");
-  for (int i = 0; i < 3; i++)
+  encoder[Quadruped::RB][3] = robot->getPositionSensor("RR_foot_joint_sensor");
+  for (int i = 0; i < 4; i++)
   {
       encoder[Quadruped::RB][i]->enable(timeStep);
   }
@@ -139,7 +147,7 @@ int main(int argc, char **argv) {
   LegCtrl rb_leg_ctrl(&rb_leg_obj, timeStep);
   rb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE, -0.234832 - YSPAN, -0.5937));
 
-  QpEst qpest(static_cast<double>(timeStep) * 0.001f);
+  QpwEst qpest(static_cast<double>(timeStep) * 0.001f);
   Leg* legsObj[4] = { &lf_leg_obj, &rf_leg_obj, &lb_leg_obj, &rb_leg_obj };
   Body qp_body(&qpest,legsObj, static_cast<double>(timeStep) * 0.001f);
   double mb[3] = { Quadruped::Mmid, Quadruped::Mhead, Quadruped::Mtail };
@@ -173,7 +181,7 @@ int main(int argc, char **argv) {
   Vector4d phaseResult;
   Vector4i contactResult;
   phaseResult.setZero();
-  contactResult.setZero();
+  contactResult.setOnes();
   GaitCtrl gaitCtrl(&qp_ctrl, legsCtrl, timeStep, &phaseResult, &contactResult);
   gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
   gaitCtrl.initExpectK(gaitK);
@@ -182,7 +190,7 @@ int main(int argc, char **argv) {
 
   //VOFA vofa("vjs.exe");
 
-  Eigen::Vector3d last_encoderValue[4];
+  Eigen::Vector4d last_encoderValue[4];
   for (auto p : last_encoderValue)
   {
       p.setZero();
@@ -198,11 +206,11 @@ int main(int argc, char **argv) {
   // 重新配置腿部曲线跟踪参数
   Vector2d lPid_pvParams[6];
   lPid_pvParams[0] << 4000, 200;
-  lPid_pvParams[1] << 100, 200;
+  lPid_pvParams[1] << 80, 200;
   lPid_pvParams[2] << 4000, 200;
-  lPid_pvParams[3] << 100, 200;
+  lPid_pvParams[3] << 80, 200;
   lPid_pvParams[4] << 4000, 500;
-  lPid_pvParams[5] << 100, 500;
+  lPid_pvParams[5] << 80, 500;
   for (auto p : legsCtrl)
   {
       p->loadPid_pvParams(p->lPid_pv, lPid_pvParams);
@@ -320,7 +328,8 @@ int main(int argc, char **argv) {
           qp_body.legVelocityInWorldFrame();
           if (t > 0.2)
           {
-              Eigen::Matrix<double, 3, 1> estInput = qp_body.currentWorldState.linAcc_xyz + qp_body.g;
+              // 使用宇树教程观测器
+              /*Eigen::Matrix<double, 3, 1> estInput = qp_body.currentWorldState.linAcc_xyz + qp_body.g;
               Eigen::Matrix<double, 28, 1> estObserve;
               for (int i(0); i < 4; i++)
               {
@@ -329,8 +338,24 @@ int main(int argc, char **argv) {
                   estObserve(24 + i, 0) = 0;
               }
               qp_body.est->estimatorRun(estInput, estObserve, contactResult, phaseResult);
-              qp_body.currentWorldState.dist = qp_body.est->estimatorState.block<3, 1>(0, 0);
-              qp_body.currentWorldState.linVel_xyz = qp_body.est->estimatorState.block<3, 1>(3, 0);
+              qp_body.currentWorldState.dist = qp_body.est->getEstBodyPosS();
+              qp_body.currentWorldState.linVel_xyz = qp_body.est->getEstBodyVelS();*/
+
+              // 使用四轮足论文观测器
+              Eigen::Matrix<double, 3, 1> estInput = qp_body.currentWorldState.linAcc_xyz + qp_body.g;
+              Eigen::Matrix<double, 44, 1> estObserve;
+              estObserve.setZero();
+              for (int i(0); i < 4; i++)
+              {
+                  estObserve.block<3, 1>(i * 3, 0) = qp_body.Rsb_c * qp_body.currentBodyState.leg_b[i].Position;
+                  estObserve.block<3, 1>(12 + i * 3, 0) = qp_body.currentWorldState.leg_s[i].Velocity;
+                  estObserve.block<3, 1>(24 + i * 3, 0) = qp_body.currentWorldState.leg_s[i].VelocityW;
+              }
+              qp_body.est->estimatorRun(estInput, estObserve, contactResult, phaseResult);
+              /*std::cout << "estState: \n" << qpest.estimatorState.transpose() << std::endl;
+              std::cout << "estOut:   \n" << qpest.estimatorOut.transpose() << std::endl;*/
+              qp_body.currentWorldState.dist = qp_body.est->getEstBodyPosS();
+              qp_body.currentWorldState.linVel_xyz = qp_body.est->getEstBodyVelS();
               qp_body.updateEqBody();
               qp_ctrl.updateDynamic();
           }
@@ -365,11 +390,11 @@ int main(int argc, char **argv) {
               legsCtrl[0]->legObject->targetLeg.Velocity(2) = scale * w * cos(w*t);*/
           }
 
-          Eigen::Vector3d encoderValue[4];
-          Eigen::Vector3d motorSpeed[4];
+          Eigen::Vector4d encoderValue[4];
+          Eigen::Vector4d motorSpeed[4];
           for (int i = 0; i < 4; i++)
           {
-              for (int j = 0; j < 3; j++)
+              for (int j = 0; j < 4; j++)
               {
                   encoderValue[i](j) = encoder[i][j]->getValue();
               }
@@ -377,7 +402,7 @@ int main(int argc, char **argv) {
               last_encoderValue[i] = encoderValue[i];
               legsCtrl[i]->updateMotorAng(encoderValue[i]);
               legsCtrl[i]->updateMotorVel(motorSpeed[i]);
-              legsCtrl[i]->legStateCal();
+              legsCtrl[i]->legStateCal(imuRPYd,gyrod);
               if (use_mpc == false)
               {
                   legsCtrl[i]->legPvCtrlForce();
@@ -395,7 +420,15 @@ int main(int argc, char **argv) {
               qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
               qp_ctrl.setContactConstrain(contactResult);
               Eigen::Vector<bool, 6> en;
-              en << true, true, true, true, true, true;
+              if (gaitCtrl.stRatio < 1.)
+              {
+                  en << true, true, true, true, true, true;
+              }
+              else
+              {
+                  en << true, true, true, true, true, true;
+              }
+              
               qp_ctrl.mpc_adjust(en);
           }
 

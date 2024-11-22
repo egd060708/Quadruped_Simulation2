@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 
 #define YSPAN 0.03
-#define XMOVE 0
+#define XMOVE -0.03
 
 namespace Quadruped {
 	// 腿长参数
@@ -51,8 +51,8 @@ namespace Quadruped {
 	const Eigen::Vector<double, 6> F = Q;
 	const Eigen::Vector<double, 12> R = Eigen::Vector<double, 12>::Constant(1);
 	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(0.8);
-	const Eigen::Vector<double, 9> linPD(20, -0.2, 2, 15, -0.15, 2, 25, -0.25, 2);
-	const Eigen::Vector<double, 9> angPD(30, -0.3, 5, 20, -0.2, 5, 10, -0.1, 5);
+	const Eigen::Vector<double, 9> linPD(20, -0.2, 2, 20, -0.3, 2, 25, -0.25, 2);
+	const Eigen::Vector<double, 9> angPD(30, -0.1, 5, 20, -0.1, 5, 10, -0.5, 5);
 	//const Eigen::Vector<double, 9> linPD(0, -0., 0, 0, -0., 0, 0, -0., 0);
 	//const Eigen::Vector<double, 9> angPD(0, -0., 0, 0, -0., 0, 0, -0., 0);
 
@@ -61,5 +61,5 @@ namespace Quadruped {
 	//const Eigen::Vector<double, 12> ub = Eigen::Vector<double, 12>::Constant(100);
 
 	// 步态运动期望增益
-	const Eigen::Vector3d gaitK(0.003, 0.003, 0.003);
+	const Eigen::Vector3d gaitK(0.1, 0.1, 0.1);
 }
