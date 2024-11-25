@@ -188,7 +188,7 @@ int main(int argc, char** argv)
     phaseResult.setZero();
     contactResult.setZero();
     GaitCtrl gaitCtrl(&qp_ctrl,legsCtrl,timeStep,&phaseResult,&contactResult);
-    gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+    gaitCtrl.initSwingParams(0.4, 1., Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
     gaitCtrl.initExpectK(gaitK);
     Eigen::Matrix<double, 3, 4> feetPos;
     Eigen::Matrix<double, 3, 4> feetVel;
@@ -352,9 +352,9 @@ int main(int argc, char** argv)
             /*std::cout << "mass:" << qp_body.M << std::endl;
             std::cout << "inerM:" << qp_body.I << std::endl;
             std::cout << "massP:" << qp_body.P << std::endl;*/
-            std::cout << "tar:" << lf_leg_obj.targetLeg.Position << std::endl;
+            /*std::cout << "tar:" << lf_leg_obj.targetLeg.Position << std::endl;
             std::cout << "cur:" << lf_leg_obj.currentLeg.Position << std::endl;
-            std::cout << "f:" << lf_leg_obj.targetLeg.Force << std::endl;
+            std::cout << "f:" << lf_leg_obj.targetLeg.Force << std::endl;*/
 
 
             /*std::cout << "estimatorOut:" << std::endl;*/
@@ -422,7 +422,7 @@ int main(int argc, char** argv)
                 last_encoderValue[i] = encoderValue[i];
                 legsCtrl[i]->updateMotorAng(encoderValue[i]);
                 legsCtrl[i]->updateMotorVel(motorSpeed[i]);
-                legsCtrl[i]->legStateCal();
+                legsCtrl[i]->legStateCal(imuRPYd, gyrod);
                 if (use_mpc == false)
                 {
                     legsCtrl[i]->legPvCtrlForce();
@@ -464,7 +464,9 @@ int main(int argc, char** argv)
                     }
                 }
                 qp_ctrl.setLegsForce(legF);
+                std::cout << "legF: " << legF << std::endl;
             }
+            
 
             for (int i = 0; i < 4; i++)
             {

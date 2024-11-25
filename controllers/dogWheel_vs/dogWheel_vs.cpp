@@ -21,6 +21,8 @@
 #include "RobotEst.h"
 #include "BodyCtrlNew.h"
 
+
+
 using namespace webots;
 using namespace Quadruped;
 using namespace std;
@@ -51,7 +53,7 @@ int main(int argc, char **argv) {
   motors[Quadruped::LF][1] = robot->getMotor("FL_thigh_joint");
   motors[Quadruped::LF][2] = robot->getMotor("FL_calf_joint");
   motors[Quadruped::LF][3] = robot->getMotor("FL_foot_joint");
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 4; i++)
   {
       motors[Quadruped::LF][i]->setPosition(INFINITY);
       motors[Quadruped::LF][i]->setVelocity(0);
@@ -61,7 +63,7 @@ int main(int argc, char **argv) {
   motors[Quadruped::RF][1] = robot->getMotor("FR_thigh_joint");
   motors[Quadruped::RF][2] = robot->getMotor("FR_calf_joint");
   motors[Quadruped::RF][3] = robot->getMotor("FR_foot_joint");
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 4; i++)
   {
       motors[Quadruped::RF][i]->setPosition(INFINITY);
       motors[Quadruped::RF][i]->setVelocity(0);
@@ -71,7 +73,7 @@ int main(int argc, char **argv) {
   motors[Quadruped::LB][1] = robot->getMotor("RL_thigh_joint");
   motors[Quadruped::LB][2] = robot->getMotor("RL_calf_joint");
   motors[Quadruped::LB][3] = robot->getMotor("RL_foot_joint");
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 4; i++)
   {
       motors[Quadruped::LB][i]->setPosition(INFINITY);
       motors[Quadruped::LB][i]->setVelocity(0);
@@ -81,7 +83,7 @@ int main(int argc, char **argv) {
   motors[Quadruped::RB][1] = robot->getMotor("RR_thigh_joint");
   motors[Quadruped::RB][2] = robot->getMotor("RR_calf_joint");
   motors[Quadruped::RB][3] = robot->getMotor("RR_foot_joint");
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 4; i++)
   {
       motors[Quadruped::RB][i]->setPosition(INFINITY);
       motors[Quadruped::RB][i]->setVelocity(0);
@@ -133,19 +135,19 @@ int main(int argc, char **argv) {
   Vector3d p_mass[4] = { Quadruped::Phip, Quadruped::Pthigh, Quadruped::Pcalf, Quadruped::Pfoot };
   Leg lf_leg_obj(links, p_mass, mass, iner, Quadruped::LF);
   LegCtrl lf_leg_ctrl(&lf_leg_obj, timeStep);
-  lf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE, 0.234832 + YSPAN, -0.5937));
+  lf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE + XSPAN, 0.234832 + YSPAN, -0.5937));
 
   Leg rf_leg_obj(links, p_mass, mass, iner, Quadruped::RF);
   LegCtrl rf_leg_ctrl(&rf_leg_obj, timeStep);
-  rf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE, -0.234832 - YSPAN, -0.5937));
+  rf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE + XSPAN, -0.234832 - YSPAN, -0.5937));
 
   Leg lb_leg_obj(links, p_mass, mass, iner, Quadruped::LB);
   LegCtrl lb_leg_ctrl(&lb_leg_obj, timeStep);
-  lb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE, 0.234832 + YSPAN, -0.5937));
+  lb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE - XSPAN, 0.234832 + YSPAN, -0.5937));
 
   Leg rb_leg_obj(links, p_mass, mass, iner, Quadruped::RB);
   LegCtrl rb_leg_ctrl(&rb_leg_obj, timeStep);
-  rb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE, -0.234832 - YSPAN, -0.5937));
+  rb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0.0130447 + XMOVE - XSPAN, -0.234832 - YSPAN, -0.5937));
 
   QpwEst qpest(static_cast<double>(timeStep) * 0.001f);
   Leg* legsObj[4] = { &lf_leg_obj, &rf_leg_obj, &lb_leg_obj, &rb_leg_obj };
@@ -155,10 +157,10 @@ int main(int argc, char **argv) {
   Vector3d pb[3] = { Quadruped::Pmid, Quadruped::Phead, Quadruped::Ptail };
   qp_body.initParams(leg2bodyFrame, initRbLegXYPosition, mb, ib, pb);
   Eigen::Matrix<double, 3, 4> footPoint;
-  footPoint.col(LF) = Vector3d(0.3415447 + XMOVE, 0.234832 + YSPAN, 0);
-  footPoint.col(RF) = Vector3d(0.3415447 + XMOVE, -0.234832 - YSPAN, 0);
-  footPoint.col(LB) = Vector3d(-0.3154553 + XMOVE, 0.234832 + YSPAN, 0);
-  footPoint.col(RB) = Vector3d(-0.3154553 + XMOVE, -0.234832 - YSPAN, 0);
+  footPoint.col(LF) = Vector3d(0.3415447 + XMOVE + XSPAN, 0.234832 + YSPAN, 0);
+  footPoint.col(RF) = Vector3d(0.3415447 + XMOVE + XSPAN, -0.234832 - YSPAN, 0);
+  footPoint.col(LB) = Vector3d(-0.3154553 + XMOVE - XSPAN, 0.234832 + YSPAN, 0);
+  footPoint.col(RB) = Vector3d(-0.3154553 + XMOVE - XSPAN, -0.234832 - YSPAN, 0);
   qp_body.updateTargetFootPoint(footPoint);
   Vector3d angle_t(0, 0, 0);
   Vector3d p_t(0, 0, 0.5937);
@@ -173,9 +175,13 @@ int main(int argc, char **argv) {
   LegCtrl* legsCtrl[4] = { &lf_leg_ctrl,&rf_leg_ctrl,&lb_leg_ctrl,&rb_leg_ctrl };
 
   //BodyCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
-  QpCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
+  QpwCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
   qp_ctrl.importWeight(Q, F, R, W);
+#if USE_WHEEL == 1
+  qp_ctrl.importPDparam(linPD, angPD,wheelPID);
+#else
   qp_ctrl.importPDparam(linPD, angPD);
+#endif
   bool use_mpc = false;
 
   Vector4d phaseResult;
@@ -183,7 +189,7 @@ int main(int argc, char **argv) {
   phaseResult.setZero();
   contactResult.setOnes();
   GaitCtrl gaitCtrl(&qp_ctrl, legsCtrl, timeStep, &phaseResult, &contactResult);
-  gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+  gaitCtrl.initSwingParams(0.4, 1, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
   gaitCtrl.initExpectK(gaitK);
   Eigen::Matrix<double, 3, 4> feetPos;
   Eigen::Matrix<double, 3, 4> feetVel;
@@ -248,11 +254,11 @@ int main(int argc, char **argv) {
               {
               case keyboard->UP:
                   //x_t += 0.0002;
-                  vx_t = 0.2;
+                  vx_t = 1;
                   break;
               case keyboard->DOWN:
                   //x_t -= 0.0002;
-                  vx_t = -0.2;
+                  vx_t = -1;
                   break;
               case keyboard->RIGHT:
                   //y_t -= 0.0002;
@@ -416,8 +422,13 @@ int main(int argc, char **argv) {
               gaitCtrl.run(feetPos, feetVel);
 
               qp_ctrl.updateBalanceState();
+#if USE_WHEEL == 1
+              qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t), Eigen::Vector4d(footPoint(0,0), footPoint(0,1), footPoint(0,2), footPoint(0,3)));
+              qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t), Eigen::Vector4d(vx_t, vx_t, vx_t, vx_t));
+#else   
               qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
               qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
+#endif
               qp_ctrl.setContactConstrain(contactResult);
               Eigen::Vector<bool, 6> en;
               if (gaitCtrl.stRatio < 1.)
@@ -436,7 +447,9 @@ int main(int argc, char **argv) {
           if (use_mpc == true && t > 0.2)
           {
               Eigen::Matrix<double, 3, 4> legF;
+              Eigen::Vector4d wheelT;
               legF.setZero();
+              wheelT.setZero();
               qp_body.updateTargetFootPoint(feetPos);
               qp_body.updateTargetFootVel(feetVel);
               qp_body.legAndBodyPosition(-1);
@@ -445,27 +458,43 @@ int main(int argc, char **argv) {
                   if (contactResult(i) == 0)
                   {
                       legF.col(i) = legsCtrl[i]->legPvCtrlForceR();
+                      wheelT(i) = 0;
                   }
                   else
                   {
-                      legF.col(i) = qp_ctrl.mpcOut.col(i);
+                      legF.col(i) = qp_ctrl.mpcOut.block(0,i,3,1);
+                      wheelT(i) = qp_ctrl.mpcOut(3, i);
                   }
               }
+              /*std::cout << "legF:  \n" << legF << std::endl;
+              std::cout << "wheelT:\n" << wheelT << std::endl;
+              std::cout << "wheetV:\n" << legsObj[0]->currentJoint.Foot_Velocity << ", " << legsObj[1]->currentJoint.Foot_Velocity
+                  << ", " << legsObj[2]->currentJoint.Foot_Velocity << ", " << legsObj[3]->currentJoint.Foot_Velocity << std::endl;*/
+#if USE_WHEEL == 1
+              qp_ctrl.setLegsForce(legF,wheelT);
+#else
               qp_ctrl.setLegsForce(legF);
+#endif
           }
 
           for (int i = 0; i < 4; i++)
           {
-              for (int k = 0; k < 3; k++)
+              for (int k = 0; k < 4; k++)
               {
                   if (k < 2)
                   {
                       motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Torque(k), 200));
                   }
-                  else
+                  else if(k == 2)
                   {
                       motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Torque(k), 320));
                   }
+#if USE_WHEEL == 1
+                  else
+                  {
+                      motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Foot_Torque, 20));
+                  }
+#endif
               }
           }
 
