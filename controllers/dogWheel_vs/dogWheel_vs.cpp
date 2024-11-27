@@ -189,12 +189,12 @@ int main(int argc, char **argv) {
   phaseResult.setZero();
   contactResult.setOnes();
   GaitCtrl gaitCtrl(&qp_ctrl, legsCtrl, timeStep, &phaseResult, &contactResult);
-  gaitCtrl.initSwingParams(0.4, 1, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+  gaitCtrl.initSwingParams(0.8, 1., Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
   gaitCtrl.initExpectK(gaitK);
   Eigen::Matrix<double, 3, 4> feetPos;
   Eigen::Matrix<double, 3, 4> feetVel;
 
-  //VOFA vofa("vjs.exe");
+  VOFA vofa("vjs.exe");
 
   Eigen::Vector4d last_encoderValue[4];
   for (auto p : last_encoderValue)
@@ -225,6 +225,8 @@ int main(int argc, char **argv) {
   qp_ctrl.force_c = 1000;
   qp_ctrl.u = 2;
 
+  //LPF_SecondOrder_Classdef velFilter[3] = { LPF_SecondOrder_Classdef(5,500),LPF_SecondOrder_Classdef(5,500) ,LPF_SecondOrder_Classdef(5,500) };
+  MeanFilter<100> velFilter[3];
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
   while (robot->step(timeStep) != -1) {
@@ -254,11 +256,11 @@ int main(int argc, char **argv) {
               {
               case keyboard->UP:
                   //x_t += 0.0002;
-                  vx_t = 1;
+                  vx_t = 1.2;
                   break;
               case keyboard->DOWN:
                   //x_t -= 0.0002;
-                  vx_t = -1;
+                  vx_t = -1.2;
                   break;
               case keyboard->RIGHT:
                   //y_t -= 0.0002;
@@ -306,8 +308,12 @@ int main(int argc, char **argv) {
               }
               key = keyboard->getKey();
           }
-          Eigen::AngleAxisd rotationz_t(yaw_t, Eigen::Vector3d::UnitZ());
-          Eigen::Vector3d real_vt(vx_t, vy_t, 0);
+          Eigen::AngleAxisd rotationz_t(velFilter[2].f(yaw_t), Eigen::Vector3d::UnitZ());
+          Eigen::Vector3d real_vt(velFilter[0].f(vx_t), velFilter[1].f(vy_t), 0);
+          /*float data[DNUM];
+          data[0] = real_vt(0);
+          data[1] = real_vt(1);
+          data[2] = real_vt(2);*/
           real_vt = rotationz_t.toRotationMatrix() * real_vt;
           x_t += real_vt(0) * 0.001 * timeStep;
           y_t += real_vt(1) * 0.001 * timeStep;
@@ -470,6 +476,10 @@ int main(int argc, char **argv) {
               std::cout << "wheelT:\n" << wheelT << std::endl;
               std::cout << "wheetV:\n" << legsObj[0]->currentJoint.Foot_Velocity << ", " << legsObj[1]->currentJoint.Foot_Velocity
                   << ", " << legsObj[2]->currentJoint.Foot_Velocity << ", " << legsObj[3]->currentJoint.Foot_Velocity << std::endl;*/
+              /*std::cout << "dis: \n" << qpest.getEstBodyPosS().transpose() << std::endl;
+              std::cout << "vel: \n" << qpest.getEstBodyVelS().transpose() << std::endl;
+              std::cout << "wdis:\n" << qpest.getEstFootPosS().transpose() << std::endl;
+              std::cout << "wvel:\n" << qpest.getEstFootVelS().transpose() << std::endl;*/
 #if USE_WHEEL == 1
               qp_ctrl.setLegsForce(legF,wheelT);
 #else
@@ -498,36 +508,39 @@ int main(int argc, char **argv) {
               }
           }
 
-          //float data[DNUM];
-          ///*data[0] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(0));
-          //data[1] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(1));
-          //data[2] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(2));*/
-          //data[0] = float(qp_ctrl.currentBalanceState.p_dot(0));
-          //data[1] = float(qp_ctrl.currentBalanceState.p_dot(1));
-          //data[2] = float(qp_ctrl.currentBalanceState.p_dot(2));
-          //data[3] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(0));
-          //data[4] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(1));
-          //data[5] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(2));
-          //data[6] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(0));
-          //data[7] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(1));
-          //data[8] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(2));
-          //data[9] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(0));
-          //data[10] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(1));
-          //data[11] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(2));
-          //data[12] = float(gaitCtrl.contact(0));
-          //data[13] = float(gaitCtrl.phase(0));
-          ///*data[9] = float(qp_ctrl.targetBalanceState.p(0));
-          //data[10] = float(qp_ctrl.targetBalanceState.p(1));
-          //data[11] = float(qp_ctrl.targetBalanceState.p(2));
-          //data[12] = float(qp_ctrl.currentBalanceState.p(0));
-          //data[13] = float(qp_ctrl.currentBalanceState.p(1));
-          //data[14] = float(qp_ctrl.currentBalanceState.p(2));
-          //data[15] = float(qp_ctrl.targetBalanceState.p_dot(0));
-          //data[16] = float(qp_ctrl.targetBalanceState.p_dot(1));
-          //data[17] = float(qp_ctrl.targetBalanceState.p_dot(2));
-          //data[18] = float(qp_ctrl.currentBalanceState.p_dot(0));
-          //data[19] = float(qp_ctrl.currentBalanceState.p_dot(1));
-          //data[20] = float(qp_ctrl.currentBalanceState.p_dot(2));*/
+          /*float data[DNUM];
+          data[0] = float(vx_t);
+          data[1] = float(vy_t);
+          data[2] = float(vyaw_t);*/
+          /*data[0] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(0));
+          data[1] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(1));
+          data[2] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Position(2));*/
+          /*data[0] = float(qp_ctrl.currentBalanceState.p_dot(0));
+          data[1] = float(qp_ctrl.currentBalanceState.p_dot(1));
+          data[2] = float(qp_ctrl.currentBalanceState.p_dot(2));
+          data[3] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(0));
+          data[4] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(1));
+          data[5] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(2));
+          data[6] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(0));
+          data[7] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(1));
+          data[8] = float(qp_ctrl.bodyObject->legs[0]->targetLeg.Velocity(2));
+          data[9] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(0));
+          data[10] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(1));
+          data[11] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Velocity(2));
+          data[12] = float(gaitCtrl.contact(0));
+          data[13] = float(gaitCtrl.phase(0));*/
+          /*data[9] = float(qp_ctrl.targetBalanceState.p(0));
+          data[10] = float(qp_ctrl.targetBalanceState.p(1));
+          data[11] = float(qp_ctrl.targetBalanceState.p(2));
+          data[12] = float(qp_ctrl.currentBalanceState.p(0));
+          data[13] = float(qp_ctrl.currentBalanceState.p(1));
+          data[14] = float(qp_ctrl.currentBalanceState.p(2));
+          data[15] = float(qp_ctrl.targetBalanceState.p_dot(0));
+          data[16] = float(qp_ctrl.targetBalanceState.p_dot(1));
+          data[17] = float(qp_ctrl.targetBalanceState.p_dot(2));
+          data[18] = float(qp_ctrl.currentBalanceState.p_dot(0));
+          data[19] = float(qp_ctrl.currentBalanceState.p_dot(1));
+          data[20] = float(qp_ctrl.currentBalanceState.p_dot(2));*/
           //vofa.dataTransmit(data, 5);
       }
   };

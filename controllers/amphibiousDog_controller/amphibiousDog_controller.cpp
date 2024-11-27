@@ -16,9 +16,10 @@
 #include "mathTool.h"
 
 #define MOTOR_TORQUE 0
-#define BACK_INV 0 // 是否使用后腿反屈膝
-#define STAND_BIAS 0.023 // 中性落足点的偏移，相对于四个髋关节的位置，正为向外，负为向内
-#define HEIGHT 0.15
+#define BACK_INV 1 // 是否使用后腿反屈膝
+#define FRONT_INV 0// 是否使用前腿反屈膝
+#define STAND_BIAS 0.003 // 中性落足点的偏移，相对于四个髋关节的位置，正为向外，负为向内
+#define HEIGHT 0.18
 #define IS_WATER_GAIT 0
 
 // All the webots classes are defined in the "webots" namespace
@@ -108,16 +109,21 @@ int main(int argc, char **argv) {
   Leg_Ctrl_Param legsCtrlParam[4];
   Body body;
   double links[2] = { 0.09, 0.1225};
+#if FRONT_INV==1
+  InitLeg(&legsObj[LF], links, 1, -1);
+  InitLeg(&legsObj[RF], links, -1, -1);
+#else
   InitLeg(&legsObj[LF], links, 1, 1);
   InitLeg(&legsObj[RF], links, -1, 1);
+#endif
 #if BACK_INV==1
-  InitLeg(&legsObj[LB], links, 1, 1);
-  InitLeg(&legsObj[RB], links, -1, 1);
-#else
   InitLeg(&legsObj[LB], links, 1, -1);
   InitLeg(&legsObj[RB], links, -1, -1);
+#else
+  InitLeg(&legsObj[LB], links, 1, 1);
+  InitLeg(&legsObj[RB], links, -1, 1);
 #endif
-  double kp_p[3] = { 10,10,-5 };
+  double kp_p[3] = { 5,5,-2.5 };
   //double kd_p[3] = { 0.5,0.5,-0.25 };
   double kd_p[3] = { 0.,0.,-0. };
   double kp_t[3] = { 1,1,1 };

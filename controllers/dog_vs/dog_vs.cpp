@@ -188,7 +188,7 @@ int main(int argc, char** argv)
     phaseResult.setZero();
     contactResult.setZero();
     GaitCtrl gaitCtrl(&qp_ctrl,legsCtrl,timeStep,&phaseResult,&contactResult);
-    gaitCtrl.initSwingParams(0.4, 1., Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+    gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
     gaitCtrl.initExpectK(gaitK);
     Eigen::Matrix<double, 3, 4> feetPos;
     Eigen::Matrix<double, 3, 4> feetVel;
