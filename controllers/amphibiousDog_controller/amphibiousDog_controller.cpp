@@ -123,10 +123,10 @@ int main(int argc, char **argv) {
   InitLeg(&legsObj[LB], links, 1, 1);
   InitLeg(&legsObj[RB], links, -1, 1);
 #endif
-  double kp_p[3] = { 5,5,-2.5 };
+  double kp_p[3] = { 3,3,5 };
   //double kd_p[3] = { 0.5,0.5,-0.25 };
   double kd_p[3] = { 0.,0.,-0. };
-  double kp_t[3] = { 1,1,1 };
+  double kp_t[3] = { 100,100,100 };
   double init_p[4][3] = {
       {STAND_BIAS, 0, -HEIGHT},
       {STAND_BIAS, 0, -HEIGHT},

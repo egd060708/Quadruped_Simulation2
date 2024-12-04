@@ -131,25 +131,25 @@ int main(int argc, char** argv)
     Leg lf_leg_obj(links, p_mass, mass, iner, Quadruped::LF);
     LegCtrl lf_leg_ctrl(&lf_leg_obj, timeStep);
     //virtualLegCtrl lf_vleg_ctrl(&lf_leg_obj, timeStep);
-    lf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
+    lf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(XSPAN + XMOVE, 0.0838 + YSPAN + YMOVE, -0.27));
     //lf_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
 
     Leg rf_leg_obj(links, p_mass, mass, iner, Quadruped::RF);
     LegCtrl rf_leg_ctrl(&rf_leg_obj, timeStep);
     //virtualLegCtrl rf_vleg_ctrl(&rf_leg_obj, timeStep);
-    rf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
+    rf_leg_ctrl.setEndPositionTar(Eigen::Vector3d(XSPAN + XMOVE, -0.0838 - YSPAN + YMOVE, -0.27));
     //rf_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
 
     Leg lb_leg_obj(links, p_mass, mass, iner, Quadruped::LB);
     LegCtrl lb_leg_ctrl(&lb_leg_obj, timeStep);
     //virtualLegCtrl lb_vleg_ctrl(&lb_leg_obj, timeStep);
-    lb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
+    lb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(-XSPAN + XMOVE, 0.0838 + YSPAN + YMOVE, -0.27));
     //lb_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, 0.0838, -0.27));
 
     Leg rb_leg_obj(links, p_mass, mass, iner, Quadruped::RB);
     LegCtrl rb_leg_ctrl(&rb_leg_obj, timeStep);
     //virtualLegCtrl rb_vleg_ctrl(&rb_leg_obj, timeStep);
-    rb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
+    rb_leg_ctrl.setEndPositionTar(Eigen::Vector3d(-XSPAN + XMOVE, -0.0838 - YSPAN + YMOVE, -0.27));
     //rb_vleg_ctrl.setEndPositionTar(Eigen::Vector3d(0, -0.0838, -0.27));
 
     QpEst qpest(static_cast<double>(timeStep) * 0.001f);
@@ -160,14 +160,14 @@ int main(int argc, char** argv)
     Vector3d pb[3] = { Quadruped::Pmid, Quadruped::Phead, Quadruped::Ptail };
     qp_body.initParams(leg2bodyFrame, initRbLegXYPosition, mb, ib, pb);
     Eigen::Matrix<double, 3, 4> footPoint;
-    footPoint.col(LF) = Vector3d(0.1805, 0.1308, 0.);
-    footPoint.col(RF) = Vector3d(0.1805, -0.1308, 0.);
-    footPoint.col(LB) = Vector3d(-0.1805, 0.1308, 0.);
-    footPoint.col(RB) = Vector3d(-0.1805, -0.1308, 0.);
+    footPoint.col(LF) = Vector3d(0.1805 + XSPAN + XMOVE, 0.1308 + YSPAN + YMOVE, 0.);
+    footPoint.col(RF) = Vector3d(0.1805 + XSPAN + XMOVE, -0.1308 - YSPAN + YMOVE, 0.);
+    footPoint.col(LB) = Vector3d(-0.1805 - XSPAN + XMOVE, 0.1308 + YSPAN + YMOVE, 0.);
+    footPoint.col(RB) = Vector3d(-0.1805 - XSPAN + XMOVE, -0.1308 - YSPAN + YMOVE, 0.);
     qp_body.updateTargetFootPoint(footPoint);
     Vector3d angle_t(0, 0, 0);
     Vector3d p_t(0, 0, 0.27);
-    double x_t = 0;
+    double x_t = 0.;
     double y_t = 0;
     double z_t = 0.27;
     double roll_t = 0;
@@ -178,9 +178,9 @@ int main(int argc, char** argv)
     LegCtrl* legsCtrl[4] = { &lf_leg_ctrl,&rf_leg_ctrl,&lb_leg_ctrl,&rb_leg_ctrl };
     //virtualLegCtrl* vLegsCtrl[4] = { &lf_vleg_ctrl, &rf_vleg_ctrl, &lb_vleg_ctrl, &rb_vleg_ctrl };
 
-    QpCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
+    QpPVCtrl qp_ctrl(&qp_body, legsCtrl, timeStep);
     qp_ctrl.importWeight(Q, F, R, W);
-    qp_ctrl.importPDparam(linPD, angPD);
+    //qp_ctrl.importPDparam(linPD, angPD);
     bool use_mpc = false;
 
     Vector4d phaseResult;
@@ -188,7 +188,7 @@ int main(int argc, char** argv)
     phaseResult.setZero();
     contactResult.setZero();
     GaitCtrl gaitCtrl(&qp_ctrl,legsCtrl,timeStep,&phaseResult,&contactResult);
-    gaitCtrl.initSwingParams(0.4, 0.5, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+    gaitCtrl.initSwingParams(0.5, 0.6, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
     gaitCtrl.initExpectK(gaitK);
     Eigen::Matrix<double, 3, 4> feetPos;
     Eigen::Matrix<double, 3, 4> feetVel;
@@ -253,19 +253,19 @@ int main(int argc, char** argv)
                 {
                 case keyboard->UP:
                     //x_t += 0.0002;
-                    vx_t = 0.2;
+                    vx_t = 0.5;
                     break;
                 case keyboard->DOWN:
                     //x_t -= 0.0002;
-                    vx_t = -0.2;
+                    vx_t = -0.5;
                     break;
                 case keyboard->RIGHT:
                     //y_t -= 0.0002;
-                    vy_t = -0.2;
+                    vy_t = -0.25;
                     break;
                 case keyboard->LEFT:
                     //y_t += 0.0002;
-                    vy_t = 0.2;
+                    vy_t = 0.25;
                     break;
                 case (keyboard->SHIFT + keyboard->RIGHT):
                     roll_t += 0.0005;
@@ -432,7 +432,7 @@ int main(int argc, char** argv)
             if (t > 0.2)
             {
                 gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
-                gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.02);
+                gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.04);
                 gaitCtrl.run(feetPos, feetVel);
 
                 qp_ctrl.updateBalanceState();
@@ -464,7 +464,7 @@ int main(int argc, char** argv)
                     }
                 }
                 qp_ctrl.setLegsForce(legF);
-                std::cout << "legF: " << legF << std::endl;
+                //std::cout << "legF: " << legF << std::endl;
             }
             
 

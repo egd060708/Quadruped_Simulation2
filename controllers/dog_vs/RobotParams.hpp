@@ -3,6 +3,11 @@
 #include <stdint.h>
 #include <Eigen/Dense>
 
+#define XSPAN 0.02
+#define XMOVE 0
+#define YSPAN 0
+#define YMOVE 0
+
 namespace Quadruped {
 
 	const double L1 = 0.0838f;
@@ -11,7 +16,7 @@ namespace Quadruped {
 	// 腿部基坐标系到机身坐标系的转换向量，要转换到机身坐标系，直接加上此向量(此处向量仅代表左前腿)
 	const Eigen::Vector3d leg2bodyFrame(0.1805, 0.047, 0);
 	// 初始右后腿位置
-	const Eigen::Vector3d initRbLegXYPosition(-0.1805, -0.1308, 0);
+	const Eigen::Vector3d initRbLegXYPosition(-0.1805 - XSPAN, -0.1308 - YSPAN, 0);
 	// 机身参数
 	const Eigen::Vector<double,6> Imid(1.585330e-02,3.779990e-02,4.565420e-02,-3.660000e-05,-6.110000e-05,-2.750000e-05);
 	const double Mmid = 6.000000;
@@ -39,12 +44,16 @@ namespace Quadruped {
 	const double Mfoot = 0.060000;
 	const Eigen::Vector3d Pfoot(0,0,0);
 	// mpc平衡控制器权重参数
-	const Eigen::Vector<double, 6> Q(3000, 3000, 5000, 200, 200, 200);
+	/*const Eigen::Vector<double, 6> Q(3000, 3000, 5000, 200, 200, 200);
 	const Eigen::Vector<double, 6> F = Q;
 	const Eigen::Vector<double, 12> R = Eigen::Vector<double, 12>::Constant(1);
 	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(0.8);
 	const Eigen::Vector<double, 9> linPD(15, -0., 5, 20, -0., 7, 30, -0., 6);
-	const Eigen::Vector<double, 9> angPD(5, -0., 3, 10, -0., 5, 5, -0., 3);
+	const Eigen::Vector<double, 9> angPD(5, -0., 3, 10, -0., 5, 5, -0., 3);*/
+	const Eigen::Vector<double, 15> Q(40000, 40000, 100000, 5000, 10000, 5000,100,100,120,20,50,20,1e-6,1e-6,1e-6);
+	const Eigen::Vector<double, 15> F = Q;
+	const Eigen::Vector<double, 12> R = Eigen::Vector<double, 12>::Constant(1e-4);
+	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(1e-6);
 
 	//// mpc约束
 	//const Eigen::Vector<double, 12> lb = Eigen::Vector<double, 12>::Constant(-100);
