@@ -3,11 +3,11 @@
 #include <stdint.h>
 #include <Eigen/Dense>
 
-#define YSPAN 0.03
+#define YSPAN 0.0
 #define XMOVE 0.0
-#define XSPAN 0.05
+#define XSPAN 0.0
 
-#define USE_WHEEL 1
+#define USE_WHEEL 0
 
 namespace Quadruped {
 	// 腿长参数
@@ -50,26 +50,42 @@ namespace Quadruped {
 	const Eigen::Vector3d Pfoot(-0.000991,0.051053,-0.001130);
 	// mpc平衡控制器权重参数
 #if USE_WHEEL ==1
-	const Eigen::Vector<double, 10> Q(400000, 300000, 600000, 30000, 50000, 30000,5000,5000,5000,5000);
-	const Eigen::Vector<double, 10> F = Q;
+	/*const Eigen::Vector<double, 10> Q(400000, 300000, 600000, 30000, 50000, 30000,5000,5000,5000,5000);
+	const Eigen::Vector<double, 10> F = Q;*/
+	const Eigen::Vector<double, 23> Q(4e6, 1e8, 8e6,\
+									  5e5, 8e5, 1e5,\
+									  1e-6, 1e-6, 1e-6, 1e-6,\
+									  1e3, 2e3, 1e4,\
+									  5e2, 5e2, 6e3,\
+									  1e4, 1e4, 1e4, 1e4,\
+									  1e-6, 1e-6, 1e-6);
+	const Eigen::Vector<double, 23> F = Q;
+	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-6);
+	const Eigen::Vector<double, 16> W = Eigen::Vector<double, 16>::Constant(1e-8);
 #else
-	const Eigen::Vector<double, 6> Q(500000, 300000, 500000, 30000, 50000, 30000);
-	const Eigen::Vector<double, 6> F = Q;
+	/*const Eigen::Vector<double, 6> Q(500000, 300000, 500000, 30000, 50000, 30000);
+	const Eigen::Vector<double, 6> F = Q;*/
+	const Eigen::Vector<double, 15> Q(4e6, 3e6, 6e6,\
+									  2e5, 5e5, 1e5,\
+									  1e3, 2e3, 1e4,\
+									  5e2, 5e2, 6e3,\
+									  1e-6, 1e-6, 1e-6);
+	const Eigen::Vector<double, 15> F = Q;
+	const Eigen::Vector<double, 12> R = Eigen::Vector<double, 12>::Constant(1e-4);
+	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(1e-6);
 #endif
-	
-	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1);
+
+
+	/*const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1);
 	const Eigen::Vector<double, 16> W = Eigen::Vector<double, 16>::Constant(0.8);
 	const Eigen::Vector<double, 9> linPD(20, -0.2, 2, 20, -0.2, 2, 35, -0.35, 2);
 	const Eigen::Vector<double, 9> angPD(30, -0.1, 5, 30, -0.2, 10, 10, -0.5, 5);
-	//const Eigen::Vector<double, 5> wheelPID(10, 0.1, -0.1, 5, 20);
-	const Eigen::Vector<double, 3> wheelPID(20, -0.2, 2);
-	//const Eigen::Vector<double, 9> linPD(0, -0., 0, 0, -0., 0, 0, -0., 0);
-	//const Eigen::Vector<double, 9> angPD(0, -0., 0, 0, -0., 0, 0, -0., 0);
+	const Eigen::Vector<double, 3> wheelPID(20, -0.2, 2);*/
 
 	//// mpc约束
 	//const Eigen::Vector<double, 12> lb = Eigen::Vector<double, 12>::Constant(-100);
 	//const Eigen::Vector<double, 12> ub = Eigen::Vector<double, 12>::Constant(100);
 
 	// 步态运动期望增益
-	const Eigen::Vector3d gaitK(-0.005, -0.005, 0.005);
+	const Eigen::Vector3d gaitK(-0.007, -0.007, 0.007);
 }

@@ -80,7 +80,7 @@ PROTO B2WSimple [
         }
       }
       Solid {
-        translation 0.000000 -0.023410 0.049270
+        translation 0.000000 0.000000 0.000000
         children [
           InertialUnit {
             name "trunk_imu inertial"
