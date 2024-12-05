@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <Eigen/Dense>
 
-#define YSPAN 0.0
+#define YSPAN 0.03
 #define XMOVE 0.0
 #define XSPAN 0.0
 
@@ -65,11 +65,16 @@ namespace Quadruped {
 #else
 	/*const Eigen::Vector<double, 6> Q(500000, 300000, 500000, 30000, 50000, 30000);
 	const Eigen::Vector<double, 6> F = Q;*/
-	const Eigen::Vector<double, 15> Q(4e6, 3e6, 6e6,\
-									  2e5, 5e5, 1e5,\
-									  1e3, 2e3, 1e4,\
-									  5e2, 5e2, 6e3,\
-									  1e-6, 1e-6, 1e-6);
+	/*const Eigen::Vector<double, 15> Q(1e2, 1e2, 1e3,\
+									  1e2, 1e2, 1e2,\
+									  1e5, 2e5, 1e6,\
+									  2e4, 2e4, 2e4,\
+									  1e-6, 1e-6, 1e-6);*/
+	const Eigen::Vector<double, 15> Q(8e4, 6e4, 2e5, \
+										2e4, 2e4, 2e4, \
+										1e2, 2e2, 1e3, \
+										5e1, 5e1, 5e1, \
+										1e-6, 1e-6, 1e-6);
 	const Eigen::Vector<double, 15> F = Q;
 	const Eigen::Vector<double, 12> R = Eigen::Vector<double, 12>::Constant(1e-4);
 	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(1e-6);
@@ -87,5 +92,5 @@ namespace Quadruped {
 	//const Eigen::Vector<double, 12> ub = Eigen::Vector<double, 12>::Constant(100);
 
 	// 步态运动期望增益
-	const Eigen::Vector3d gaitK(-0.007, -0.007, 0.007);
+	const Eigen::Vector3d gaitK(-0.005, -0.005, 0.005);
 }
