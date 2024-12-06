@@ -20,6 +20,7 @@
 #include "dataDisplay.h"
 #include "RobotEst.h"
 #include "BodyCtrlNew.h"
+#include "mathTool.h"
 
 
 
@@ -264,19 +265,19 @@ int main(int argc, char **argv) {
               {
               case keyboard->UP:
                   //x_t += 0.0002;
-                  vx_t = 0.3;
+                  vx_t = 1.2;
                   break;
               case keyboard->DOWN:
                   //x_t -= 0.0002;
-                  vx_t = -0.3;
+                  vx_t = -1.2;
                   break;
               case keyboard->RIGHT:
                   //y_t -= 0.0002;
-                  vy_t = -0.2;
+                  vy_t = -0.3;
                   break;
               case keyboard->LEFT:
                   //y_t += 0.0002;
-                  vy_t = 0.2;
+                  vy_t = 0.3;
                   break;
               case (keyboard->SHIFT + keyboard->RIGHT):
                   roll_t += 0.0005;
@@ -316,9 +317,10 @@ int main(int argc, char **argv) {
               }
               key = keyboard->getKey();
           }
-          /*Eigen::AngleAxisd rotationz_t(velFilter[2].f(yaw_t), Eigen::Vector3d::UnitZ());
-          Eigen::Vector3d real_vt(velFilter[0].f(vx_t), velFilter[1].f(vy_t), 0);*/
           Eigen::AngleAxisd rotationz_t(yaw_t, Eigen::Vector3d::UnitZ());
+          vx_t = velFilter[0].f(slopeConstrain(vx_t, qp_body.est->getEstBodyVelB()(0), 0.5, -0.5));
+          vy_t = velFilter[1].f(slopeConstrain(vy_t, qp_body.est->getEstBodyVelB()(1), 0.2, -0.2));
+          vyaw_t = velFilter[2].f(slopeConstrain(velFilter[2].f(vyaw_t), qp_ctrl.currentBalanceState.r_dot(2), 0.4, -0.4));
           Eigen::Vector3d real_vt(vx_t, vy_t, 0);
           real_vt = rotationz_t.toRotationMatrix() * real_vt;
           x_t += real_vt(0) * 0.001 * timeStep;
@@ -445,6 +447,7 @@ int main(int argc, char **argv) {
               qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
 #endif
               qp_ctrl.setContactConstrain(contactResult);
+              qp_ctrl.contactDeal(Q, 1);
               Eigen::Vector<bool, 6> en;
               if (gaitCtrl.stRatio < 1.)
               {
@@ -456,8 +459,8 @@ int main(int argc, char **argv) {
               }
               
               qp_ctrl.mpc_adjust(en);
-              Eigen::Vector4d wheeltar(footPoint(0, 0), footPoint(0, 1), footPoint(0, 2), footPoint(0, 3));
-              qp_ctrl.wheel_adjust(wheeltar, wheeltar);
+              //Eigen::Vector4d wheeltar(footPoint(0, 0), footPoint(0, 1), footPoint(0, 2), footPoint(0, 3));
+              //qp_ctrl.wheel_adjust(wheeltar, wheeltar);
           }
 
 
@@ -471,13 +474,16 @@ int main(int argc, char **argv) {
               //feetVel.setZero();
               qp_body.updateTargetFootVel(feetVel);
               qp_body.legAndBodyPosition(-1);
-              wheelT = qp_ctrl.wheelTau;
+              //wheelT = qp_ctrl.wheelTau;
               for (int i = 0; i < 4; i++)
               {
                   if (contactResult(i) == 0)
                   {
                       legF.col(i) = legsCtrl[i]->legPvCtrlForceR();
                       //wheelT(i) = 0;
+#if USE_WHEEL == 1
+                      wheelT(i) = qp_ctrl.mpcOut(3, i);
+#endif
                   }
                   else
                   {

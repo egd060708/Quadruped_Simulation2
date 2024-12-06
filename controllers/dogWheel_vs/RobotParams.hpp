@@ -3,11 +3,11 @@
 #include <stdint.h>
 #include <Eigen/Dense>
 
-#define YSPAN 0.03
+#define YSPAN 0.0
 #define XMOVE 0.0
-#define XSPAN 0.0
+#define XSPAN 0.05
 
-#define USE_WHEEL 0
+#define USE_WHEEL 1
 
 namespace Quadruped {
 	// ÍÈ³¤²ÎÊý
@@ -52,16 +52,16 @@ namespace Quadruped {
 #if USE_WHEEL ==1
 	/*const Eigen::Vector<double, 10> Q(400000, 300000, 600000, 30000, 50000, 30000,5000,5000,5000,5000);
 	const Eigen::Vector<double, 10> F = Q;*/
-	const Eigen::Vector<double, 23> Q(4e6, 1e8, 8e6,\
-									  5e5, 8e5, 1e5,\
-									  1e-6, 1e-6, 1e-6, 1e-6,\
-									  1e3, 2e3, 1e4,\
-									  5e2, 5e2, 6e3,\
-									  1e4, 1e4, 1e4, 1e4,\
+	const Eigen::Vector<double, 23> Q(1e5, 6e4, 2e5,\
+									  5e4, 1e5, 5e4,\
+									  1e5, 1e5, 1e5, 1e5,\
+									  2e2, 6e2, 1e3,\
+									  5e1, 5e1, 5e1,\
+									  5e1, 5e1, 5e1, 5e1,\
 									  1e-6, 1e-6, 1e-6);
 	const Eigen::Vector<double, 23> F = Q;
-	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-6);
-	const Eigen::Vector<double, 16> W = Eigen::Vector<double, 16>::Constant(1e-8);
+	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-4);
+	const Eigen::Vector<double, 16> W = Eigen::Vector<double, 16>::Constant(1e-4);
 #else
 	/*const Eigen::Vector<double, 6> Q(500000, 300000, 500000, 30000, 50000, 30000);
 	const Eigen::Vector<double, 6> F = Q;*/
