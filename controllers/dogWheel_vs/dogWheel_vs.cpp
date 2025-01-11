@@ -510,6 +510,8 @@ int main(int argc, char **argv) {
 
           for (int i = 0; i < 4; i++)
           {
+              /*std::cout << "leg" << i << ": " << std::endl;
+              std::cout << legsObj[i]->Icleg[1] << std::endl;*/
               for (int k = 0; k < 4; k++)
               {
                   if (k < 2)
