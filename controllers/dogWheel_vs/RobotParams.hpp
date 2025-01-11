@@ -32,19 +32,19 @@ namespace Quadruped {
 	const Eigen::Vector<double, 6> Itail(2.811800e-03,4.750600e-03,2.915400e-03,1.950000e-05,-7.870000e-06,-1.570000e-05);
 	const double Mtail = 0.795000;
 	const Eigen::Vector3d Ptail(-0.374480,0.000488,0.006495);
-	// 髋参数(左前腿为例)
+	// 髋参数(左前腿为例)(初始位型水平放置)
 	const Eigen::Vector<double, 6> Ihip(3.318800e-03,4.874300e-03,3.708700e-03,7.160000e-05,3.770000e-07,-4.000000e-09);
 	const double Mhip = 2.673;
 	const Eigen::Vector3d Phip(-0.003841, -0.009068, 0.000000);
-	// 大腿参数(左前腿为例)
+	// 大腿参数(左前腿为例)(初始位型竖直向下)
 	const Eigen::Vector<double, 6> Ithigh(6.229900e-02,6.139900e-02,8.199700e-03,8.778100e-04,-3.647500e-03,8.353700e-03);
 	const double Mthigh = 4.536;
 	const Eigen::Vector3d Pthigh(-0.006279, -0.032049, -0.057835);
-	// 小腿参数(左前腿为例)
+	// 小腿参数(左前腿为例)(初始位型竖直向下)
 	const Eigen::Vector<double, 6> Icalf(2.928300e-02,3.086800e-02,3.260000e-03,2.210000e-04,-1.064000e-03,2.093000e-03);
 	const double Mcalf = 2.290600;
 	const Eigen::Vector3d Pcalf(0.005278, 0.017301, -0.297780);
-	// 足参数(左前腿为例)
+	// 足参数(左前腿为例)(初始位型为旋转方向沿世界坐标系y轴)
 	const Eigen::Vector<double, 6> Ifoot(4.121000e-03,7.776000e-03,4.108000e-03,6.000000e-06,-4.800000e-05,7.000000e-06);
 	const double Mfoot = 1.083000;
 	const Eigen::Vector3d Pfoot(-0.000991,0.051053,-0.001130);
