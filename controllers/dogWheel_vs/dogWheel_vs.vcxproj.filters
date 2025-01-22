@@ -265,6 +265,12 @@
     <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\BodyCtrlNew.h">
       <Filter>application</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\SlopeEst.h">
+      <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\robot_module\Quadruped\Cpp\include\TraPlan.h">
+      <Filter>application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="webotsLib">

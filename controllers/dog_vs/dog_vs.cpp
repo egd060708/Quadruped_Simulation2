@@ -18,6 +18,7 @@
 #include "SecondButterworthLPF.h"
 #include "virtualLegCtrl.h"
 #include "dataDisplay.h"
+#include "SlopeEst.h"
 
 
 using namespace webots;
@@ -193,6 +194,9 @@ int main(int argc, char** argv)
     Eigen::Matrix<double, 3, 4> feetPos;
     Eigen::Matrix<double, 3, 4> feetVel;
 
+    SlopeEst slope;
+    slope.init(footPoint, Eigen::Vector4i::Ones());
+
     //VOFA vofa("vjs.exe");
     dataDisplay<2> dispD(disp);
 
@@ -253,19 +257,19 @@ int main(int argc, char** argv)
                 {
                 case keyboard->UP:
                     //x_t += 0.0002;
-                    vx_t = 0.5;
+                    vx_t = 0.3;
                     break;
                 case keyboard->DOWN:
                     //x_t -= 0.0002;
-                    vx_t = -0.5;
+                    vx_t = -0.3;
                     break;
                 case keyboard->RIGHT:
                     //y_t -= 0.0002;
-                    vy_t = -0.25;
+                    vy_t = -0.2;
                     break;
                 case keyboard->LEFT:
                     //y_t += 0.0002;
-                    vy_t = 0.25;
+                    vy_t = 0.2;
                     break;
                 case (keyboard->SHIFT + keyboard->RIGHT):
                     roll_t += 0.0005;
@@ -349,6 +353,8 @@ int main(int argc, char** argv)
                 qp_body.updateEqBody();
                 qp_ctrl.updateDynamic();
             }
+
+
             /*std::cout << "mass:" << qp_body.M << std::endl;
             std::cout << "inerM:" << qp_body.I << std::endl;
             std::cout << "massP:" << qp_body.P << std::endl;*/
@@ -431,17 +437,25 @@ int main(int argc, char** argv)
 
             if (t > 0.2)
             {
+                slope.updatePoints(qp_body.getFKFeetPos(), contactResult);
+                slope.estRun();
                 gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
                 gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.04);
                 gaitCtrl.run(feetPos, feetVel);
 
                 qp_ctrl.updateBalanceState();
-                qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
+                Eigen::Vector3d addr = qp_body.rotMatToRPY(slope.getSlopeRotation());
+                //std::cout << addr << std::endl;
+                qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), qp_body.Rsb_c.transpose()*addr + Eigen::Vector3d(roll_t, pitch_t, yaw_t));
                 qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
-                qp_ctrl.setContactConstrain(contactResult);
+                qp_ctrl.setContactConstrain(contactResult,slope.getSlopeRotation());
                 Eigen::Vector<bool, 6> en;
                 en << true, true, true, true, true, true;
                 qp_ctrl.mpc_adjust(en);
+                
+                //std::cout << "slope: \n" << slope.getEstNormal() << std::endl;
+                std::cout << "R: \n" << slope.getSlopeRotation() << std::endl;
+                //std::cout << "normals: \n" << slope.estFacesNormal << std::endl;
             }
             
 

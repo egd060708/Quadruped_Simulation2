@@ -92,5 +92,11 @@ namespace Quadruped {
 	//const Eigen::Vector<double, 12> ub = Eigen::Vector<double, 12>::Constant(100);
 
 	// 步态运动期望增益
-	const Eigen::Vector3d gaitK(-0.005, -0.005, 0.005);
+	const Eigen::Vector3d gaitK(-0.002, -0.002, 0.005);
+
+	// 轨迹规划mpc参数测试
+	const Eigen::Vector<double, 6> traQ(100, 100, 300, 100, 100, 10);
+	const Eigen::Vector<double, 6> traF = traQ;
+	const Eigen::Vector<double, 3> traR = Eigen::Vector<double, 3>::Constant(1e-4);
+	const Eigen::Vector<double, 3> traW = Eigen::Vector<double, 3>::Constant(1e-3);
 }

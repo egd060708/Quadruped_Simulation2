@@ -16,8 +16,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.1159688642435811 0.16739692160996392 -0.9790451946470916 1.2315998290409924
-  position 1.8619223062350838 6.265239883123518 2.192524746585847
+  orientation 0.13181474889213032 0.10228841548786109 -0.9859827341447147 1.835350534474002
+  position 9.078971558980498 16.689644799258538 4.866325629005892
 }
 TexturedBackground {
 }
@@ -30,4 +30,38 @@ RectangleArena {
 B2WSimple {
   translation 4.56 0 0.6
   controller "dogWheel_vs"
+}
+Solid {
+  translation 7.76 -2.71911e-16 0
+  rotation 0 0 1 3.141592653589793
+  children [
+    DEF slope Group {
+      children [
+        Shape {
+          appearance PBRAppearance {
+            roughness 1
+          }
+          geometry IndexedFaceSet {
+            coord Coordinate {
+              point [
+                -4 -3 1
+                -4 3 1
+                -4 3 0
+                -4 -3 0
+                2 -3 0
+                2 3 0
+              ]
+            }
+            coordIndex [
+              5, 4, 3, 2, -1, 1, 4, 5, -1, 5
+              2, 1, -1, 3, 4, 0, -1, 4, 1, 0
+              -1, 1, 2, 3, 0
+            ]
+          }
+        }
+      ]
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE slope
 }
