@@ -5,7 +5,7 @@
 # Extracted from: D:/Git_Project/github/Quadruped_Simulation2/model/b2w_description.urdf
 
 PROTO B2WSimple [
-  field  SFVec3f     translation     0 0 0
+  field  SFVec3f     translation     0 0 0.6
   field  SFRotation  rotation        0 0 1 0
   field  SFString    name            "B2WSimple"  # Is `Robot.name`.
   field  SFString    controller      "void" # Is `Robot.controller`.
@@ -146,6 +146,8 @@ PROTO B2WSimple [
       HingeJoint {
         jointParameters HingeJointParameters {
           anchor 0.328500 0.072000 0.000000
+          minStop -0.87
+          maxStop 0.87
         }
         device [
           RotationalMotor {
@@ -170,13 +172,15 @@ PROTO B2WSimple [
                 axis 0.000000 1.000000 0.000000
                 anchor 0.000000 0.119730 0.000000
                 position 0.7854
+                minStop -0.94
+                maxStop 3.14
               }
               device [
                 RotationalMotor {
                   name "FL_thigh_joint"
                   maxVelocity 23.0
                   minPosition -0.94
-                  maxPosition 4.69
+                  maxPosition 3.14
                   maxTorque 200.0
                 }
                 PositionSensor {
@@ -193,6 +197,8 @@ PROTO B2WSimple [
                   HingeJoint {
                     jointParameters HingeJointParameters {
                       position -1.6250000
+                      minStop -2.82
+                      maxStop -0.43
                       axis 0.000000 1.000000 0.000000
                       anchor 0.000000 -0.000088 -0.350000
                     }
@@ -322,6 +328,8 @@ PROTO B2WSimple [
       HingeJoint {
         jointParameters HingeJointParameters {
           anchor 0.328500 -0.072000 0.000000
+          minStop -0.87
+          maxStop 0.87
         }
         device [
           RotationalMotor {
@@ -346,13 +354,15 @@ PROTO B2WSimple [
                 axis 0.000000 1.000000 0.000000
                 anchor 0.000000 -0.119730 0.000000
                 position 0.7854
+                minStop -0.94
+                maxStop 3.14
               }
               device [
                 RotationalMotor {
                   name "FR_thigh_joint"
                   maxVelocity 23.0
                   minPosition -0.94
-                  maxPosition 4.69
+                  maxPosition 3.14
                   maxTorque 200.0
                 }
                 PositionSensor {
@@ -369,6 +379,8 @@ PROTO B2WSimple [
                   HingeJoint {
                     jointParameters HingeJointParameters {
                       position -1.625000
+                      minStop -2.82
+                      maxStop -0.43
                       axis 0.000000 1.000000 0.000000
                       anchor 0.000000 0.000088 -0.350000
                     }
@@ -498,6 +510,8 @@ PROTO B2WSimple [
       HingeJoint {
         jointParameters HingeJointParameters {
           anchor -0.328500 0.072000 0.000000
+          minStop -0.87
+          maxStop 0.87
         }
         device [
           RotationalMotor {
@@ -522,13 +536,15 @@ PROTO B2WSimple [
                 axis 0.000000 1.000000 0.000000
                 anchor 0.000000 0.119730 0.000000
                 position 0.7854
+                minStop -0.94
+                maxStop 3.14
               }
               device [
                 RotationalMotor {
                   name "RL_thigh_joint"
                   maxVelocity 23.0
                   minPosition -0.94
-                  maxPosition 4.69
+                  maxPosition 3.14
                   maxTorque 200.0
                 }
                 PositionSensor {
@@ -545,6 +561,8 @@ PROTO B2WSimple [
                   HingeJoint {
                     jointParameters HingeJointParameters {
                       position -1.625000
+                      minStop -2.82
+                      maxStop -0.43
                       axis 0.000000 1.000000 0.000000
                       anchor 0.000000 -0.000088 -0.350000
                     }
@@ -674,6 +692,8 @@ PROTO B2WSimple [
       HingeJoint {
         jointParameters HingeJointParameters {
           anchor -0.328500 -0.072000 0.000000
+          minStop -0.87
+          maxStop 0.87
         }
         device [
           RotationalMotor {
@@ -698,13 +718,15 @@ PROTO B2WSimple [
                 axis 0.000000 1.000000 0.000000
                 anchor 0.000000 -0.119730 0.000000
                 position 0.7854
+                minStop -0.94
+                maxStop 3.14
               }
               device [
                 RotationalMotor {
                   name "RR_thigh_joint"
                   maxVelocity 23.0
                   minPosition -0.94
-                  maxPosition 4.69
+                  maxPosition 3.14
                   maxTorque 200.0
                 }
                 PositionSensor {
@@ -721,6 +743,8 @@ PROTO B2WSimple [
                   HingeJoint {
                     jointParameters HingeJointParameters {
                       position -1.625000
+                      minStop -2.82
+                      maxStop -0.43
                       axis 0.000000 1.000000 0.000000
                       anchor 0.000000 0.000088 -0.350000
                     }

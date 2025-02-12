@@ -5,7 +5,8 @@
 
 #define YSPAN 0.0
 #define XMOVE 0.0
-#define XSPAN 0.05
+#define XSPANF 0.06
+#define XSPANB 0.08
 
 #define USE_WHEEL 1
 
@@ -52,12 +53,19 @@ namespace Quadruped {
 #if USE_WHEEL ==1
 	/*const Eigen::Vector<double, 10> Q(400000, 300000, 600000, 30000, 50000, 30000,5000,5000,5000,5000);
 	const Eigen::Vector<double, 10> F = Q;*/
-	const Eigen::Vector<double, 23> Q(1e5, 6e4, 2e5,\
+	/*const Eigen::Vector<double, 23> Q(1e5, 6e4, 2e5,\
 									  5e4, 1e5, 5e4,\
 									  1e5, 1e5, 1e5, 1e5,\
 									  2e2, 6e2, 1e3,\
 									  5e1, 5e1, 5e1,\
 									  5e1, 5e1, 5e1, 5e1,\
+									  1e-6, 1e-6, 1e-6);*/
+	const Eigen::Vector<double, 23> Q(1e5, 6e4, 3e5, \
+									  5e4, 1e5, 5e4, \
+									  1e5, 1e5, 1e5, 1e5, \
+									  2e2, 5e2, 1e3, \
+									  45, 64, 45, \
+									  5e1, 5e1, 5e1, 5e1, \
 									  1e-6, 1e-6, 1e-6);
 	const Eigen::Vector<double, 23> F = Q;
 	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-4);
@@ -92,17 +100,28 @@ namespace Quadruped {
 	//const Eigen::Vector<double, 12> ub = Eigen::Vector<double, 12>::Constant(100);
 
 	// 步态运动期望增益
-	const Eigen::Vector3d gaitK(-0.002, -0.002, 0.005);
+	const Eigen::Vector3d gaitK(-0.002, -0.002, 0.004);
 
 	// 轨迹规划mpc参数测试
-	const Eigen::Vector<double, 6> traQ(100, 100, 300, 100, 100, 10);
-	const Eigen::Vector<double, 6> traF = traQ;
-	const Eigen::Vector<double, 3> traR = Eigen::Vector<double, 3>::Constant(1e-4);
-	const Eigen::Vector<double, 3> traW = Eigen::Vector<double, 3>::Constant(1e-3);
+	const Eigen::Vector<double, 6> traBQ(100, 100, 300, 100, 100, 10);
+	const Eigen::Vector<double, 6> traBF = traBQ;
+	const Eigen::Vector<double, 3> traBR = Eigen::Vector<double, 3>::Constant(1e-4);
+	const Eigen::Vector<double, 3> traBW = Eigen::Vector<double, 3>::Constant(1e-3);
+	const Eigen::Vector3d bodyAccL(3., 3., 4);
 
 	const Eigen::Vector<double, 16> traLQ(100, 100, 100, 100, 100, 100, 100, 100,\
 											1, 1, 1, 1, 1, 1, 1, 1);
 	const Eigen::Vector<double, 16> traLF = traLQ;
 	const Eigen::Vector<double, 8> traLR = Eigen::Vector<double, 8>::Constant(1e-4);
 	const Eigen::Vector<double, 8> traLW = Eigen::Vector<double, 8>::Constant(1e-3);
+	const Eigen::Vector<double, 8> footAccL = Eigen::Vector<double, 8>::Constant(5.);
+
+	// 联合轨迹规划方法
+	const Eigen::Vector<double, 22> traQ(25, 25, 300, 50, 50, 10, \
+										50, 50, 50, 50, 50, 50, 50, 50, \
+										2, 2, 2, 2, 2, 2, 2, 2);
+	const Eigen::Vector<double, 22> traF = traQ;
+	const Eigen::Vector<double, 11> traR = Eigen::Vector<double, 11>::Constant(1e-4);
+	const Eigen::Vector<double, 11> traW = Eigen::Vector<double, 11>::Constant(1e-3);
+	const Eigen::Vector<double, 11> accL(3, 1., 2., 2., 2., 2., 2., 2., 2., 2., 2.);
 }
