@@ -20,8 +20,8 @@ namespace Quadruped {
 	const double L7 = 0.055;
 	// 腿部基坐标系到机身坐标系的转换向量，要转换到机身坐标系，直接加上此向量(此处向量仅代表左前腿)
 	const Eigen::Vector3d leg2bodyFrame(0.3285, 0.072, 0);
-	// 初始位型右后腿位置
-	const Eigen::Vector3d initRbLegXYPosition(-0.3154553 + XMOVE - XSPAN, -0.234832 - YSPAN, 0);
+	//// 初始位型右后腿位置
+	//const Eigen::Vector3d initRbLegXYPosition(-0.3154553 + XMOVE - XSPAN, -0.234832 - YSPAN, 0);
 	// 机身参数
 	const Eigen::Vector<double, 6> Imid(2.746600e-01,1.061800e+00,1.182500e+00,-6.220000e-04,3.150000e-03,-1.390000e-03);
 	const double Mmid = 35.606;
@@ -99,4 +99,10 @@ namespace Quadruped {
 	const Eigen::Vector<double, 6> traF = traQ;
 	const Eigen::Vector<double, 3> traR = Eigen::Vector<double, 3>::Constant(1e-4);
 	const Eigen::Vector<double, 3> traW = Eigen::Vector<double, 3>::Constant(1e-3);
+
+	const Eigen::Vector<double, 16> traLQ(100, 100, 100, 100, 100, 100, 100, 100,\
+											1, 1, 1, 1, 1, 1, 1, 1);
+	const Eigen::Vector<double, 16> traLF = traLQ;
+	const Eigen::Vector<double, 8> traLR = Eigen::Vector<double, 8>::Constant(1e-4);
+	const Eigen::Vector<double, 8> traLW = Eigen::Vector<double, 8>::Constant(1e-3);
 }

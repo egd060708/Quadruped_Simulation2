@@ -162,12 +162,12 @@ int main(int argc, char **argv) {
   double mb[3] = { Quadruped::Mmid, Quadruped::Mhead, Quadruped::Mtail };
   Vector<double, 6> ib[3] = { Quadruped::Imid, Quadruped::Ihead, Quadruped::Itail };
   Vector3d pb[3] = { Quadruped::Pmid, Quadruped::Phead, Quadruped::Ptail };
-  qp_body.initParams(leg2bodyFrame, initRbLegXYPosition, mb, ib, pb);
   Eigen::Matrix<double, 3, 4> footPoint;
   footPoint.col(LF) = Vector3d(0.3415447 + XMOVE + XSPAN, 0.234832 + YSPAN, 0);
   footPoint.col(RF) = Vector3d(0.3415447 + XMOVE + XSPAN, -0.234832 - YSPAN, 0);
   footPoint.col(LB) = Vector3d(-0.3154553 + XMOVE - XSPAN, 0.234832 + YSPAN, 0);
   footPoint.col(RB) = Vector3d(-0.3154553 + XMOVE - XSPAN, -0.234832 - YSPAN, 0);
+  qp_body.initParams(leg2bodyFrame, footPoint, mb, ib, pb);
   qp_body.updateTargetFootPoint(footPoint);
   Vector3d angle_t(0, 0, 0);
   Vector3d p_t(0, 0, 0.5937);
@@ -200,15 +200,17 @@ int main(int argc, char **argv) {
   phaseResult.setZero();
   contactResult.setOnes();
   GaitCtrl gaitCtrl(&qp_ctrl, legsCtrl, timeStep, &phaseResult, &contactResult);
-  gaitCtrl.initSwingParams(0.6, 0.6, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+  gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
   gaitCtrl.initExpectK(gaitK);
   Eigen::Matrix<double, 3, 4> feetPos;
   Eigen::Matrix<double, 3, 4> feetVel;
 
   SlopeEst slope;
   slope.init(footPoint, Eigen::Vector4i::Ones());
-  BalanceBodyPlanning bbp;
-  bbp.setInitBodyPlanPosition(Eigen::Vector3d(x_t, y_t, z_t));
+
+  BalanceDividePlanning bdp;
+  bdp.setInitBodyPlanPosition(Eigen::Vector3d(x_t, y_t, z_t));
+  bdp.setInitFootPlanPosition(footPoint);
 
   //VOFA vofa("vjs.exe");
 
@@ -277,7 +279,7 @@ int main(int argc, char **argv) {
                   break;
               case keyboard->DOWN:
                   //x_t -= 0.0002;
-                  vx_t = -2.;
+                  vx_t = -1.7;
                   break;
               case keyboard->RIGHT:
                   //y_t -= 0.0002;
@@ -311,11 +313,11 @@ int main(int argc, char **argv) {
                   break;
               case 'A':
                   //yaw_t += 0.0005;
-                  vyaw_t = 0.6;
+                  vyaw_t = 1.0;
                   break;
               case 'D':
                   //yaw_t -= 0.0005;
-                  vyaw_t = -0.6;
+                  vyaw_t = -1.0;
                   break;
               case 'U':
                   use_mpc = true;
@@ -335,11 +337,19 @@ int main(int argc, char **argv) {
           vz_t = velFilter[2].f(slopeConstrain(vz_t, qp_body.est->getEstBodyVelB()(2), 0.2, -0.2));*/
           vyaw_t = velFilter[3].f(slopeConstrain(vyaw_t, qp_ctrl.currentBalanceState.r_dot(2), 0.4, -0.4));
           Eigen::Vector3d real_vt(vx_t, vy_t, vz_t);
+          static Vector3d last_real_vt = Eigen::Vector3d::Zero();
+          static double last_vyaw_t = vyaw_t;
           real_vt = rotationz_t.toRotationMatrix() * real_vt;
-          x_t += real_vt(0) * 0.001 * timeStep;
+          x_t += 0.5 * (last_real_vt(0) + real_vt(0)) * 0.001 * timeStep;
+          y_t += 0.5 * (last_real_vt(1) + real_vt(1)) * 0.001 * timeStep;
+          z_t += 0.5 * (last_real_vt(2) + real_vt(2)) * 0.001 * timeStep;
+          yaw_t += 0.5 * (last_vyaw_t + vyaw_t) * 0.001 * timeStep;
+          /*x_t += real_vt(0) * 0.001 * timeStep;
           y_t += real_vt(1) * 0.001 * timeStep;
           z_t += real_vt(2) * 0.001 * timeStep;
-          yaw_t += vyaw_t * 0.001 * timeStep;
+          yaw_t += vyaw_t * 0.001 * timeStep;*/
+          last_real_vt = real_vt;
+          last_vyaw_t = vyaw_t;
 
           IOFormat CleanFmt(3, 0, ", ", "\n", "[", "]");
           IOFormat CommaInitFmt(StreamPrecision, DontAlignCols, ", ", ", ", "", "", " << ", ";");
@@ -449,16 +459,23 @@ int main(int argc, char **argv) {
               slope.updatePoints(qp_body.getFKFeetPos(), contactResult);
               slope.estRun();
 
-              bbp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), real_vt);
-              //bbp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d::Constant(0));
-              bbp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
-              bbp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
-              bbp.updateParams(0.01, 0.6, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
-              bbp.setEqConstrain(qp_body.Rsb_c.transpose() * Eigen::Vector3d(3.,1.,4.));
-              bbp.useBodyPlan();
-              /*std::cout << "planP: " << bbp.getBodyPlanPosition().transpose() << std::endl;
-              std::cout << "planV: " << bbp.getBodyPlanVelocity().transpose() << std::endl;
-              std::cout << "planA: " << bbp.getMpcOriOut().transpose() << std::endl;*/
+              bdp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), real_vt);
+              bdp.updateFootHighLevelTar(footPoint, Eigen::Matrix<double, 3, 4>::Zero());
+              //bdp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d::Constant(0));
+              bdp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
+              bdp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
+              bdp.updateBodyParams(0.01, 0.5, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bdp.updateFootParams(0.01, 0.42, 0.42, traLQ.asDiagonal(), traLF.asDiagonal(), traLR.asDiagonal(), traLW.asDiagonal());
+              bdp.warmUp(qp_body.Rsb_c);
+              bdp.setBodyInputConstrain(Eigen::Vector3d(3.,3.,4.));
+              //bdp.setBodyInputConstrain(qp_body.Rsb_c.transpose() *  Eigen::Vector3d(3., 2., 4.));
+              bdp.setFootInputConstrain(Eigen::Vector<double, 8>::Constant(5.));
+              bdp.useBodyPlan();
+              bdp.useFootPlan();
+              /*std::cout << "planP: " << bdp.getBodyPlanPosition().transpose() << std::endl;
+              std::cout << "planV: " << bdp.getBodyPlanVelocity().transpose() << std::endl;
+              std::cout << "planA: " << bdp.getMpcOriOut().transpose() << std::endl;*/
+              //std::cout << "FplanP: " << bdp.getFootPlanPosition() << std::endl;
 
               gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
               gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.06);
@@ -466,12 +483,14 @@ int main(int argc, char **argv) {
 
               qp_ctrl.updateBalanceState();
 #if USE_WHEEL == 1
+              qp_body.updateLegsXYPosition(bdp.getFootPlanPosition());
               //Eigen::Vector4d wheeltar(qp_body.targetBodyState.leg_b[0].Position(0), qp_body.targetBodyState.leg_b[1].Position(0), qp_body.targetBodyState.leg_b[2].Position(0), qp_body.targetBodyState.leg_b[3].Position(0));
-              Eigen::Vector4d wheeltar(footPoint(0, 0), footPoint(0, 1), footPoint(0, 2), footPoint(0, 3));
+              Eigen::Vector4d wheeltar(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
               /*qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), qp_body.Rsb_c.transpose()*qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheeltar);
               qp_ctrl.setVelocityTarget(real_vt, Eigen::Vector3d(0, 0, vyaw_t), Eigen::Vector4d(vx_t, vx_t, vx_t, vx_t));*/
-              qp_ctrl.setPositionTarget(bbp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheeltar);
-              qp_ctrl.setVelocityTarget(bbp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), Eigen::Vector4d((qp_body.Rsb_c.transpose()*bbp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bbp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bbp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bbp.getBodyPlanVelocity())(0)));
+              //qp_ctrl.setPositionTarget(bdp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheeltar);
+              qp_ctrl.setPositionTarget(bdp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheeltar);
+              qp_ctrl.setVelocityTarget(bdp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), Eigen::Vector4d((qp_body.Rsb_c.transpose()*bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bdp.getBodyPlanVelocity())(0)));
 #else   
               qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
               qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
@@ -576,15 +595,15 @@ int main(int argc, char **argv) {
           data[10] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(0));
           data[11] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(1));
           data[12] = float(qp_ctrl.bodyObject->legs[0]->currentLeg.Position(2));*/
-          /*data[0] = bbp.getMpcOriOut()[0];
-          data[1] = bbp.getMpcOriOut()[1];
-          data[2] = bbp.getMpcOriOut()[2];
-          data[3] = bbp.getBodyPlanVelocity()[0];
-          data[4] = bbp.getBodyPlanVelocity()[1];
-          data[5] = bbp.getBodyPlanVelocity()[2];
-          data[6] = bbp.getBodyPlanPosition()[0];
-          data[7] = bbp.getBodyPlanPosition()[1];
-          data[8] = bbp.getBodyPlanPosition()[2];*/
+          /*data[0] = bdp.getMpcOriOut()[0];
+          data[1] = bdp.getMpcOriOut()[1];
+          data[2] = bdp.getMpcOriOut()[2];
+          data[3] = bdp.getBodyPlanVelocity()[0];
+          data[4] = bdp.getBodyPlanVelocity()[1];
+          data[5] = bdp.getBodyPlanVelocity()[2];
+          data[6] = bdp.getBodyPlanPosition()[0];
+          data[7] = bdp.getBodyPlanPosition()[1];
+          data[8] = bdp.getBodyPlanPosition()[2];*/
           /*data[0] = contactResult(0);
           data[1] = contactResult(1);
           data[2] = contactResult(2);
