@@ -60,12 +60,19 @@ namespace Quadruped {
 									  5e1, 5e1, 5e1,\
 									  5e1, 5e1, 5e1, 5e1,\
 									  1e-6, 1e-6, 1e-6);*/
-	const Eigen::Vector<double, 23> Q(1e5, 6e4, 3e5, \
+	/*const Eigen::Vector<double, 23> Q(1e5, 6e4, 3e5, \
 									  5e4, 1e5, 5e4, \
 									  1e5, 1e5, 1e5, 1e5, \
 									  2e2, 5e2, 1e3, \
 									  45, 64, 45, \
 									  5e1, 5e1, 5e1, 5e1, \
+									  1e-6, 1e-6, 1e-6);*/
+	const Eigen::Vector<double, 23> Q(8e4, 6e4, 3e5, \
+									  5e4, 1e5, 5e4, \
+									  5e4, 5e4, 5e4, 5e4, \
+									  5e2, 5e2, 2e3, \
+									  45, 64, 45, \
+									  2e2, 2e2, 2e2, 2e2, \
 									  1e-6, 1e-6, 1e-6);
 	const Eigen::Vector<double, 23> F = Q;
 	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-4);
@@ -119,9 +126,9 @@ namespace Quadruped {
 	// 联合轨迹规划方法
 	const Eigen::Vector<double, 22> traQ(25, 25, 300, 50, 50, 10, \
 										50, 50, 50, 50, 50, 50, 50, 50, \
-										2, 2, 2, 2, 2, 2, 2, 2);
+										1, 1, 1, 1, 1, 1, 1, 1);
 	const Eigen::Vector<double, 22> traF = traQ;
 	const Eigen::Vector<double, 11> traR = Eigen::Vector<double, 11>::Constant(1e-4);
 	const Eigen::Vector<double, 11> traW = Eigen::Vector<double, 11>::Constant(1e-3);
-	const Eigen::Vector<double, 11> accL(3, 1., 2., 2., 2., 2., 2., 2., 2., 2., 2.);
+	const Eigen::Vector<double, 11> accL(3., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.);
 }

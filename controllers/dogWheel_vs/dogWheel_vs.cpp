@@ -233,11 +233,11 @@ int main(int argc, char **argv) {
 
   // 重新配置腿部曲线跟踪参数
   Vector2d lPid_pvParams[6];
-  lPid_pvParams[0] << 6000, 400;
+  lPid_pvParams[0] << 8000, 400;
   lPid_pvParams[1] << 150, 200;
-  lPid_pvParams[2] << 6000, 400;
+  lPid_pvParams[2] << 8000, 400;
   lPid_pvParams[3] << 150, 200;
-  lPid_pvParams[4] << 6000, 400;
+  lPid_pvParams[4] << 8000, 400;
   lPid_pvParams[5] << 150, 200;
   for (auto p : legsCtrl)
   {
@@ -247,7 +247,8 @@ int main(int argc, char **argv) {
   qp_ctrl.force_c = 1000;
   qp_ctrl.u = 0.6;
 
-  //LPF_SecondOrder_Classdef velFilter[3] = { LPF_SecondOrder_Classdef(5,500),LPF_SecondOrder_Classdef(5,500) ,LPF_SecondOrder_Classdef(5,500) };
+  //LPF_SecondOrder_Classdef velFilterN[3] = { LPF_SecondOrder_Classdef(5,500),LPF_SecondOrder_Classdef(5,500) ,LPF_SecondOrder_Classdef(5,500) };
+  //MeanFilter<100> velFilterN[3];
   MeanFilter<100> velFilter[4];
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
@@ -317,11 +318,11 @@ int main(int argc, char **argv) {
                   break;
               case 'A':
                   //yaw_t += 0.0005;
-                  vyaw_t = 0.5;
+                  vyaw_t = 0.7;
                   break;
               case 'D':
                   //yaw_t -= 0.0005;
-                  vyaw_t = -0.5;
+                  vyaw_t = -0.7;
                   break;
               case 'U':
                   use_mpc = true;
@@ -478,7 +479,8 @@ int main(int argc, char **argv) {
               bjp.updateFootHighLevelTar(footPoint, Eigen::Matrix<double, 3, 4>::Zero());
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
-              bjp.updateJointParams(qp_body.Rsb_c, 0.01, 0.85, 0.55, 0.55, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
+              bjp.updateJointParams(qp_body.Rsb_c, 0.01, 0.85, 0.4, 0.4, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               bjp.warmUp();
               bjp.useJointPlan(accL);
               //std::cout << bjp.getFootPlanPosition() << std::endl;
@@ -487,8 +489,8 @@ int main(int argc, char **argv) {
               std::cout << "foot: \n" << bjp.getFootPlanPosition() << std::endl;*/
 
               gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
-              gaitCtrl.setGait(Vector2d(real_vt(0), real_vt(1)), vyaw_t, 0.06);
-              gaitCtrl.run(feetPos, feetVel);
+              gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0,2), vyaw_t, 0.06);
+              gaitCtrl.run(feetPos, feetVel, 0.5);
 
               qp_ctrl.updateBalanceState();
 #if USE_WHEEL == 1
@@ -505,10 +507,11 @@ int main(int argc, char **argv) {
               qp_body.updateLegsXYPosition(bjp.getFootPlanPosition());
               Eigen::Vector4d wheelPos(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
               //Eigen::Vector4d wheelVel = bjp.getFootPlanVelocity().row(0);
-              Eigen::Vector4d wheelVel = Eigen::Vector4d((qp_body.Rsb_c.transpose() * bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose() * bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose() * bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose() * bdp.getBodyPlanVelocity())(0));
+              Eigen::Vector4d wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0,0), bjp.getFootPlanVelocity()(0,1), bjp.getFootPlanVelocity()(0,2), bjp.getFootPlanVelocity()(0,3));
               qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);
+              //std::cout << wheelVel << std::endl;
 #else   
               qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
               qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
@@ -613,15 +616,15 @@ int main(int argc, char **argv) {
           data[6] = bdp.getBodyPlanPosition()[0];
           data[7] = bdp.getBodyPlanPosition()[1];
           data[8] = bdp.getBodyPlanPosition()[2];*/
-          /*data[0] = contactResult(0);
-          data[1] = contactResult(1);
-          data[2] = contactResult(2);
-          data[3] = contactResult(3);
-          data[4] = phaseResult(0);
-          data[5] = phaseResult(1);
-          data[6] = phaseResult(2);
-          data[7] = phaseResult(3);
-          data[8] = 0;*/
+          //data[0] = float(qp_ctrl.currentBalanceState.r_dot(2));
+          //data[1] = float(qp_ctrl.currentBalanceState.p_dot(0));
+          //data[2] = float(qp_ctrl.currentBalanceState.p_dot(1));
+          //data[3] = float(bjp.getBodyPlanVelocity()(0));
+          //data[4] = float(bjp.getBodyPlanVelocity()(1));
+          //data[5] = float(bjp.getBodyPlanVelocity()(2));
+          //data[6] = float(/*velFilterN[0].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(0, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(0, 0)/*)*/);
+          //data[7] = float(/*velFilterN[1].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(1, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(1, 0)/*)*/);
+          //data[8] = float(/*velFilterN[2].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(2, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(2, 0)/*)*/);
           //vofa.dataTransmit(data, 5);
       }
   };
