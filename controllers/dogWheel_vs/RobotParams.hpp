@@ -133,5 +133,5 @@ namespace Quadruped {
 	const Eigen::Vector<double, 22> traF = traQ;
 	const Eigen::Vector<double, 11> traR = Eigen::Vector<double, 11>::Constant(1e-4);
 	const Eigen::Vector<double, 11> traW = Eigen::Vector<double, 11>::Constant(1e-3);
-	const Eigen::Vector<double, 11> accL(3., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.);
+	const Eigen::Vector<double, 11> accL(4., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.);
 }
