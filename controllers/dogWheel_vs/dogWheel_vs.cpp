@@ -230,22 +230,20 @@ int main(int argc, char **argv) {
   Vector4d imuQd;
   Vector3d gyrod;
   Vector3d accd;
+  Eigen::Matrix<double, 3, 4> legF = Eigen::Matrix<double,3,4>::Zero();
 
   // 重新配置腿部曲线跟踪参数
   Vector2d lPid_pvParams[6];
-  lPid_pvParams[0] << 8000, 400;
-  lPid_pvParams[1] << 150, 200;
-  lPid_pvParams[2] << 8000, 400;
-  lPid_pvParams[3] << 150, 200;
-  lPid_pvParams[4] << 8000, 400;
-  lPid_pvParams[5] << 150, 200;
+  lPid_pvParams[0] << 8000, 350;
+  lPid_pvParams[1] << 150, 175;
+  lPid_pvParams[2] << 8000, 350;
+  lPid_pvParams[3] << 150, 175;
+  lPid_pvParams[4] << 8000, 500;
+  lPid_pvParams[5] << 150, 250;
   for (auto p : legsCtrl)
   {
       p->loadPid_pvParams(p->lPid_pv, lPid_pvParams);
   }
-
-  qp_ctrl.force_c = 1000;
-  qp_ctrl.u = 0.6;
 
   //LPF_SecondOrder_Classdef velFilterN[3] = { LPF_SecondOrder_Classdef(5,500),LPF_SecondOrder_Classdef(5,500) ,LPF_SecondOrder_Classdef(5,500) };
   //MeanFilter<100> velFilterN[3];
@@ -480,7 +478,7 @@ int main(int argc, char **argv) {
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
               bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
-              bjp.updateJointParams(qp_body.Rsb_c, 0.01, 0.85, 0.4, 0.4, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bjp.updateJointParams(qp_body.Rsb_c, 0.01, 0.85, 0.55, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               bjp.warmUp();
               bjp.useJointPlan(accL);
               //std::cout << bjp.getFootPlanPosition() << std::endl;
@@ -516,7 +514,7 @@ int main(int argc, char **argv) {
               qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), Eigen::Vector3d(roll_t, pitch_t, yaw_t));
               qp_ctrl.setVelocityTarget(Eigen::Vector3d(real_vt(0), real_vt(1), 0), Eigen::Vector3d(0, 0, vyaw_t));
 #endif
-              qp_ctrl.setContactConstrain(contactResult);
+              qp_ctrl.setContactConstrain(contactResult,legF);
               qp_ctrl.contactDeal(Q, 1, gaitCtrl.stRatio);
               //qp_ctrl.setContactConstrain(Eigen::Vector4i::Constant(1));
               Eigen::Vector<bool, 6> en;
@@ -537,9 +535,7 @@ int main(int argc, char **argv) {
 
           if (use_mpc == true && t > 0.2)
           {
-              Eigen::Matrix<double, 3, 4> legF;
               Eigen::Vector4d wheelT;
-              legF.setZero();
               wheelT.setZero();
               qp_body.updateTargetFootPoint(feetPos);
               //feetVel.setZero();
