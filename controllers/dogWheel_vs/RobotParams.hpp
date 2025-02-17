@@ -124,11 +124,14 @@ namespace Quadruped {
 	const Eigen::Vector<double, 8> footAccL = Eigen::Vector<double, 8>::Constant(5.);
 
 	// 联合轨迹规划方法
-	const Eigen::Vector<double, 22> traQ(25, 25, 300, 50, 50, 10, \
-										50, 50, 50, 50, 50, 50, 50, 50, \
-										1, 1, 1, 1, 1, 1, 1, 1);
+	//const Eigen::Vector<double, 22> traQ(250, 250, 300, 20, 20, 10, \
+	//									50, 50, 50, 50, 50, 50, 50, 50, \
+	//									1, 1, 1, 1, 1, 1, 1, 1);
+	const Eigen::Vector<double, 22> traQ(25, 25, 300, 50, 50, 15, \
+										 50, 50, 50, 50, 50, 50, 50, 50, \
+										 1, 1, 1, 1, 1, 1, 1, 1);
 	const Eigen::Vector<double, 22> traF = traQ;
 	const Eigen::Vector<double, 11> traR = Eigen::Vector<double, 11>::Constant(1e-4);
 	const Eigen::Vector<double, 11> traW = Eigen::Vector<double, 11>::Constant(1e-3);
-	const Eigen::Vector<double, 11> accL(4., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.);
+	const Eigen::Vector<double, 11> accL(3., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.);
 }

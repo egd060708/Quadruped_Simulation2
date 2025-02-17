@@ -306,8 +306,6 @@ int main(int argc, char **argv) {
                   vz_t = -0.3;
                   //z_t -= 0.0002;
                   break;
-              case 'O':
-                  break;
               case 'W':
                   pitch_t += 0.0005;
                   break;
@@ -331,9 +329,12 @@ int main(int argc, char **argv) {
               case 'I':
                   gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
                   break;
+              case 'O':
+                  break;
               }
               key = keyboard->getKey();
           }
+          //Eigen::AngleAxisd rotationz_t(qp_body.currentBodyState.Ang_xyz(2), Eigen::Vector3d::UnitZ());
           Eigen::AngleAxisd rotationz_t(yaw_t, Eigen::Vector3d::UnitZ());
           /*vx_t = velFilter[0].f(slopeConstrain(vx_t, qp_body.est->getEstBodyVelB()(0), 0.5, -0.5));
           vy_t = velFilter[1].f(slopeConstrain(vy_t, qp_body.est->getEstBodyVelB()(1), 0.3, -0.3));
