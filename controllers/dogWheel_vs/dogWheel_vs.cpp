@@ -510,8 +510,8 @@ int main(int argc, char **argv) {
               Eigen::Vector4d wheelPos(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
               //Eigen::Vector4d wheelVel = bjp.getFootPlanVelocity().row(0);
               Eigen::Vector4d wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0,0), bjp.getFootPlanVelocity()(0,1), bjp.getFootPlanVelocity()(0,2), bjp.getFootPlanVelocity()(0,3));
-              //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
-              qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
+              qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
+              //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);
               //std::cout << wheelVel << std::endl;
 #else   
@@ -621,9 +621,9 @@ int main(int argc, char **argv) {
           /*data[0] = float(qp_ctrl.currentBalanceState.p_dot(0));
           data[1] = float(qp_ctrl.currentBalanceState.p_dot(1));
           data[2] = float(qp_ctrl.currentBalanceState.p_dot(2));
-          data[3] = float((qp_body.currentBodyState.linAcc_xyz + qp_body.g)(0));
-          data[4] = float((qp_body.currentBodyState.linAcc_xyz + qp_body.g)(1));
-          data[5] = float((qp_body.currentBodyState.linAcc_xyz + qp_body.g)(2));
+          data[3] = float(qp_ctrl.targetBalanceState.p_dot(0));
+          data[4] = float(qp_ctrl.targetBalanceState.p_dot(1));
+          data[5] = float(qp_ctrl.targetBalanceState.p_dot(2));
           data[6] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(0));
           data[7] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(1));
           data[8] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(2));
