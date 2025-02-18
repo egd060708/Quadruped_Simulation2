@@ -462,11 +462,12 @@ int main(int argc, char **argv) {
               slope.updatePoints(qp_body.getFKFeetPos(), contactResult);
               slope.estRun();
 
-             /* bdp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), real_vt);
+             /*bdp.updateRsb(qp_body.Rsb_c);
+              bdp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), real_vt);
               bdp.updateFootHighLevelTar(footPoint, Eigen::Matrix<double, 3, 4>::Zero());
               bdp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bdp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
-              bdp.updateBodyParams(qp_body.Rsb_c, 0.01, 0.5, traBQ.asDiagonal(), traBF.asDiagonal(), traBR.asDiagonal(), traBW.asDiagonal());
+              bdp.updateBodyParams(0.01, 0.5, traBQ.asDiagonal(), traBF.asDiagonal(), traBR.asDiagonal(), traBW.asDiagonal());
               bdp.updateFootParams(0.01, 0.42, 0.42, traLQ.asDiagonal(), traLF.asDiagonal(), traLR.asDiagonal(), traLW.asDiagonal());
               bdp.warmUp();
               bdp.setBodyInputConstrain(bodyAccL);
@@ -474,12 +475,14 @@ int main(int argc, char **argv) {
               bdp.useBodyPlan();
               bdp.useFootPlan();*/
 
+              bjp.updateRsb(qp_body.Rsb_c, qp_body.Rsbh_c);
               bjp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), real_vt);
               bjp.updateFootHighLevelTar(footPoint, Eigen::Matrix<double, 3, 4>::Zero());
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
               bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
-              bjp.updateJointParams(qp_body.Rsb_c, 0.01, 0.85, 0.55, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bjp.updateJointParams(0.01, 0.85, 0.55, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              //bjp.updateJointParams(0.01, 1., 1., 1., traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               bjp.warmUp();
               bjp.useJointPlan(accL);
               //std::cout << bjp.getFootPlanPosition() << std::endl;
@@ -507,8 +510,8 @@ int main(int argc, char **argv) {
               Eigen::Vector4d wheelPos(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
               //Eigen::Vector4d wheelVel = bjp.getFootPlanVelocity().row(0);
               Eigen::Vector4d wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0,0), bjp.getFootPlanVelocity()(0,1), bjp.getFootPlanVelocity()(0,2), bjp.getFootPlanVelocity()(0,3));
-              qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
-              //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
+              //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
+              qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);
               //std::cout << wheelVel << std::endl;
 #else   
@@ -527,7 +530,6 @@ int main(int argc, char **argv) {
               {
                   en << true, true, true, true, true, true;
               }
-              
               qp_ctrl.mpc_adjust(en);
               //Eigen::Vector4d wheeltar(footPoint(0, 0), footPoint(0, 1), footPoint(0, 2), footPoint(0, 3));
               //qp_ctrl.wheel_adjust(wheeltar, wheeltar);
@@ -613,16 +615,19 @@ int main(int argc, char **argv) {
           data[6] = bdp.getBodyPlanPosition()[0];
           data[7] = bdp.getBodyPlanPosition()[1];
           data[8] = bdp.getBodyPlanPosition()[2];*/
-          //data[0] = float(qp_ctrl.currentBalanceState.r_dot(2));
-          //data[1] = float(qp_ctrl.currentBalanceState.p_dot(0));
-          //data[2] = float(qp_ctrl.currentBalanceState.p_dot(1));
-          //data[3] = float(bjp.getBodyPlanVelocity()(0));
-          //data[4] = float(bjp.getBodyPlanVelocity()(1));
-          //data[5] = float(bjp.getBodyPlanVelocity()(2));
           //data[6] = float(/*velFilterN[0].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(0, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(0, 0)/*)*/);
           //data[7] = float(/*velFilterN[1].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(1, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(1, 0)/*)*/);
           //data[8] = float(/*velFilterN[2].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(2, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(2, 0)/*)*/);
-          //vofa.dataTransmit(data, 5);
+          /*data[0] = float(qp_ctrl.currentBalanceState.p_dot(0));
+          data[1] = float(qp_ctrl.currentBalanceState.p_dot(1));
+          data[2] = float(qp_ctrl.currentBalanceState.p_dot(2));
+          data[3] = float((qp_body.currentBodyState.linAcc_xyz + qp_body.g)(0));
+          data[4] = float((qp_body.currentBodyState.linAcc_xyz + qp_body.g)(1));
+          data[5] = float((qp_body.currentBodyState.linAcc_xyz + qp_body.g)(2));
+          data[6] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(0));
+          data[7] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(1));
+          data[8] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(2));
+          vofa.dataTransmit(data, 5);*/
       }
   };
 
