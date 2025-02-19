@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
   {
       motors[Quadruped::LF][i]->setPosition(INFINITY);
       motors[Quadruped::LF][i]->setVelocity(0);
+      //motors[Quadruped::LF][i]->enableTorqueFeedback(timeStep);
   }
 
   motors[Quadruped::RF][0] = robot->getMotor("FR_hip_joint");
@@ -70,6 +71,7 @@ int main(int argc, char **argv) {
   {
       motors[Quadruped::RF][i]->setPosition(INFINITY);
       motors[Quadruped::RF][i]->setVelocity(0);
+      //motors[Quadruped::RF][i]->enableTorqueFeedback(timeStep);
   }
 
   motors[Quadruped::LB][0] = robot->getMotor("RL_hip_joint");
@@ -80,6 +82,7 @@ int main(int argc, char **argv) {
   {
       motors[Quadruped::LB][i]->setPosition(INFINITY);
       motors[Quadruped::LB][i]->setVelocity(0);
+      //motors[Quadruped::LB][i]->enableTorqueFeedback(timeStep);
   }
 
   motors[Quadruped::RB][0] = robot->getMotor("RR_hip_joint");
@@ -90,6 +93,7 @@ int main(int argc, char **argv) {
   {
       motors[Quadruped::RB][i]->setPosition(INFINITY);
       motors[Quadruped::RB][i]->setVelocity(0);
+      //motors[Quadruped::RB][i]->enableTorqueFeedback(timeStep);
   }
 
   // get position sensor
@@ -216,12 +220,15 @@ int main(int argc, char **argv) {
   bjp.setInitBodyPlanPosition(Eigen::Vector3d(x_t, y_t, z_t));
   bjp.setInitFootPlanPosition(footPoint);
 
-  //VOFA vofa("vjs.exe");
+  VOFA vofa("vjs.exe");
 
   Eigen::Vector4d last_encoderValue[4];
-  for (auto p : last_encoderValue)
+  Eigen::Vector4d last_encoderVel[4];
+  Eigen::Vector3d lastGyro = Eigen::Vector3d::Zero();
+  for (int i=0;i<4;i++)
   {
-      p.setZero();
+      last_encoderValue[i].setZero();
+      last_encoderVel[i].setZero();
   }
 
   uint8_t initCount = 0;
@@ -229,6 +236,7 @@ int main(int argc, char **argv) {
   Vector3d imuRPYd;
   Vector4d imuQd;
   Vector3d gyrod;
+  Vector3d gyroAccd;
   Vector3d accd;
   Eigen::Matrix<double, 3, 4> legF = Eigen::Matrix<double,3,4>::Zero();
 
@@ -366,13 +374,18 @@ int main(int argc, char **argv) {
           imuQd << static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]);
           gyrod << static_cast<double>(gyro_data[0]), static_cast<double>(gyro_data[1]), static_cast<double>(gyro_data[2]);
           accd << static_cast<double>(acc_data[0]), static_cast<double>(acc_data[1]), static_cast<double>(acc_data[2]);
+          gyroAccd = (gyrod - lastGyro) / (0.001 * static_cast<double>(timeStep));
+          lastGyro = gyrod;
           qp_body.updateBodyImu(imuQd);
           qp_body.updateBodyGyro(gyrod);
+          qp_body.updateBodyGyroAcc(gyroAccd);
           qp_body.updateBodyAcc(accd);
           qp_body.calTbs(1);
           qp_body.bodyAndWorldFramePosition(1);
           qp_body.legAndBodyPosition(1);
           qp_body.legVelocityInWorldFrame();
+          qp_body.legAccInWorldFrame();
+          qp_body.estimateContact(contactResult);
           if (t > 0.2)
           {
 //#if USE_WHEEL == 0
@@ -440,16 +453,23 @@ int main(int argc, char **argv) {
 
           Eigen::Vector4d encoderValue[4];
           Eigen::Vector4d motorSpeed[4];
+          Eigen::Vector4d motorAcc[4];
+          //Eigen::Vector4d motorTau[4];
           for (int i = 0; i < 4; i++)
           {
               for (int j = 0; j < 4; j++)
               {
                   encoderValue[i](j) = encoder[i][j]->getValue();
+                  //motorTau[i](j) = motors[i][j]->getTorqueFeedback();
               }
               motorSpeed[i] = (encoderValue[i] - last_encoderValue[i]) / (0.001 * static_cast<double>(timeStep));
+              motorAcc[i] = (motorSpeed[i] - last_encoderVel[i]) / (0.001 * static_cast<double>(timeStep));
               last_encoderValue[i] = encoderValue[i];
+              last_encoderVel[i] = motorSpeed[i];
               legsCtrl[i]->updateMotorAng(encoderValue[i]);
               legsCtrl[i]->updateMotorVel(motorSpeed[i]);
+              legsCtrl[i]->updateMotorAcc(motorAcc[i]);
+              //legsCtrl[i]->updateMotorTau(motorTau[i]);
               legsCtrl[i]->legStateCal(imuRPYd,gyrod);
               if (use_mpc == false)
               {
@@ -573,23 +593,28 @@ int main(int argc, char **argv) {
 
           for (int i = 0; i < 4; i++)
           {
+              Eigen::Vector4d tauWatch;
               for (int k = 0; k < 4; k++)
               {
                   if (k < 2)
                   {
                       motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Torque(k), 200));
+                      tauWatch(k) = upper::constrain(legsObj[i]->targetJoint.Torque(k), 200);
                   }
                   else if(k == 2)
                   {
                       motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Torque(k), 320));
+                      tauWatch(k) = upper::constrain(legsObj[i]->targetJoint.Torque(k), 320);
                   }
 #if USE_WHEEL == 1
                   else
                   {
                       motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Foot_Torque, 20));
+                      tauWatch(k) = upper::constrain(legsObj[i]->targetJoint.Foot_Torque, 20);
                   }
 #endif
               }
+              legsObj[i]->updateJointTau(tauWatch);// 最后更新电机输出力矩
           }
 
           float data[DNUM];
@@ -618,16 +643,17 @@ int main(int argc, char **argv) {
           //data[6] = float(/*velFilterN[0].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(0, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(0, 0)/*)*/);
           //data[7] = float(/*velFilterN[1].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(1, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(1, 0)/*)*/);
           //data[8] = float(/*velFilterN[2].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(2, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(2, 0)/*)*/);
-          /*data[0] = float(qp_ctrl.currentBalanceState.p_dot(0));
-          data[1] = float(qp_ctrl.currentBalanceState.p_dot(1));
-          data[2] = float(qp_ctrl.currentBalanceState.p_dot(2));
-          data[3] = float(qp_ctrl.targetBalanceState.p_dot(0));
-          data[4] = float(qp_ctrl.targetBalanceState.p_dot(1));
-          data[5] = float(qp_ctrl.targetBalanceState.p_dot(2));
-          data[6] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(0));
-          data[7] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(1));
-          data[8] = float((qp_body.currentWorldState.linAcc_xyz + qp_body.g)(2));
-          vofa.dataTransmit(data, 5);*/
+          data[0] = float(qp_body.currentWorldState.leg_s[0].Force(0));
+          data[1] = float(qp_body.currentWorldState.leg_s[0].Force(1));
+          data[2] = float(qp_body.currentWorldState.leg_s[0].Force(2));
+          data[3] = float(qp_body.currentWorldState.leg_s[0].extForce(0));
+          data[4] = float(qp_body.currentWorldState.leg_s[0].extForce(1));
+          data[5] = float(qp_body.currentWorldState.leg_s[0].extForce(2));
+          data[6] = float(qp_body.currentWorldState.leg_s[0].Acc(0));
+          data[7] = float(qp_body.currentWorldState.leg_s[0].Acc(1));
+          data[8] = float(qp_body.currentWorldState.leg_s[0].Acc(2));
+          data[9] = float(contactResult(0));
+          vofa.dataTransmit(data, 5);
       }
   };
 
