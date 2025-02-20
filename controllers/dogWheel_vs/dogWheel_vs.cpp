@@ -593,8 +593,8 @@ int main(int argc, char **argv) {
           data[10] = qp_ctrl.currentBalanceState.pe(0);
           data[11] = qp_ctrl.currentBalanceState.pe(1);
           data[12] = qp_ctrl.currentBalanceState.pe(2);
-          data[13] = qp_ctrl.currentBalanceState.pe(3);
-          vofa.dataTransmit(data, 5);*/
+          data[13] = qp_ctrl.currentBalanceState.pe(3);*/
+          //vofa.dataTransmit(data, 5);
       }
   };
 
