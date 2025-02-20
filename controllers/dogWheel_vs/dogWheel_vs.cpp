@@ -220,7 +220,7 @@ int main(int argc, char **argv) {
   bjp.setInitBodyPlanPosition(Eigen::Vector3d(x_t, y_t, z_t));
   bjp.setInitFootPlanPosition(footPoint);
 
-  VOFA vofa("vjs.exe");
+  //VOFA vofa("vjs.exe");
 
   Eigen::Vector4d last_encoderValue[4];
   Eigen::Vector4d last_encoderVel[4];
@@ -330,12 +330,12 @@ int main(int argc, char **argv) {
                   break;
               case 'U':
                   use_mpc = true;
-                  gaitCtrl.restart();
                   yaw_t = imuRPYd(2);
-                  gaitCtrl.initSwingParams(0.6, 0.6, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+                  gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
                   break;
               case 'I':
-                  gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+                  gaitCtrl.restart();
+                  gaitCtrl.initSwingParams(0.6, 0.6, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
                   break;
               case 'O':
                   break;
@@ -385,7 +385,7 @@ int main(int argc, char **argv) {
           qp_body.legAndBodyPosition(1);
           qp_body.legVelocityInWorldFrame();
           qp_body.legAccInWorldFrame();
-          qp_body.estimateContact(contactResult);
+          qp_body.estimateContact(contactResult,t);
           if (t > 0.2)
           {
 //#if USE_WHEEL == 0
@@ -501,7 +501,7 @@ int main(int argc, char **argv) {
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
               bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
-              bjp.updateJointParams(0.01, 0.85, 0.55, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bjp.updateJointParams(0.01, 0.85, 0.55, 0.45, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               //bjp.updateJointParams(0.01, 1., 1., 1., traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               bjp.warmUp();
               bjp.useJointPlan(accL);
@@ -530,8 +530,8 @@ int main(int argc, char **argv) {
               Eigen::Vector4d wheelPos(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
               //Eigen::Vector4d wheelVel = bjp.getFootPlanVelocity().row(0);
               Eigen::Vector4d wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0,0), bjp.getFootPlanVelocity()(0,1), bjp.getFootPlanVelocity()(0,2), bjp.getFootPlanVelocity()(0,3));
-              qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
-              //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
+              //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
+              qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);
               //std::cout << wheelVel << std::endl;
 #else   
@@ -643,17 +643,33 @@ int main(int argc, char **argv) {
           //data[6] = float(/*velFilterN[0].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(0, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(0, 0)/*)*/);
           //data[7] = float(/*velFilterN[1].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(1, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(1, 0)/*)*/);
           //data[8] = float(/*velFilterN[2].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(2, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(2, 0)/*)*/);
-          data[0] = float(qp_body.currentWorldState.leg_s[0].Force(0));
-          data[1] = float(qp_body.currentWorldState.leg_s[0].Force(1));
-          data[2] = float(qp_body.currentWorldState.leg_s[0].Force(2));
-          data[3] = float(qp_body.currentWorldState.leg_s[0].extForce(0));
-          data[4] = float(qp_body.currentWorldState.leg_s[0].extForce(1));
-          data[5] = float(qp_body.currentWorldState.leg_s[0].extForce(2));
-          data[6] = float(qp_body.currentWorldState.leg_s[0].Acc(0));
-          data[7] = float(qp_body.currentWorldState.leg_s[0].Acc(1));
-          data[8] = float(qp_body.currentWorldState.leg_s[0].Acc(2));
-          data[9] = float(contactResult(0));
-          vofa.dataTransmit(data, 5);
+          /*data[0] = float(qp_body.currentWorldState.leg_s[0].extForce(2));
+          data[1] = float(qp_body.currentWorldState.leg_s[0].Acc(2));
+          data[2] = float(qp_body.mixContact(0));
+          data[3] = float(qp_body.currentWorldState.leg_s[1].extForce(2));
+          data[4] = float(qp_body.currentWorldState.leg_s[1].Acc(2));
+          data[5] = float(qp_body.mixContact(1));
+          data[6] = float(qp_body.currentWorldState.leg_s[2].extForce(2));
+          data[7] = float(qp_body.currentWorldState.leg_s[2].Acc(2));
+          data[8] = float(qp_body.mixContact(2));
+          data[9] = float(qp_body.currentWorldState.leg_s[3].extForce(2));
+          data[10] = float(qp_body.currentWorldState.leg_s[3].Acc(2));
+          data[11] = float(qp_body.mixContact(3));*/
+          /*data[0] = qp_ctrl.currentBalanceState.p_dot(0);
+          data[1] = qp_ctrl.currentBalanceState.p_dot(1);
+          data[2] = qp_ctrl.currentBalanceState.p_dot(2);
+          data[3] = qp_ctrl.bodyObject->est->getEstFootVelS()(0);
+          data[4] = qp_ctrl.bodyObject->est->getEstFootVelS()(1);
+          data[5] = qp_ctrl.bodyObject->est->getEstFootVelS()(2);
+          data[6] = qp_ctrl.currentBalanceState.pe_dot(0);
+          data[7] = qp_ctrl.currentBalanceState.pe_dot(1);
+          data[8] = qp_ctrl.currentBalanceState.pe_dot(2);
+          data[9] = qp_ctrl.currentBalanceState.pe_dot(3);
+          data[10] = qp_ctrl.currentBalanceState.pe(0);
+          data[11] = qp_ctrl.currentBalanceState.pe(1);
+          data[12] = qp_ctrl.currentBalanceState.pe(2);
+          data[13] = qp_ctrl.currentBalanceState.pe(3);
+          vofa.dataTransmit(data, 5);*/
       }
   };
 
