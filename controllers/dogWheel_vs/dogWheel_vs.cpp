@@ -193,6 +193,9 @@ int main(int argc, char **argv) {
   Eigen::Matrix<double, 3, 4> feetPos;
   Eigen::Matrix<double, 3, 4> feetVel;
 
+  Vector4d estPhaseResult;
+  estPhaseResult.setZero();
+
   SlopeEst slope;
   slope.init(footPoint, Eigen::Vector4i::Ones());
 
@@ -454,7 +457,7 @@ int main(int argc, char **argv) {
               bjp.warmUp();
               bjp.useJointPlan(accL);
 
-              gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime());
+              gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime(), estPhaseResult, qp_body.mixContact);
               gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0,2), vyaw_t, 0.06);
               gaitCtrl.run(feetPos, feetVel, 0.5);
 
@@ -531,13 +534,11 @@ int main(int argc, char **argv) {
                       motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Torque(k), 320));
                       tauWatch(k) = upper::constrain(legsObj[i]->targetJoint.Torque(k), 320);
                   }
-#if USE_WHEEL == 1
                   else
                   {
                       motors[i][k]->setTorque(upper::constrain(legsObj[i]->targetJoint.Foot_Torque, 20));
                       tauWatch(k) = upper::constrain(legsObj[i]->targetJoint.Foot_Torque, 20);
                   }
-#endif
               }
               legsObj[i]->updateJointTau(tauWatch);// 最后更新电机输出力矩
           }
@@ -568,18 +569,18 @@ int main(int argc, char **argv) {
           //data[6] = float(/*velFilterN[0].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(0, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(0, 0)/*)*/);
           //data[7] = float(/*velFilterN[1].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(1, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(1, 0)/*)*/);
           //data[8] = float(/*velFilterN[2].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(2, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(2, 0)/*)*/);
-          /*data[0] = float(qp_body.currentWorldState.leg_s[0].extForce(2));
-          data[1] = float(qp_body.currentWorldState.leg_s[0].Acc(2));
+          data[0] = float(estPhaseResult(0));
+          data[1] = float(phaseResult(0));
           data[2] = float(qp_body.mixContact(0));
-          data[3] = float(qp_body.currentWorldState.leg_s[1].extForce(2));
-          data[4] = float(qp_body.currentWorldState.leg_s[1].Acc(2));
+          data[3] = float(estPhaseResult(1));
+          data[4] = float(phaseResult(1));
           data[5] = float(qp_body.mixContact(1));
-          data[6] = float(qp_body.currentWorldState.leg_s[2].extForce(2));
-          data[7] = float(qp_body.currentWorldState.leg_s[2].Acc(2));
+          data[6] = float(estPhaseResult(2));
+          data[7] = float(phaseResult(2));
           data[8] = float(qp_body.mixContact(2));
-          data[9] = float(qp_body.currentWorldState.leg_s[3].extForce(2));
-          data[10] = float(qp_body.currentWorldState.leg_s[3].Acc(2));
-          data[11] = float(qp_body.mixContact(3));*/
+          data[9] = float(estPhaseResult(3));
+          data[10] = float(phaseResult(3));
+          data[11] = float(qp_body.mixContact(3));
           /*data[0] = qp_ctrl.currentBalanceState.p_dot(0);
           data[1] = qp_ctrl.currentBalanceState.p_dot(1);
           data[2] = qp_ctrl.currentBalanceState.p_dot(2);

@@ -8,8 +8,6 @@
 #define XSPANF 0.06
 #define XSPANB 0.08
 
-#define USE_WHEEL 1
-
 namespace Quadruped {
 	// 腿长参数
 	const double L1 = 0.11973;// 髋
@@ -50,7 +48,6 @@ namespace Quadruped {
 	const double Mfoot = 1.083000;
 	const Eigen::Vector3d Pfoot(-0.000991,0.051053,-0.001130);
 	// mpc平衡控制器权重参数
-#if USE_WHEEL ==1
 	/*const Eigen::Vector<double, 10> Q(400000, 300000, 600000, 30000, 50000, 30000,5000,5000,5000,5000);
 	const Eigen::Vector<double, 10> F = Q;*/
 	/*const Eigen::Vector<double, 23> Q(1e5, 6e4, 2e5,\
@@ -77,23 +74,6 @@ namespace Quadruped {
 	const Eigen::Vector<double, 23> F = Q;
 	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-4);
 	const Eigen::Vector<double, 16> W = Eigen::Vector<double, 16>::Constant(1e-4);
-#else
-	/*const Eigen::Vector<double, 6> Q(500000, 300000, 500000, 30000, 50000, 30000);
-	const Eigen::Vector<double, 6> F = Q;*/
-	/*const Eigen::Vector<double, 15> Q(1e2, 1e2, 1e3,\
-									  1e2, 1e2, 1e2,\
-									  1e5, 2e5, 1e6,\
-									  2e4, 2e4, 2e4,\
-									  1e-6, 1e-6, 1e-6);*/
-	const Eigen::Vector<double, 15> Q(8e4, 6e4, 2e5, \
-										2e4, 2e4, 2e4, \
-										1e2, 2e2, 1e3, \
-										5e1, 5e1, 5e1, \
-										1e-6, 1e-6, 1e-6);
-	const Eigen::Vector<double, 15> F = Q;
-	const Eigen::Vector<double, 12> R = Eigen::Vector<double, 12>::Constant(1e-4);
-	const Eigen::Vector<double, 12> W = Eigen::Vector<double, 12>::Constant(1e-6);
-#endif
 
 
 	/*const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1);
