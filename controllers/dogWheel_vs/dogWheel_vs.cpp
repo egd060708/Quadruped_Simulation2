@@ -21,6 +21,7 @@
 #include "mathTool.h"
 #include "SlopeEst.h"
 #include "TraPlan.h"
+#include "stdFile.h"
 
 
 
@@ -207,8 +208,6 @@ int main(int argc, char **argv) {
   bjp.setInitBodyPlanPosition(Eigen::Vector3d(x_t, y_t, z_t));
   bjp.setInitFootPlanPosition(footPoint);
 
-  //VOFA vofa("vjs.exe");
-
   Eigen::Vector4d last_encoderValue[4];
   Eigen::Vector4d last_encoderVel[4];
   Eigen::Vector3d lastGyro = Eigen::Vector3d::Zero();
@@ -240,9 +239,19 @@ int main(int argc, char **argv) {
       p->loadPid_pvParams(p->lPid_pv, lPid_pvParams);
   }
 
+  /* 数据导出与观察 */
+  //std::ofstream csvFile("D:\\Git_Project\\github\\Quadruped_Simulation2\\experience\\trajectory_tracking\\flat\\data1.csv",std::ios_base::out | std::ios_base::trunc);
+  //if (!csvFile.is_open()) {
+  //    std::cerr << "无法打开文件！" << std::endl;
+  //    return 1;
+  //}
+  //// 写入表头
+  //writeCSVLine(csvFile, "time", "bodyPosX_ref", "bodyPosX_cur", "bodyPosY_ref", "bodyPosY_cur", "bodyPosZ_ref", "bodyPosZ_cur");
+
   //LPF_SecondOrder_Classdef velFilterN[3] = { LPF_SecondOrder_Classdef(5,500),LPF_SecondOrder_Classdef(5,500) ,LPF_SecondOrder_Classdef(5,500) };
   //MeanFilter<100> velFilterN[3];
   MeanFilter<100> velFilter[4];
+  int useSlopeConstrain = 1;
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
   while (robot->step(timeStep) != -1) {
@@ -321,12 +330,18 @@ int main(int argc, char **argv) {
                   gaitCtrl.initSwingParams(0.6, 0.6, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
                   break;
               case 'O':
+                  useSlopeConstrain = 0;
+                  break;
+              case 'P':
+                  useSlopeConstrain = 1;
                   break;
               }
               key = keyboard->getKey();
           }
           //Eigen::AngleAxisd rotationz_t(qp_body.currentBodyState.Ang_xyz(2), Eigen::Vector3d::UnitZ());
           Eigen::AngleAxisd rotationz_t(yaw_t, Eigen::Vector3d::UnitZ());
+          Eigen::AngleAxisd rotationy_t(pitch_t, Eigen::Vector3d::UnitY());
+          Eigen::AngleAxisd rotationx_t(roll_t, Eigen::Vector3d::UnitX());
           /*vx_t = velFilter[0].f(slopeConstrain(vx_t, qp_body.est->getEstBodyVelB()(0), 0.5, -0.5));
           vy_t = velFilter[1].f(slopeConstrain(vy_t, qp_body.est->getEstBodyVelB()(1), 0.3, -0.3));
           vz_t = velFilter[2].f(slopeConstrain(vz_t, qp_body.est->getEstBodyVelB()(2), 0.2, -0.2));*/
@@ -334,10 +349,13 @@ int main(int argc, char **argv) {
           vy_t = velFilter[1].f(vy_t);
           vz_t = velFilter[2].f(vz_t);*/
           vyaw_t = velFilter[3].f(slopeConstrain(vyaw_t, qp_ctrl.currentBalanceState.r_dot(2), 0.3, -0.3));
-          Eigen::Vector3d real_vt(vx_t, vy_t, vz_t);
+          Eigen::Vector3d real_vt(vx_t, vy_t, 0);
           static Vector3d last_real_vt = Eigen::Vector3d::Zero();
           static double last_vyaw_t = vyaw_t;
-          real_vt = rotationz_t.toRotationMatrix() * real_vt;
+          //real_vt = rotationz_t.toRotationMatrix() * qp_body.Rsbh_c.transpose() * qp_body.Rsb_c * real_vt;
+          real_vt = rotationz_t.toRotationMatrix() * slope.getSlopeRotation() * real_vt;
+          real_vt(2) = 0;
+          real_vt = real_vt + Eigen::Vector3d(0, 0, vz_t);
           x_t += 0.5 * (last_real_vt(0) + real_vt(0)) * 0.001 * timeStep;
           y_t += 0.5 * (last_real_vt(1) + real_vt(1)) * 0.001 * timeStep;
           z_t += 0.5 * (last_real_vt(2) + real_vt(2)) * 0.001 * timeStep;
@@ -385,7 +403,17 @@ int main(int argc, char **argv) {
               qp_body.currentWorldState.dist = qp_body.est->getEstBodyPosS();
               qp_body.currentWorldState.linVel_xyz = qp_body.est->getEstBodyVelS();
               qp_body.updateEqBody();
-              qp_ctrl.updateDynamic();
+              if (useSlopeConstrain == 0)
+              {
+                  qp_ctrl.updateDynamic();
+              }
+              else
+              {
+                  qp_ctrl.updateDynamic(slope.getSlopeRotation());
+              }
+              //std::cout << useSlopeConstrain << std::endl;
+
+
           }
 
           // 不适用平衡控制器和步态
@@ -453,7 +481,8 @@ int main(int argc, char **argv) {
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
               bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
-              bjp.updateJointParams(0.01, 0.85, 0.55, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bjp.updateJointParams(0.01, 0.85, 0.6, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              //bjp.updateJointParams(0.01, 0.85, 2., 2., traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               bjp.warmUp();
               bjp.useJointPlan(accL);
 
@@ -479,8 +508,15 @@ int main(int argc, char **argv) {
               qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToEulerZYX(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);
-
-              qp_ctrl.setContactConstrain(contactResult,legF);
+              //std::cout << "slope: " << slope.getSlopeRotation() << std::endl;
+              if (useSlopeConstrain == 0)
+              {
+                  qp_ctrl.setContactConstrain(contactResult, legF);
+              }
+              else
+              {
+                  qp_ctrl.setContactConstrain(contactResult, legF, slope.getSlopeRotation());
+              }
               qp_ctrl.contactDeal(Q, 1, gaitCtrl.stRatio);
               Eigen::Vector<bool, 6> en;
               if (gaitCtrl.stRatio < 1.)
@@ -569,7 +605,7 @@ int main(int argc, char **argv) {
           //data[6] = float(/*velFilterN[0].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(0, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(0, 0)/*)*/);
           //data[7] = float(/*velFilterN[1].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(1, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(1, 0)/*)*/);
           //data[8] = float(/*velFilterN[2].f(*/qp_ctrl.bodyObject->est->getEstBodyVelS()(2, 0) - qp_ctrl.bodyObject->est->getEstFootVelS()(2, 0)/*)*/);
-          data[0] = float(estPhaseResult(0));
+          /*data[0] = float(estPhaseResult(0));
           data[1] = float(phaseResult(0));
           data[2] = float(qp_body.mixContact(0));
           data[3] = float(estPhaseResult(1));
@@ -580,7 +616,7 @@ int main(int argc, char **argv) {
           data[8] = float(qp_body.mixContact(2));
           data[9] = float(estPhaseResult(3));
           data[10] = float(phaseResult(3));
-          data[11] = float(qp_body.mixContact(3));
+          data[11] = float(qp_body.mixContact(3));*/
           /*data[0] = qp_ctrl.currentBalanceState.p_dot(0);
           data[1] = qp_ctrl.currentBalanceState.p_dot(1);
           data[2] = qp_ctrl.currentBalanceState.p_dot(2);
@@ -595,12 +631,29 @@ int main(int argc, char **argv) {
           data[11] = qp_ctrl.currentBalanceState.pe(1);
           data[12] = qp_ctrl.currentBalanceState.pe(2);
           data[13] = qp_ctrl.currentBalanceState.pe(3);*/
-          //vofa.dataTransmit(data, 5);
+          /*data[0] = qp_body.currentWorldState.leg_s[0].Force(0);
+          data[1] = qp_body.currentWorldState.leg_s[0].Force(1);
+          data[2] = qp_body.currentWorldState.leg_s[0].Force(2);
+          data[3] = qp_body.currentWorldState.leg_s[1].Force(0);
+          data[4] = qp_body.currentWorldState.leg_s[1].Force(1);
+          data[5] = qp_body.currentWorldState.leg_s[1].Force(2);
+          data[6] = qp_body.currentWorldState.leg_s[2].Force(0);
+          data[7] = qp_body.currentWorldState.leg_s[2].Force(1);
+          data[8] = qp_body.currentWorldState.leg_s[2].Force(2);
+          data[9] = qp_body.currentWorldState.leg_s[3].Force(0);
+          data[10] = qp_body.currentWorldState.leg_s[3].Force(1);
+          data[11] = qp_body.currentWorldState.leg_s[3].Force(2);
+          vofa.dataTransmit(data, 5);*/
+
+          /*if (t > 0.3)
+          {
+              writeCSVLine(csvFile, t, qp_ctrl.targetBalanceState.p(0), qp_ctrl.currentBalanceState.p(0), qp_ctrl.targetBalanceState.p(1), qp_ctrl.currentBalanceState.p(1), qp_ctrl.targetBalanceState.p(2), qp_ctrl.currentBalanceState.p(2));
+          }*/
       }
   };
 
   // Enter here exit cleanup code.
-
+  //csvFile.close();
   delete robot;
   return 0;
 }

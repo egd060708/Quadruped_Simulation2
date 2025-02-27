@@ -164,6 +164,9 @@
     <ClCompile Include="..\..\libraries\robot_module\myMath\Cpp\source\mathTool.cpp">
       <Filter>application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\file_module\Cpp\source\stdFile.cpp">
+      <Filter>application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\Libraries\qpOASES-stable-3.2\qpOASES-stable-3.2\include\qpOASES\Utils.hpp">
