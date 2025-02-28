@@ -322,7 +322,7 @@ int main(int argc, char **argv) {
                   break;
               case 'U':
                   use_mpc = true;
-                  yaw_t = imuRPYd(2);
+                  //yaw_t = imuRPYd(2);
                   gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
                   break;
               case 'I':
@@ -387,6 +387,7 @@ int main(int argc, char **argv) {
           qp_body.legVelocityInWorldFrame();
           qp_body.legAccInWorldFrame();
           qp_body.estimateContact(contactResult,t);
+          //qp_body.estimateContact(contactResult, t, slope.getSlopeRotation());
           if (t > 0.2)
           {
               // 使用四轮足论文观测器
@@ -481,7 +482,7 @@ int main(int argc, char **argv) {
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
               bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
-              bjp.updateJointParams(0.01, 0.85, 0.6, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bjp.updateJointParams(0.01, 0.85, 0.58, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               //bjp.updateJointParams(0.01, 0.85, 2., 2., traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               bjp.warmUp();
               bjp.useJointPlan(accL);
@@ -504,6 +505,7 @@ int main(int argc, char **argv) {
 
               qp_body.updateLegsXYPosition(bjp.getFootPlanPosition());
               Eigen::Vector4d wheelPos(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
+              //Eigen::Vector4d wheelPos(bjp.getFootPlanPositionWorld()(0, 0), bjp.getFootPlanPositionWorld()(0, 1), bjp.getFootPlanPositionWorld()(0, 2), bjp.getFootPlanPositionWorld()(0, 3));
               Eigen::Vector4d wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0,0), bjp.getFootPlanVelocity()(0,1), bjp.getFootPlanVelocity()(0,2), bjp.getFootPlanVelocity()(0,3));
               qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToEulerZYX(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);

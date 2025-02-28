@@ -19,8 +19,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.03706829761273961 0.9065540423201824 -0.42045892744123115 0.19381209538741753
-  position -26.53998914013018 16.193167287074967 4.311138966958039
+  orientation 0.12103413907448296 0.15892812887883087 -0.9798431440947946 1.3213824128886256
+  position -5.2673939656495055 10.880367456771783 5.269318598597631
 }
 TexturedBackground {
 }
@@ -32,6 +32,7 @@ RectangleArena {
   floorAppearance Parquetry {
     type "light strip"
   }
+  wallHeight 1e-05
 }
 Solid {
   translation 0.34 13.47 0
@@ -68,12 +69,12 @@ Solid {
   boundingObject USE slope
 }
 B2WSimple {
-  translation -5.14 6.87 0.6
-  rotation 0 0 1 1.5708
+  translation -5 -7 0.6
+  rotation 0 0 -1 -5.307179586466759e-06
   controller "dogWheel_vs"
 }
 UnevenTerrain {
-  translation 40 0 0
+  translation 40 0 -0.05
   size 50 50 2
   xDimension 100
   yDimension 20

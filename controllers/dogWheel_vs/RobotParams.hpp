@@ -71,6 +71,13 @@ namespace Quadruped {
 									  45, 64, 45, \
 									  2e2, 2e2, 2e2, 2e2, \
 									  1e-6, 1e-6, 1e-6);
+	/*const Eigen::Vector<double, 23> Q(8e4, 6e4, 3e5, \
+										5e4, 1e5, 5e4, \
+										5e4, 5e4, 5e4, 5e4, \
+										5e2, 5e2, 2e3, \
+										90, 128, 90, \
+										2e2, 2e2, 2e2, 2e2, \
+										1e-6, 1e-6, 1e-6);*/
 	const Eigen::Vector<double, 23> F = Q;
 	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-4);
 	const Eigen::Vector<double, 16> W = Eigen::Vector<double, 16>::Constant(1e-4);
