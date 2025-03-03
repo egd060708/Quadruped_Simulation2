@@ -314,15 +314,18 @@ int main(int argc, char **argv) {
                   break;
               case 'A':
                   //yaw_t += 0.0005;
-                  vyaw_t = 0.7;
+                  vyaw_t = 0.6;
                   break;
               case 'D':
                   //yaw_t -= 0.0005;
-                  vyaw_t = -0.7;
+                  vyaw_t = -0.6;
                   break;
               case 'U':
+                  if (use_mpc == false)
+                  {
+                      yaw_t = imuRPYd(2);
+                  }
                   use_mpc = true;
-                  //yaw_t = imuRPYd(2);
                   gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
                   break;
               case 'I':
@@ -348,7 +351,7 @@ int main(int argc, char **argv) {
           /*vx_t = velFilter[0].f(vx_t);
           vy_t = velFilter[1].f(vy_t);
           vz_t = velFilter[2].f(vz_t);*/
-          vyaw_t = velFilter[3].f(slopeConstrain(vyaw_t, qp_ctrl.currentBalanceState.r_dot(2), 0.3, -0.3));
+          vyaw_t = velFilter[3].f(slopeConstrain(vyaw_t, qp_ctrl.currentBalanceState.r_dot(2), 0.2, -0.2));
           Eigen::Vector3d real_vt(vx_t, vy_t, 0);
           static Vector3d last_real_vt = Eigen::Vector3d::Zero();
           static double last_vyaw_t = vyaw_t;
@@ -476,16 +479,16 @@ int main(int argc, char **argv) {
               bdp.useBodyPlan();
               bdp.useFootPlan();*/
 
-              bjp.updateRsb(qp_body.Rsb_c, qp_body.Rsbh_c);
+              bjp.updateRsb(qp_body.Rsb_c, qp_body.Rsbh_c, qp_body.Tsb_c, qp_body.Tsbh_c);
               bjp.updateBodyHighLevelTar(Eigen::Vector3d(x_t, y_t, z_t), real_vt);
               bjp.updateFootHighLevelTar(footPoint, Eigen::Matrix<double, 3, 4>::Zero());
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
               bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
-              bjp.updateJointParams(0.01, 0.85, 0.58, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
-              //bjp.updateJointParams(0.01, 0.85, 2., 2., traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              //bjp.updateJointParams(0.01, 0.85, 0.58, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              bjp.updateJointParams(0.01, 0.85, 0.6, 0.4, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               bjp.warmUp();
-              bjp.useJointPlan(accL);
+              bjp.useJointPlan(accL,qp_body.Rsbh_c.transpose()*qp_body.Rsb_c*qp_body.currentBodyState.linAcc_xyz);
 
               gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime(), estPhaseResult, qp_body.mixContact);
               gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0,2), vyaw_t, 0.06);
@@ -506,6 +509,7 @@ int main(int argc, char **argv) {
               qp_body.updateLegsXYPosition(bjp.getFootPlanPosition());
               Eigen::Vector4d wheelPos(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
               //Eigen::Vector4d wheelPos(bjp.getFootPlanPositionWorld()(0, 0), bjp.getFootPlanPositionWorld()(0, 1), bjp.getFootPlanPositionWorld()(0, 2), bjp.getFootPlanPositionWorld()(0, 3));
+              //Eigen::Vector4d wheelPos(feetPos(0, 0), feetPos(0, 1), feetPos(0, 2), feetPos(0, 3));
               Eigen::Vector4d wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0,0), bjp.getFootPlanVelocity()(0,1), bjp.getFootPlanVelocity()(0,2), bjp.getFootPlanVelocity()(0,3));
               qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToEulerZYX(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);

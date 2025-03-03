@@ -65,7 +65,7 @@ namespace Quadruped {
 									  5e1, 5e1, 5e1, 5e1, \
 									  1e-6, 1e-6, 1e-6);*/
 	const Eigen::Vector<double, 23> Q(8e4, 6e4, 3e5, \
-									  5e4, 1e5, 5e4, \
+									  5e4, 1e5, 2.5e4, \
 									  5e4, 5e4, 5e4, 5e4, \
 									  5e2, 5e2, 2e3, \
 									  45, 64, 45, \
@@ -73,10 +73,10 @@ namespace Quadruped {
 									  1e-6, 1e-6, 1e-6);
 	/*const Eigen::Vector<double, 23> Q(8e4, 6e4, 3e5, \
 										5e4, 1e5, 5e4, \
-										5e4, 5e4, 5e4, 5e4, \
+										5e-1, 5e-1, 5e-1, 5e-1, \
 										5e2, 5e2, 2e3, \
 										90, 128, 90, \
-										2e2, 2e2, 2e2, 2e2, \
+										2e4, 2e4, 2e4, 2e4, \
 										1e-6, 1e-6, 1e-6);*/
 	const Eigen::Vector<double, 23> F = Q;
 	const Eigen::Vector<double, 16> R = Eigen::Vector<double, 16>::Constant(1e-4);
@@ -94,6 +94,7 @@ namespace Quadruped {
 	//const Eigen::Vector<double, 12> ub = Eigen::Vector<double, 12>::Constant(100);
 
 	// 步态运动期望增益
+	//const Eigen::Vector3d gaitK(-0.02, -0.02, 0.04);
 	const Eigen::Vector3d gaitK(-0.002, -0.002, 0.004);
 
 	// 轨迹规划mpc参数测试
