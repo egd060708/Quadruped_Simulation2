@@ -189,10 +189,11 @@ int main(int argc, char **argv) {
   phaseResult.setZero();
   contactResult.setOnes();
   GaitCtrl gaitCtrl(&qp_ctrl, legsCtrl, timeStep, &phaseResult, &contactResult);
-  gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+  gaitCtrl.initSwingParams(0.6, 0.6, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
   gaitCtrl.initExpectK(gaitK);
   Eigen::Matrix<double, 3, 4> feetPos;
   Eigen::Matrix<double, 3, 4> feetVel;
+  WaveStatus gaitState = WaveStatus::STANCE_ALL;
 
   Vector4d estPhaseResult;
   estPhaseResult.setZero();
@@ -323,14 +324,14 @@ int main(int argc, char **argv) {
               case 'U':
                   if (use_mpc == false)
                   {
-                      yaw_t = imuRPYd(2);
+                      yaw_t = qp_ctrl.currentBalanceState.r(2);
                   }
                   use_mpc = true;
-                  gaitCtrl.initSwingParams(0.6, 1.0, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+                  gaitState = WaveStatus::STANCE_ALL;
                   break;
               case 'I':
                   gaitCtrl.restart();
-                  gaitCtrl.initSwingParams(0.6, 0.6, Eigen::Vector4d(0.5, 0, 0, 0.5), robot->getTime());
+                  gaitState = WaveStatus::WAVE_ALL;
                   break;
               case 'O':
                   useSlopeConstrain = 0;
@@ -363,6 +364,10 @@ int main(int argc, char **argv) {
           y_t += 0.5 * (last_real_vt(1) + real_vt(1)) * 0.001 * timeStep;
           z_t += 0.5 * (last_real_vt(2) + real_vt(2)) * 0.001 * timeStep;
           yaw_t += 0.5 * (last_vyaw_t + vyaw_t) * 0.001 * timeStep;
+          if (use_mpc == true)
+          {
+              yaw_t = slopeConstrain(yaw_t, qp_ctrl.currentBalanceState.r(2), 0.4, -0.4);
+          }
           last_real_vt = real_vt;
           last_vyaw_t = vyaw_t;
 
@@ -490,9 +495,9 @@ int main(int argc, char **argv) {
               bjp.warmUp();
               bjp.useJointPlan(accL,qp_body.Rsbh_c.transpose()*qp_body.Rsb_c*qp_body.currentBodyState.linAcc_xyz);
 
-              gaitCtrl.calcContactPhase(WaveStatus::WAVE_ALL, robot->getTime(), estPhaseResult, qp_body.mixContact);
+              gaitCtrl.calcContactPhase(gaitState, robot->getTime(), estPhaseResult, qp_body.mixContact);
               gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0,2), vyaw_t, 0.06);
-              gaitCtrl.run(feetPos, feetVel, 0.5);
+              gaitCtrl.run(feetPos, feetVel, 0.5, slope.getSlopeRotation());
 
               qp_ctrl.updateBalanceState();
 
