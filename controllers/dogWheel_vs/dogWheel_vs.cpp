@@ -253,6 +253,7 @@ int main(int argc, char **argv) {
   //MeanFilter<100> velFilterN[3];
   MeanFilter<100> velFilter[4];
   int useSlopeConstrain = 1;
+  int noSlip = 1;
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
   while (robot->step(timeStep) != -1) {
@@ -282,10 +283,24 @@ int main(int argc, char **argv) {
               switch (key)
               {
               case keyboard->UP:
-                  vx_t = 2.2;
+                  if (noSlip == 0)
+                  {
+                      vx_t = 2.2;
+                  }
+                  else
+                  {
+                      vx_t = 1.0;
+                  }
                   break;
               case keyboard->DOWN:
-                  vx_t = -1.7;
+                  if (noSlip == 0)
+                  {
+                      vx_t = -1.7;
+                  }
+                  else
+                  {
+                      vx_t = -0.8;
+                  }
                   break;
               case keyboard->RIGHT:
                   vy_t = -0.5;
@@ -334,10 +349,15 @@ int main(int argc, char **argv) {
                   gaitState = WaveStatus::WAVE_ALL;
                   break;
               case 'O':
-                  useSlopeConstrain = 0;
+                  //useSlopeConstrain = 0;
+                  noSlip = 0;
                   break;
               case 'P':
-                  useSlopeConstrain = 1;
+                  //useSlopeConstrain = 1;
+                  if (vx_t < 0.5 && qp_ctrl.currentBalanceState.p_dot.norm() < 0.5 && qp_body.est->getEstFootVelS().norm()<0.5)
+                  {
+                      noSlip = 1;
+                  }
                   break;
               }
               key = keyboard->getKey();
@@ -490,13 +510,27 @@ int main(int argc, char **argv) {
               bjp.updateBodyState(qpest.getEstBodyPosS(), qpest.getEstBodyVelS());
               bjp.updateFootState(qp_body.getFKFeetPos(), qp_body.getFKFeetVel());
               bjp.updateWBodyState(qpest.getEstFootPosS(), qpest.getEstFootVelS());
-              //bjp.updateJointParams(0.01, 0.85, 0.58, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
-              bjp.updateJointParams(0.01, 0.85, 0.6, 0.4, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              if (noSlip == 0)
+              {
+                  //bjp.updateJointParams(0.01, 0.85, 0.58, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+                  bjp.updateJointParams(0.01, 0.85, 0.6, 0.4, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              }
+              else
+              {
+                  bjp.updateJointParams(0.01, 0.85, 0.9, 0.6, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+              }
               bjp.warmUp();
               bjp.useJointPlan(accL,qp_body.Rsbh_c.transpose()*qp_body.Rsb_c*qp_body.currentBodyState.linAcc_xyz);
 
               gaitCtrl.calcContactPhase(gaitState, robot->getTime(), estPhaseResult, qp_body.mixContact);
-              gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0,2), vyaw_t, 0.06);
+              if (noSlip == 0)
+              {
+                  gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0, 2), vyaw_t, 0.075);
+              }
+              else
+              {
+                  gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0, 2), vyaw_t, 0.15);
+              }
               gaitCtrl.run(feetPos, feetVel, 0.5, slope.getSlopeRotation());
 
               qp_ctrl.updateBalanceState();
@@ -512,10 +546,26 @@ int main(int argc, char **argv) {
               //qp_ctrl.setVelocityTarget(bdp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), Eigen::Vector4d((qp_body.Rsb_c.transpose()*bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bdp.getBodyPlanVelocity())(0), (qp_body.Rsb_c.transpose()* bdp.getBodyPlanVelocity())(0)));
 
               qp_body.updateLegsXYPosition(bjp.getFootPlanPosition());
-              Eigen::Vector4d wheelPos(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
+              // 处理混合运动和纯步态行走模式
+              Eigen::Vector4d wheelPos, wheelVel;
+              if (noSlip == 0)
+              {
+                  wheelPos = qp_body.initLegsXYPosition.row(0);
+                  wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0, 0), bjp.getFootPlanVelocity()(0, 1), bjp.getFootPlanVelocity()(0, 2), bjp.getFootPlanVelocity()(0, 3));
+              }
+              else
+              {
+                  Eigen::Matrix4d bodyFeetPos;
+                  bodyFeetPos.row(3).setConstant(1.);
+                  bodyFeetPos.block(0, 0, 3, 4) = feetPos;
+                  for (int i = 0; i < 4; i++)
+                  {
+                      bodyFeetPos.col(i) = qp_body.Tsbh_c.inverse() * bodyFeetPos.col(i);
+                  }
+                  wheelPos = bodyFeetPos.row(0);
+                  wheelVel.setZero();
+              }
               //Eigen::Vector4d wheelPos(bjp.getFootPlanPositionWorld()(0, 0), bjp.getFootPlanPositionWorld()(0, 1), bjp.getFootPlanPositionWorld()(0, 2), bjp.getFootPlanPositionWorld()(0, 3));
-              //Eigen::Vector4d wheelPos(feetPos(0, 0), feetPos(0, 1), feetPos(0, 2), feetPos(0, 3));
-              Eigen::Vector4d wheelVel = Eigen::Vector4d(bjp.getFootPlanVelocity()(0,0), bjp.getFootPlanVelocity()(0,1), bjp.getFootPlanVelocity()(0,2), bjp.getFootPlanVelocity()(0,3));
               qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToEulerZYX(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);

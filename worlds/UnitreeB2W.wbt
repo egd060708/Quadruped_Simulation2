@@ -21,15 +21,15 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.16198072734200789 0.049513512222635274 0.9855509403765658 2.5563879484509817
-  position 5.979001110343228 -20.956000379645616 3.781128838803695
+  orientation -0.1770366251899945 -0.22931368887451403 0.9571171639021524 4.9256743900022055
+  position -6.746951114719805 -1.2634860796121754 4.777755815757637
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 40 50
+  floorSize 40 60
   floorTileSize 5 5
   floorAppearance Parquetry {
     type "light strip"
@@ -42,6 +42,136 @@ Solid {
   children [
     DEF slope Group {
       children [
+        Pose {
+          translation -10.25 0 0.05
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.1
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -9.75 0 0.1
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.2
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -9.25 0 0.15
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.3
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -8.75 0 0.2
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.4
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -8.25 0 0.25
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.5
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -7.75 0 0.3
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.6
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -7.25 0 0.35
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.7
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -6.75 0 0.4
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.8
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -6.25 0 0.45
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 0.5 20 0.9
+              }
+            }
+          ]
+        }
+        Pose {
+          translation -5 0 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                roughness 1
+              }
+              geometry Box {
+                size 2 20 1
+              }
+            }
+          ]
+        }
         Shape {
           appearance PBRAppearance {
             roughness 1
@@ -71,7 +201,7 @@ Solid {
   boundingObject USE slope
 }
 Solid {
-  translation 4 -18 0
+  translation 4 -22 0
   children [
     DEF slope Group {
       children [
@@ -104,12 +234,12 @@ Solid {
   boundingObject USE slope
 }
 StraightStairs {
-  translation -2.64466e-05 -12.84 0
+  translation -2.71806e-05 -16.8 0
   rotation 0 0 1 1.5708
 }
 B2WSimple {
-  translation 0.0499703 -15.07 0.6
-  rotation 0 0 1 1.5708
+  translation -4.95003 -12.19 0.6
+  rotation 0 0 1 -1.5707953071795862
   controller "dogWheel_vs"
 }
 UnevenTerrain {
@@ -141,14 +271,14 @@ UnevenTerrain {
   perlinNOctaves 8
 }
 Ramp30deg {
-  translation 0 -7 0
+  translation 0 -10 -0.2
 }
 Ramp30deg {
-  translation 0 -9 0
+  translation 0 -12 -0.2
   name "ramp 30 degrees(1)"
 }
 Ramp30deg {
-  translation 0 -10 0
+  translation 0 -14 -0.2
   name "ramp 30 degrees(2)"
 }
 Rock {
