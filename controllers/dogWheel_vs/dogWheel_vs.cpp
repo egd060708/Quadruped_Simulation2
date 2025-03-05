@@ -409,7 +409,7 @@ int main(int argc, char **argv) {
           qp_body.updateBodyGyro(gyrod);
           qp_body.updateBodyGyroAcc(gyroAccd);
           qp_body.updateBodyAcc(accd);
-          qp_body.calTbs(1);
+          qp_body.calTbs(1,slope.getEstNormal());
           qp_body.bodyAndWorldFramePosition(1);
           qp_body.legAndBodyPosition(1);
           qp_body.legVelocityInWorldFrame();
@@ -455,7 +455,7 @@ int main(int argc, char **argv) {
               angle_t(1) = pitch_t;
               angle_t(2) = yaw_t;
               qp_body.updateBodyTargetPos(angle_t, p_t);
-              qp_body.calTbs(-1);
+              qp_body.calTbs(-1, slope.getEstNormal());
               qp_body.bodyAndWorldFramePosition(-1);
               qp_body.legAndBodyPosition(-1);
           }
@@ -520,7 +520,7 @@ int main(int argc, char **argv) {
                   bjp.updateJointParams(0.01, 0.85, 0.9, 0.6, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               }
               bjp.warmUp();
-              bjp.useJointPlan(accL,qp_body.Rsbh_c.transpose()*qp_body.Rsb_c*qp_body.currentBodyState.linAcc_xyz);
+              bjp.useJointPlan(accL,qp_body.currentBodyState.linAcc_xyz);
 
               gaitCtrl.calcContactPhase(gaitState, robot->getTime(), estPhaseResult, qp_body.mixContact);
               if (noSlip == 0)
