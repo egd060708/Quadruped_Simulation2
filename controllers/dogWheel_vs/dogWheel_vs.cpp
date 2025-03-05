@@ -221,7 +221,6 @@ int main(int argc, char **argv) {
   uint8_t initCount = 0;
   bool is_sys_init = false;
   Vector3d imuRPYd;
-  Vector4d imuQd;
   Vector3d gyrod;
   Vector3d gyroAccd;
   Vector3d accd;
@@ -400,7 +399,7 @@ int main(int argc, char **argv) {
           const double* acc_data = acc->getValues();
 
           imuRPYd << static_cast<double>(imuRPY_data[0]), static_cast<double>(imuRPY_data[1]), static_cast<double>(imuRPY_data[2]);
-          imuQd << static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]);
+          Quaterniond imuQd(static_cast<double>(imuQ_data[3]), static_cast<double>(imuQ_data[0]), static_cast<double>(imuQ_data[1]), static_cast<double>(imuQ_data[2]));
           gyrod << static_cast<double>(gyro_data[0]), static_cast<double>(gyro_data[1]), static_cast<double>(gyro_data[2]);
           accd << static_cast<double>(acc_data[0]), static_cast<double>(acc_data[1]), static_cast<double>(acc_data[2]);
           gyroAccd = (gyrod - lastGyro) / (0.001 * static_cast<double>(timeStep));
@@ -570,14 +569,6 @@ int main(int argc, char **argv) {
               //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);
               //std::cout << "slope: " << slope.getSlopeRotation() << std::endl;
-              if (useSlopeConstrain == 0)
-              {
-                  qp_ctrl.setContactConstrain(contactResult, legF);
-              }
-              else
-              {
-                  qp_ctrl.setContactConstrain(contactResult, legF, slope.getSlopeRotation());
-              }
               qp_ctrl.contactDeal(Q, 1, gaitCtrl.stRatio);
               Eigen::Vector<bool, 6> en;
               if (gaitCtrl.stRatio < 1.)
@@ -588,7 +579,17 @@ int main(int argc, char **argv) {
               {
                   en << true, true, true, true, true, true;
               }
-              qp_ctrl.mpc_adjust(en);
+              if (useSlopeConstrain == 0)
+              {
+                  qp_ctrl.setContactConstrain(contactResult, legF);
+                  qp_ctrl.mpc_adjust(en);
+              }
+              else
+              {
+                  qp_ctrl.setContactConstrain(contactResult, legF, slope.getSlopeRotation());
+                  qp_ctrl.mpc_adjust(en, slope.getSlopeRotation());
+              }
+              
           }
 
 
