@@ -8,6 +8,7 @@
 #include <webots/Keyboard.hpp>
 #include <webots/GPS.hpp>
 #include <webots/Display.hpp>
+#include <webots/Supervisor.hpp>
 #include "LegCtrl.h"
 #include "RobotParams.hpp"
 #include "Body.h"
@@ -31,7 +32,8 @@ using namespace std;
 
 int main(int argc, char **argv) {
   // create the Robot instance.
-  Robot *robot = new Robot();
+  //Robot *robot = new Robot();
+  Supervisor* robot = new Supervisor();
 
   // get the time step of the current world.
   int timeStep = (int)robot->getBasicTimeStep();
@@ -240,13 +242,22 @@ int main(int argc, char **argv) {
   }
 
   /* 数据导出与观察 */
-  //std::ofstream csvFile("D:\\Git_Project\\github\\Quadruped_Simulation2\\experience\\trajectory_tracking\\flat\\data1.csv",std::ios_base::out | std::ios_base::trunc);
-  //if (!csvFile.is_open()) {
-  //    std::cerr << "无法打开文件！" << std::endl;
-  //    return 1;
-  //}
-  //// 写入表头
-  //writeCSVLine(csvFile, "time", "bodyPosX_ref", "bodyPosX_cur", "bodyPosY_ref", "bodyPosY_cur", "bodyPosZ_ref", "bodyPosZ_cur");
+  std::ofstream csvFile("D:\\Git_Project\\github\\Quadruped_Simulation2\\experience\\disturbance\\pulse\\x\\data1.csv",std::ios_base::out | std::ios_base::trunc);
+  if (!csvFile.is_open()) {
+      std::cerr << "无法打开文件！" << std::endl;
+      return 1;
+  }
+  // 写入表头
+  writeCSVLine(csvFile, "time", "Prx", "Pry", "Prz", "Vrx", "Vry", "Vrz", "Yawr", "vYawr",\
+                                "Pcx", "Pcy", "Pcz", "Vcx", "Vcy", "Vcz", \
+                                "Pbx", "Pby", "Pbz", "Vbx", "Vby", "Vbz", \
+                                "Rollt", "Pitcht", "Yawt", \
+                                "Rollc", "Pitchc", "Yawc", \
+                                /*"Pf0rx", "Pf1rx", "Pf2rx", "Pf3rx", \
+                                "Pf0cx", "Pf1cx", "Pf2cx", "Pf3cx", \
+                                "Pf0ry", "Pf1ry", "Pf2ry", "Pf3ry", \
+                                "Pf0cy", "Pf1cy", "Pf2cy", "Pf3cy", \*/
+                                "ux", "uy", "Forcex", "Forcey", "Forcez");
 
   //LPF_SecondOrder_Classdef velFilterN[3] = { LPF_SecondOrder_Classdef(5,500),LPF_SecondOrder_Classdef(5,500) ,LPF_SecondOrder_Classdef(5,500) };
   //MeanFilter<100> velFilterN[3];
@@ -259,11 +270,10 @@ int main(int argc, char **argv) {
       // 使用gps计算加速度
       double t = robot->getTime();
 
-      double vx_t = 0;
-      double vy_t = 0;
-      double vz_t = 0;
-      double vyaw_t = 0;
-      double vtest = 0;
+      static double vx_t = 0;
+      static double vy_t = 0;
+      static double vz_t = 0;
+      static double vyaw_t = 0;
 
       if (is_sys_init == false)
       {
@@ -533,10 +543,6 @@ int main(int argc, char **argv) {
               gaitCtrl.run(feetPos, feetVel, 0.5, slope.getSlopeRotation());
 
               qp_ctrl.updateBalanceState();
-
-              /*Eigen::Vector4d wheeltar(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
-              qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), qp_body.Rsb_c.transpose()*qp_body.rotMatToRPY(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheeltar);
-              qp_ctrl.setVelocityTarget(real_vt, Eigen::Vector3d(0, 0, vyaw_t), Eigen::Vector4d(vx_t, vx_t, vx_t, vx_t));*/
               
               //qp_body.updateLegsXYPosition(bdp.getFootPlanPosition());
               //Eigen::Vector4d wheeltar(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
@@ -564,11 +570,16 @@ int main(int argc, char **argv) {
                   wheelPos = bodyFeetPos.row(0);
                   wheelVel.setZero();
               }
+
+              /*Eigen::Vector4d wheeltar(qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3));
+              qp_ctrl.setPositionTarget(Eigen::Vector3d(x_t, y_t, z_t), qp_body.Rsb_c.transpose() * qp_body.rotMatToEulerZYX(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheeltar);
+              qp_ctrl.setVelocityTarget(real_vt, Eigen::Vector3d(0, 0, vyaw_t), Eigen::Vector4d(vx_t, vx_t, vx_t, vx_t));*/
+
               //Eigen::Vector4d wheelPos(bjp.getFootPlanPositionWorld()(0, 0), bjp.getFootPlanPositionWorld()(0, 1), bjp.getFootPlanPositionWorld()(0, 2), bjp.getFootPlanPositionWorld()(0, 3));
               qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), qp_body.Rsb_c.transpose()* qp_body.rotMatToEulerZYX(slope.getSlopeRotation()) + Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               //qp_ctrl.setPositionTarget(bjp.getBodyPlanPosition(), Eigen::Vector3d(roll_t, pitch_t, yaw_t), wheelPos);
               qp_ctrl.setVelocityTarget(bjp.getBodyPlanVelocity(), Eigen::Vector3d(0, 0, vyaw_t), wheelVel);
-              //std::cout << "slope: " << slope.getSlopeRotation() << std::endl;
+              
               qp_ctrl.contactDeal(Q, 1, gaitCtrl.stRatio);
               Eigen::Vector<bool, 6> en;
               if (gaitCtrl.stRatio < 1.)
@@ -711,11 +722,68 @@ int main(int argc, char **argv) {
           {
               writeCSVLine(csvFile, t, qp_ctrl.targetBalanceState.p(0), qp_ctrl.currentBalanceState.p(0), qp_ctrl.targetBalanceState.p(1), qp_ctrl.currentBalanceState.p(1), qp_ctrl.targetBalanceState.p(2), qp_ctrl.currentBalanceState.p(2));
           }*/
+
+          // 自动脚本准备工作
+          double force[3] = { 0 };
+          Node* com = robot->getFromDef("QP");
+          if (t == 0.5)
+          {
+              noSlip = 0;
+              if (use_mpc == false)
+              {
+                  yaw_t = qp_ctrl.currentBalanceState.r(2);
+              }
+              use_mpc = true;
+              gaitState = WaveStatus::WAVE_ALL;
+          }
+          // 自动动作执行
+          if (t > 2. && t < 2.5)
+          {
+              //vx_t = 1.;
+              //force[1] = 250. * sin(M_PI * (t - 2.));
+              force[0] = 500.;
+              vyaw_t = 0.;
+          }
+          else if (t > 4. && t < 4.5)
+          {
+              //vx_t = 1.;
+              //force[1] = 250. * sin(M_PI * (t - 4.));
+              force[0] = -500.;
+              vyaw_t = 0.;
+          }
+          else
+          {
+              //vx_t = 0;
+              force[0] = 0;
+              vyaw_t = 0;
+          }
+          com->addForce(force, false);
+          // 自动记录参数执行
+          if (t >= 1. && t <= 10.)
+          {
+              static double last_record_t = 0.97;
+              if (t - last_record_t > 0.01)
+              {
+                  writeCSVLine(csvFile, t, x_t, y_t, z_t, real_vt(0), real_vt(1), real_vt(2), yaw_t, vyaw_t, \
+                      bjp.getBodyPlanPosition()(0), bjp.getBodyPlanPosition()(1), bjp.getBodyPlanPosition()(2), \
+                      bjp.getBodyPlanVelocity()(0), bjp.getBodyPlanVelocity()(1), bjp.getBodyPlanVelocity()(2), \
+                      qp_ctrl.currentBalanceState.p(0), qp_ctrl.currentBalanceState.p(1), qp_ctrl.currentBalanceState.p(2), \
+                      qp_ctrl.currentBalanceState.p_dot(0), qp_ctrl.currentBalanceState.p_dot(1), qp_ctrl.currentBalanceState.p_dot(2), \
+                      qp_ctrl.targetBalanceState.r(0), qp_ctrl.targetBalanceState.r(1), qp_ctrl.targetBalanceState.r(2), \
+                      qp_ctrl.currentBalanceState.r(0), qp_ctrl.currentBalanceState.r(1), qp_ctrl.currentBalanceState.r(2), \
+                      /*qp_body.initLegsXYPosition(0, 0), qp_body.initLegsXYPosition(0, 1), qp_body.initLegsXYPosition(0, 2), qp_body.initLegsXYPosition(0, 3), \
+                      qp_ctrl.currentBalanceState.pe(0), qp_ctrl.currentBalanceState.pe(1), qp_ctrl.currentBalanceState.pe(2), qp_ctrl.currentBalanceState.pe(3), \
+                      qp_body.initLegsXYPosition(1, 0), qp_body.initLegsXYPosition(1, 1), qp_body.initLegsXYPosition(1, 2), qp_body.initLegsXYPosition(1, 3), \
+                      qp_body.currentBodyState.leg_b[0].Position(1), qp_body.currentBodyState.leg_b[1].Position(1), qp_body.currentBodyState.leg_b[2].Position(1), qp_body.currentBodyState.leg_b[3].Position(1), \*/
+                      bjp.getMus()(0), bjp.getMus()(1), force[0], force[1], force[2]);
+                  last_record_t = t;
+              }
+          }
       }
   };
 
   // Enter here exit cleanup code.
-  //csvFile.close();
+  csvFile.close();
   delete robot;
   return 0;
 }

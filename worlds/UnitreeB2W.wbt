@@ -21,9 +21,10 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.056990515302370634 -0.9099783934423149 -0.4107205919280329 5.980498389023442
-  position -21.698699937436874 0.3722867437465289 5.713679403822388
+  orientation -0.06774374705576634 -0.055566211163192734 0.9961541953491997 4.511780732384434
+  position -2.6819544210215405 11.947853500300127 1.6568494205877953
   follow "B2WSimple"
+  followType "None"
 }
 TexturedBackground {
 }
@@ -238,10 +239,11 @@ StraightStairs {
   translation -2.71806e-05 -16.8 0
   rotation 0 0 1 1.5708
 }
-B2WSimple {
-  translation -4.95003 4.86 0.6
+DEF QP B2WSimple {
+  translation -4.5 4.93 0.6
   rotation 0 0 1 1.01503e-06
   controller "dogWheel_vs"
+  supervisor TRUE
 }
 UnevenTerrain {
   translation 40 0 -0.05
