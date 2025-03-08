@@ -21,8 +21,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.06774374705576634 -0.055566211163192734 0.9961541953491997 4.511780732384434
-  position -2.6819544210215405 11.947853500300127 1.6568494205877953
+  orientation -0.11196259342122165 -0.11119759798234831 0.9874712511649897 4.692951521890211
+  position -7.0654859658422655 9.791325949064602 3.7780315737181622
   follow "B2WSimple"
   followType "None"
 }
@@ -240,7 +240,7 @@ StraightStairs {
   rotation 0 0 1 1.5708
 }
 DEF QP B2WSimple {
-  translation -4.5 4.93 0.6
+  translation -10.56 -3.63 0.6
   rotation 0 0 1 1.01503e-06
   controller "dogWheel_vs"
   supervisor TRUE
