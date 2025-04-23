@@ -263,7 +263,7 @@ int main(int argc, char **argv) {
   //MeanFilter<100> velFilterN[3];
   MeanFilter<100> velFilter[4];
   int useSlopeConstrain = 1;
-  int noSlip = 1;
+  int noSlip = 0;
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
   while (robot->step(timeStep) != -1) {
@@ -367,6 +367,9 @@ int main(int argc, char **argv) {
                   {
                       noSlip = 1;
                   }
+                  break;
+              case 'Y':
+                  gaitState = WaveStatus::ADAPT;
                   break;
               }
               key = keyboard->getKey();
@@ -522,7 +525,7 @@ int main(int argc, char **argv) {
               if (noSlip == 0)
               {
                   //bjp.updateJointParams(0.01, 0.85, 0.58, 0.35, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
-                  bjp.updateJointParams(0.01, 0.85, 0.6, 0.4, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
+                  bjp.updateJointParams(0.01, 0.85, 0.6, 0.5, traQ.asDiagonal(), traF.asDiagonal(), traR.asDiagonal(), traW.asDiagonal());
               }
               else
               {
@@ -541,6 +544,8 @@ int main(int argc, char **argv) {
                   gaitCtrl.setGait(bjp.getBodyPlanVelocity().segment(0, 2), vyaw_t, 0.15);
               }
               gaitCtrl.run(feetPos, feetVel, 0.5, slope.getSlopeRotation());
+              gaitCtrl.footPointMarking();
+              gaitCtrl.footStateTransform(t);
 
               qp_ctrl.updateBalanceState();
               
