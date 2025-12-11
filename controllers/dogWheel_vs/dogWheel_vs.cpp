@@ -164,10 +164,10 @@ int main(int argc, char **argv) {
   Vector<double, 6> ib[3] = { Quadruped::Imid, Quadruped::Ihead, Quadruped::Itail };
   Vector3d pb[3] = { Quadruped::Pmid, Quadruped::Phead, Quadruped::Ptail };
   Eigen::Matrix<double, 3, 4> footPoint;
-  footPoint.col(LF) = Vector3d(0.3415447 + XMOVE + XSPANF, 0.234832 + YSPAN, 0);
-  footPoint.col(RF) = Vector3d(0.3415447 + XMOVE + XSPANF, -0.234832 - YSPAN, 0);
-  footPoint.col(LB) = Vector3d(-0.3154553 + XMOVE - XSPANB, 0.234832 + YSPAN, 0);
-  footPoint.col(RB) = Vector3d(-0.3154553 + XMOVE - XSPANB, -0.234832 - YSPAN, 0);
+  footPoint.col(LF) = Vector3d(0.3415447 + XMOVE + XSPANF, 0.306832 + YSPAN, 0);
+  footPoint.col(RF) = Vector3d(0.3415447 + XMOVE + XSPANF, -0.306832 - YSPAN, 0);
+  footPoint.col(LB) = Vector3d(-0.3154553 + XMOVE - XSPANB, 0.306832 + YSPAN, 0);
+  footPoint.col(RB) = Vector3d(-0.3154553 + XMOVE - XSPANB, -0.306832 - YSPAN, 0);
   qp_body.initParams(leg2bodyFrame, footPoint, mb, ib, pb);
   qp_body.updateTargetFootPoint(footPoint);
   Vector3d angle_t(0, 0, 0);
